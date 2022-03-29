@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Net.NetworkInformation;
 
 namespace Server
 {
@@ -17,14 +18,46 @@ namespace Server
         }
         private async Task BoardServer()
         {
+            List<IPAddress> iPAddresses = new List<IPAddress>();
+            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+            foreach (NetworkInterface adapter in nics)
+            {
+                if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet || adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                {
+                    bool isLocal = false;
+                    IPInterfaceProperties ip = adapter.GetIPProperties();
+                    UnicastIPAddressInformationCollection ipCollection = ip.UnicastAddresses;
+                    foreach (UnicastIPAddressInformation ipadd in ipCollection)
+                    {
+                        if(ipadd.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            if (ipadd.Address.ToString().StartsWith("169.254"))
+                            {
+                                isLocal = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isLocal) continue;
+                    IPAddressInformationCollection ipAnycastAddresses = ip.AnycastAddresses;
+                    foreach (UnicastIPAddressInformation ipadd in ipCollection)
+                    {
+                        if (ipadd.Address.AddressFamily == AddressFamily.InterNetwork)
+                        {
+                            iPAddresses.Add(ipadd.Address);
+                        }
+                    }
+                }
+            }
+
             UdpClient udpClient = new UdpClient();
+            List<IPEndPoint> iPEndPoints = new List<IPEndPoint>(iPAddresses.Select(t => new IPEndPoint(t, 6839)));
+            Byte[] sendBytes = Encoding.ASCII.GetBytes("Is anybody thereA?");
             await Task.Run(() =>
             {
                 while (true)
                 {
-                    IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("255.255.255.255"), 6839);
-                    Byte[] sendBytes = Encoding.ASCII.GetBytes("Is anybody thereA?");
-                    udpClient.Send(sendBytes, sendBytes.Length, endpoint);
+                    iPEndPoints.ForEach(t => udpClient.Send(sendBytes, sendBytes.Length, t));
                 }
             });
             udpClient.Close();
