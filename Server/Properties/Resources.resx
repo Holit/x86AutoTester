@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CPU_allFanSpeed_Description" xml:space="preserve">
+    <value>按照更快的频率(由 5分钟 提高到 30秒 )记录计算机的中央处理器散热风扇转速，用以详细的监察计算机处理器风扇是否发生过速状况</value>
+  </data>
+  <data name="CPU_AllTemp_Description" xml:space="preserve">
+    <value>按照更快的频率(由 5分钟 提高到 30秒 )记录计算机的中央处理器温度，用以详细的监察计算机处理器是否发生过温状况</value>
+  </data>
+  <data name="CPU_details_Description" xml:space="preserve">
+    <value>按照更快的频率(由 5分钟 提高到 30秒 )记录计算机的中央处理器总利用率，用以详细评估各时间段内处理器利用率及其散热功效。此选项建议和记录温度、风扇风速一并使用。</value>
+  </data>
+  <data name="CPU_Enable_Description" xml:space="preserve">
+    <value>允许对中央处理器进行压力测试，将采用循环数学问题计算方案。在此期间，计算机可能因为应用程序的大规模运算产生卡顿。此测试将持续 6 小时</value>
+  </data>
+  <data name="default_Description" xml:space="preserve">
+    <value>将在此处显示具体项目的描述，将鼠标悬停在任意控件上查看详情...</value>
+  </data>
+  <data name="Disk_chkdsk_Description" xml:space="preserve">
+    <value>使用组件chkdsk对计算机的磁盘进行坏道检查。此检查视磁盘大小将执行一段时间。在此时间内，磁盘将被大规模读取和占用，也可能造成无法恢复的文件丢失。请在执行操作之前进行适当的备份。将回传详细chkdsk日志供服务器识别和认证。</value>
+  </data>
+  <data name="Error_Stop_Description" xml:space="preserve">
+    <value>出现任何错误，包括软件报错、硬件错误、通信错误、无响应等情况时立即停止操作。此选项能够防止计算机在测试时陷入无法处理的问题，包括但不限于BSoD、硬件损毁等。</value>
+  </data>
+  <data name="Mem_Enable_Description" xml:space="preserve">
+    <value>允许对计算机内部存储器进行存取实验，将创建多个子进程/线程对内存进行分别大规模分配请求和占用，并持续足够长时间( 6 小时)。测试期间可能因为计算机内存大量被占用导致计算机部分程序运行失常，故建议在执行此测试之前关闭所有其他应用程序。</value>
+  </data>
+  <data name="Mem_ErrorLocation_Description" xml:space="preserve">
+    <value>如果在存取期间出现程序异常，将试图获取异常的地址。此功能尚未完善。</value>
+  </data>
+  <data name="Net_CommCheck_Description" xml:space="preserve">
+    <value>执行服务器通信测试。</value>
+  </data>
+  <data name="Net_Enable_Description" xml:space="preserve">
+    <value>执行网络测试。由于与服务器通信总是建立，因此此测试不可取消。</value>
+  </data>
+  <data name="Net_MAC_Description" xml:space="preserve">
+    <value>将对计算机各适配器的MAC地址进行合规性测试。合规性测试采用IEEE 802.1a规范。请访问https://1.ieee802.org/security/802-1ae/ 获取更多信息</value>
+  </data>
+  <data name="Net_web_Description" xml:space="preserve">
+    <value>执行简易互联网访问测试，将检查包括DNS、TCP/IP在内的一系列协议的工作正常与否。将尝试向指定网站 (设定为哈尔滨工程大学官网/218.7.43.8) 发送ICMP握手通信数据包。</value>
+  </data>
+  <data name="Other_AllInfo_Description" xml:space="preserve">
+    <value>校验所有可以获取到的配置信息。此信息将作为附件附加在日志后</value>
+  </data>
+  <data name="Other_Preset_Description" xml:space="preserve">
+    <value>校验自定义的配置</value>
+  </data>
+  <data name="Other_RTCLocal_Description" xml:space="preserve">
+    <value>传递本机时间而不是互联网时间。在传递之前将传递一些测试封包以测试网络延迟均值。此延迟将被加和在传递的RTC上。</value>
+  </data>
+  <data name="Outlet_audioPlay_Description" xml:space="preserve">
+    <value>将试图向音频输入输出设备输出一段音频(\b)，此音频简要描述为: 计算机的响铃声</value>
+  </data>
+  <data name="Outlet_COM_Description" xml:space="preserve">
+    <value>将试图先各COM端口发送测试数据(0x80AE6045)。请注意此数据可能成为某些连接在COM端口的设备的指令码。您可能需要额外设备获取这些数据，以验证COM端口的完整性。由于回环限制，暂不支持回环测试。</value>
+  </data>
+  <data name="Outlet_Description" xml:space="preserve">
+    <value>对各外设组件，包括通用串行总线控制器(USB)、端口(COM)、音频输入输出设备进行测试。</value>
+  </data>
+  <data name="Outlet_USB_Description" xml:space="preserve">
+    <value>将试图向接入计算机的所有USB设备写入一段数据，为保证测试安全性，您可能需要插入USB存储器。插入存储器时，将试图向存储器写入文件并擦除。文件内容为 Harbin Engineering University , 写入到根目录下test.bin中</value>
+  </data>
+  <data name="Outlet_VolAuto_Description" xml:space="preserve">
+    <value>将试图更改音频输入输出设备的音量，每隔10音量播放一次音频，以此调查计算机音频输入输出设备是否可以调控音量。</value>
+  </data>
+  <data name="Outlet_VolMax_Description" xml:space="preserve">
+    <value>取消自动调整音频，试图将音量设置为最大。</value>
+  </data>
+</root>
