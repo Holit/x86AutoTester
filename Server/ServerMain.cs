@@ -109,5 +109,185 @@ namespace Server
         {
             setDefaultDescription();
         }
+
+        private void cbCPU_allFanSpeed_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.CPU_allFanSpeed_Description;
+        }
+
+        private void cbCPU_allFanSpeed_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbMem_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Mem_Enable_Description;
+        }
+
+        private void cbMem_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbMem_ErrorStop_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Error_Stop_Description;
+        }
+
+        private void cbMem_ErrorStop_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbMem_ErrorLocation_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Mem_ErrorLocation_Description;
+        }
+
+        private void cbMem_ErrorLocation_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbDisk_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Disk_chkdsk_Description;
+        }
+
+        private void cbDisk_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbNet_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Net_Enable_Description;
+        }
+
+        private void cbNet_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cnNet_CommCheck_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Net_CommCheck_Description;
+        }
+
+        private void cnNet_CommCheck_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbNet_web_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Net_web_Description;
+        }
+
+        private void cbNet_web_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbNet_MAC_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Net_MAC_Description;
+        }
+
+        private void cbNet_MAC_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOutlet_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Outlet_Description;
+        }
+
+        private void cbOutlet_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOutlet_COM_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Outlet_COM_Description;
+        }
+
+        private void cbOutlet_COM_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOutlet_USB_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Outlet_USB_Description;
+        }
+
+        private void cbOutlet_USB_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOutlet_audioPlay_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Outlet_audioPlay_Description;
+        }
+
+        private void cbOutlet_audioPlay_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOutlet_VolAuto_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Outlet_VolAuto_Description;
+        }
+
+        private void cbOutlet_VolAuto_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOutlet_VolMax_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Outlet_VolMax_Description;
+        }
+
+        private void cbOutlet_VolMax_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOther_RTCLocal_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Other_RTCLocal_Description;
+        }
+
+        private void cbOther_RTCLocal_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOther_Preset_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Other_Preset_Description;
+        }
+
+        private void cbOther_Preset_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOther_AllInfo_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Other_AllInfo_Description;
+        }
+
+        private void cbOther_AllInfo_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
     }
 }
