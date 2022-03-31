@@ -44,65 +44,45 @@ namespace Client
             }
             return WMIClass;
         }
-
-
-        Dictionary<string, ManagementObjectCollection> ListViewMap = new Dictionary<string, ManagementObjectCollection>();
-        /// <summary>
-        /// 使用WMI穷举属性更新lvDeatil的内容
-        /// </summary>
-        /// <param name="path">WMI查询路径</param>
-        /// <param name="groupPropetry">显示为Group的头部的标签的property</param>
-        private async Task UpdatelvDeatilsAsync(string path, string groupPropetry = "Name")
+        
+        private async Task ShowDeatils(string path, string groupPropetry = "Name")
         {
-            if (!ListViewMap.ContainsKey(path))
+            ManagementObjectCollection managementBaseObjects = await WMITest.GetDeatils(path);
+            lvDetails.UseWaitCursor = true;
+            lvDetails.BeginUpdate();
+            lvDetails.Groups.Clear();
+            lvDetails.Items.Clear();
+            lvDetails.ShowGroups = true;
+            foreach (ManagementObject mo in managementBaseObjects)
             {
-                ///应该改为异步操作
-                await Task.Run(() =>
+                ListViewGroup listViewGroup = new ListViewGroup();
+                listViewGroup.Header = mo[groupPropetry].ToString();
+                //listViewGroup.HeaderAlignment = HorizontalAlignment.Center;
+                foreach (PropertyData pd in mo.Properties)
                 {
-                    ManagementClass mProcessor = new ManagementClass(path);
-                    ManagementObjectCollection moCollectionProcessor = mProcessor.GetInstances();
-                    mProcessor.Dispose();
-                    ListViewMap[path] = moCollectionProcessor;
+                    ListViewItem listViewItem = new ListViewItem();
+                    listViewItem.Text = pd.Name;
+                    listViewItem.SubItems.Add(pd.Value == null ? "null" : pd.Value.ToString());
+                    listViewItem.ToolTipText = ("Type:" + pd.Type);
+                    listViewGroup.Items.Add(listViewItem);
+                    lvDetails.Items.Add(listViewItem);
                 }
-                );
+                lvDetails.Groups.Add(listViewGroup);
             }
-            //await Task.Run(() =>
-            //{
-                lvDetails.UseWaitCursor = true;
-                lvDetails.BeginUpdate();
-                lvDetails.Groups.Clear();
-                lvDetails.Items.Clear();
-                lvDetails.ShowGroups = true;
-                foreach (ManagementObject mo in ListViewMap[path])
-                {
-                    ListViewGroup listViewGroup = new ListViewGroup();
-                    listViewGroup.Header = mo[groupPropetry].ToString();
-                    //listViewGroup.HeaderAlignment = HorizontalAlignment.Center;
-                    foreach (PropertyData pd in mo.Properties)
-                    {
-                        ListViewItem listViewItem = new ListViewItem();
-                        listViewItem.Text = pd.Name;
-                        listViewItem.SubItems.Add(pd.Value == null ? "null" : pd.Value.ToString());
-                        listViewItem.ToolTipText = ("Type:" + pd.Type);
-                        listViewGroup.Items.Add(listViewItem);
-                        lvDetails.Items.Add(listViewItem);
-                    }
-                    lvDetails.Groups.Add(listViewGroup);
-                }
-                lvDetails.EndUpdate();
-                lvDetails.UseWaitCursor = false;
-            //});
+            lvDetails.EndUpdate();
+            lvDetails.UseWaitCursor = false;
+
         }
         private void ClientMain_Load(object sender, EventArgs e)
         {
-            _ = UpdatelvDeatilsAsync("Win32_OperatingSystem", "Caption");
+            _ = ShowDeatils("Win32_OperatingSystem", "Caption");
         }
 
         private void rbCPU_CheckedChanged(object sender, EventArgs e)
         {
             if (rbCPU.Checked)
             {
-                _ = UpdatelvDeatilsAsync("Win32_Processor");
+                _ = ShowDeatils("Win32_Processor");
             }
         }
 
@@ -110,7 +90,7 @@ namespace Client
         {
             if (rbMem.Checked)
             {
-                _ = UpdatelvDeatilsAsync("Win32_PhysicalMemory", "Tag");
+                _ = ShowDeatils("Win32_PhysicalMemory", "Tag");
             }
         }
 
@@ -118,7 +98,7 @@ namespace Client
         {
             if (rbGPU.Checked)
             {
-                _ = UpdatelvDeatilsAsync("Win32_VideoController");
+                _ = ShowDeatils("Win32_VideoController");
 
             }
         }
@@ -127,7 +107,7 @@ namespace Client
         {
             if (rbDriver.Checked)
             {
-                _ = UpdatelvDeatilsAsync("Win32_DiskDrive", "Caption");
+                _ = ShowDeatils("Win32_DiskDrive", "Caption");
             }
         }
 
@@ -135,7 +115,7 @@ namespace Client
         {
             if (rbOS.Checked)
             {
-                _ = UpdatelvDeatilsAsync("Win32_OperatingSystem");
+                _ = ShowDeatils("Win32_OperatingSystem");
             }
         }
 
@@ -144,7 +124,7 @@ namespace Client
 
             if (rbNetworkController.Checked)
             {
-                _ = UpdatelvDeatilsAsync("Win32_NetworkAdapter");
+                _ = ShowDeatils("Win32_NetworkAdapter");
             }
         }
 

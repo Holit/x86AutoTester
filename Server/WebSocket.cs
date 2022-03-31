@@ -59,7 +59,7 @@ namespace Server
             UdpClient udpClient = new UdpClient();
             List<IPEndPoint> iPEndPoints = new List<IPEndPoint>(iPAddresses.Select(t => new IPEndPoint(t, 6839)));
             Message info = new Message { MessageType=Message.MessageTypes.ServerUuid,Content = Program.Uuid.ToString() };
-            Byte[] sendBytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(info));
+            Byte[] sendBytes = Encoding.ASCII.GetBytes(info.ToString());
             await Task.Run(() =>
             {
                 while (true)
@@ -118,25 +118,37 @@ namespace Server
         {
             if (message.MessageType == Message.MessageTypes.ServerUuid)
             {
-                socket.Send(JsonConvert.SerializeObject(new Message
+                socket.Send(new Message
                 {
                     MessageType = Message.MessageTypes.ServerUuid,
                     Content = Program.Uuid
-                }));
+                }.ToString());
             }else if (message.MessageType == Message.MessageTypes.JoinServer)
             {
-                socket.Send(JsonConvert.SerializeObject(new Message
+                socket.Send(new Message
                 {
                     MessageType = Message.MessageTypes.JoinServer,
                     Content = message.Content == Program.Uuid ? "OK" : "FAIL"
-                }));
+                }.ToString());
                 if (Program.Uuid == message.Content)
                 {
                     string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
                     Console.WriteLine("客户端"+ clientUrl + "登录成功");
                     dic_Sockets.Add(clientUrl, socket);
                     Program.ServerMain.setClientCount(dic_Sockets.Count());
+                    string[] paths = {
+                        "Win32_OperatingSystem", "Win32_Processor",
+                        "Win32_PhysicalMemory", "Win32_VideoController",
+                        "Win32_DiskDrive", "Win32_NetworkAdapter" };
+                    foreach(string path in paths)
+                    {
+                        socket.Send(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = path }.ToString());
+                    }
                 }
+            }
+            else
+            {
+                Console.WriteLine(message.ToString());
             }
         }
     }
