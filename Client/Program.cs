@@ -8,6 +8,11 @@ namespace Client
 {
     internal static class Program
     {
+        private static ClientMain clientMain = null;
+
+        public static ClientMain ClientMain { get => clientMain;}
+        public static string serverUUID;
+
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -17,7 +22,8 @@ namespace Client
             var webSocket = WebSocket.GetInstance;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ClientMain());
+            clientMain=new ClientMain();
+            Application.Run(clientMain);
         }
     }
 }

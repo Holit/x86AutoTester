@@ -26,7 +26,7 @@ namespace Server
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            label_uuid.Text = Guid.NewGuid().ToString();
+            label_uuid.Text = Program.Uuid;
         }
 
         private void cbCPU_CheckedChanged(object sender, EventArgs e)
@@ -288,6 +288,14 @@ namespace Server
         private void cbOther_AllInfo_MouseLeave(object sender, EventArgs e)
         {
             setDefaultDescription();
+        }
+
+        public void setClientCount(int count)
+        {
+            当前连接数.Invoke((MethodInvoker)delegate
+            {
+                当前连接数.Text = count.ToString();
+            });
         }
     }
 }

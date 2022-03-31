@@ -164,5 +164,20 @@ namespace Client
                 Clipboard.SetText(lvDetails.SelectedItems[0].SubItems[0].Text + " = " + lvDetails.SelectedItems[0].SubItems[1].Text);
             }
         }
+
+        public void setServerIP(string s)
+        {
+            serverIP.Invoke((MethodInvoker)delegate
+            {
+                serverIP.Text = s;
+            });
+        }
+        public void setServerUUID(string s)
+        {
+            serverUUID.Invoke((MethodInvoker)delegate
+            {
+                serverUUID.Text = s;
+            });
+        }
     }
 }

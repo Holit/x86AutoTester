@@ -63,6 +63,7 @@
     <Compile Include="WebSocket.cs" />
     <EmbeddedResource Include="ServerMain.resx">
       <DependentUpon>ServerMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -94,5 +95,6 @@
       <Name>AutoTestMessage</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

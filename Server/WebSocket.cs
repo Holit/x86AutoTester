@@ -88,6 +88,7 @@ namespace Server
                     if (dic_Sockets.ContainsKey(clientUrl))
                     {
                         dic_Sockets.Remove(clientUrl);
+                        Program.ServerMain.setClientCount(dic_Sockets.Count());
                     }
                     Console.WriteLine(DateTime.Now.ToString() + "|服务器:和客户端:" + clientUrl + " 断开WebSock连接！");
                 };
@@ -134,6 +135,7 @@ namespace Server
                     string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
                     Console.WriteLine("客户端"+ clientUrl + "登录成功");
                     dic_Sockets.Add(clientUrl, socket);
+                    Program.ServerMain.setClientCount(dic_Sockets.Count());
                 }
             }
         }

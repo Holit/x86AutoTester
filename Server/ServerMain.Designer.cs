@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.当前连接数 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label_uuid = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -131,6 +133,7 @@
             this.退出EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label26 = new System.Windows.Forms.Label();
             this.pbGlobalProgress = new System.Windows.Forms.ProgressBar();
+            this.serverMainBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -151,6 +154,7 @@
             this.tabPage4.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.serverMainBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -160,7 +164,7 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Location = new System.Drawing.Point(16, 32);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(844, 512);
@@ -168,6 +172,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.当前连接数);
             this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.label_uuid);
             this.tabPage1.Controls.Add(this.label3);
@@ -175,13 +180,23 @@
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.labelCurrentConnCount);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage1.Size = new System.Drawing.Size(836, 483);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "服务器配置";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // 当前连接数
+            // 
+            this.当前连接数.AutoSize = true;
+            this.当前连接数.Location = new System.Drawing.Point(96, 67);
+            this.当前连接数.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.当前连接数.Name = "当前连接数";
+            this.当前连接数.Size = new System.Drawing.Size(15, 15);
+            this.当前连接数.TabIndex = 5;
+            this.当前连接数.Text = "0";
             // 
             // label6
             // 
@@ -239,9 +254,9 @@
             this.labelCurrentConnCount.Location = new System.Drawing.Point(8, 67);
             this.labelCurrentConnCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCurrentConnCount.Name = "labelCurrentConnCount";
-            this.labelCurrentConnCount.Size = new System.Drawing.Size(114, 15);
+            this.labelCurrentConnCount.Size = new System.Drawing.Size(98, 15);
             this.labelCurrentConnCount.TabIndex = 0;
-            this.labelCurrentConnCount.Text = "当前连接数: %d";
+            this.labelCurrentConnCount.Text = "当前连接数: ";
             // 
             // tabPage2
             // 
@@ -251,9 +266,9 @@
             this.tabPage2.Controls.Add(this.tabControl2);
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage2.Size = new System.Drawing.Size(836, 483);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "配置文件详情";
@@ -264,7 +279,7 @@
             this.tbDescription.BackColor = System.Drawing.Color.White;
             this.tbDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbDescription.Location = new System.Drawing.Point(431, 92);
-            this.tbDescription.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbDescription.Margin = new System.Windows.Forms.Padding(4);
             this.tbDescription.Multiline = true;
             this.tbDescription.Name = "tbDescription";
             this.tbDescription.ReadOnly = true;
@@ -275,7 +290,7 @@
             // btnSend
             // 
             this.btnSend.Location = new System.Drawing.Point(289, 426);
-            this.btnSend.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSend.Margin = new System.Windows.Forms.Padding(4);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(128, 37);
             this.btnSend.TabIndex = 8;
@@ -285,7 +300,7 @@
             // btnSaveConfig
             // 
             this.btnSaveConfig.Location = new System.Drawing.Point(153, 426);
-            this.btnSaveConfig.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSaveConfig.Margin = new System.Windows.Forms.Padding(4);
             this.btnSaveConfig.Name = "btnSaveConfig";
             this.btnSaveConfig.Size = new System.Drawing.Size(128, 37);
             this.btnSaveConfig.TabIndex = 7;
@@ -301,7 +316,7 @@
             this.tabControl2.Controls.Add(this.tabPage9);
             this.tabControl2.Controls.Add(this.tabPage10);
             this.tabControl2.Location = new System.Drawing.Point(12, 55);
-            this.tabControl2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl2.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
             this.tabControl2.Size = new System.Drawing.Size(411, 364);
@@ -312,9 +327,9 @@
             this.tabPage5.Controls.Add(this.gbCPU);
             this.tabPage5.Controls.Add(this.cbCPU);
             this.tabPage5.Location = new System.Drawing.Point(4, 25);
-            this.tabPage5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage5.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage5.Size = new System.Drawing.Size(403, 335);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "处理器";
@@ -328,9 +343,9 @@
             this.gbCPU.Controls.Add(this.cbCPU_ErrorStop);
             this.gbCPU.Controls.Add(this.label9);
             this.gbCPU.Location = new System.Drawing.Point(13, 38);
-            this.gbCPU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbCPU.Margin = new System.Windows.Forms.Padding(4);
             this.gbCPU.Name = "gbCPU";
-            this.gbCPU.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbCPU.Padding = new System.Windows.Forms.Padding(4);
             this.gbCPU.Size = new System.Drawing.Size(379, 178);
             this.gbCPU.TabIndex = 1;
             this.gbCPU.TabStop = false;
@@ -340,7 +355,7 @@
             // 
             this.cbCPU_details.AutoSize = true;
             this.cbCPU_details.Location = new System.Drawing.Point(7, 150);
-            this.cbCPU_details.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbCPU_details.Margin = new System.Windows.Forms.Padding(4);
             this.cbCPU_details.Name = "cbCPU_details";
             this.cbCPU_details.Size = new System.Drawing.Size(285, 19);
             this.cbCPU_details.TabIndex = 11;
@@ -353,7 +368,7 @@
             // 
             this.cbCPU_allFanSpeed.AutoSize = true;
             this.cbCPU_allFanSpeed.Location = new System.Drawing.Point(7, 124);
-            this.cbCPU_allFanSpeed.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbCPU_allFanSpeed.Margin = new System.Windows.Forms.Padding(4);
             this.cbCPU_allFanSpeed.Name = "cbCPU_allFanSpeed";
             this.cbCPU_allFanSpeed.Size = new System.Drawing.Size(194, 19);
             this.cbCPU_allFanSpeed.TabIndex = 10;
@@ -366,7 +381,7 @@
             // 
             this.cbCPU_AllTemp.AutoSize = true;
             this.cbCPU_AllTemp.Location = new System.Drawing.Point(8, 97);
-            this.cbCPU_AllTemp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbCPU_AllTemp.Margin = new System.Windows.Forms.Padding(4);
             this.cbCPU_AllTemp.Name = "cbCPU_AllTemp";
             this.cbCPU_AllTemp.Size = new System.Drawing.Size(164, 19);
             this.cbCPU_AllTemp.TabIndex = 9;
@@ -379,7 +394,7 @@
             // 
             this.cbCPU_ErrorStop.AutoSize = true;
             this.cbCPU_ErrorStop.Location = new System.Drawing.Point(8, 70);
-            this.cbCPU_ErrorStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbCPU_ErrorStop.Margin = new System.Windows.Forms.Padding(4);
             this.cbCPU_ErrorStop.Name = "cbCPU_ErrorStop";
             this.cbCPU_ErrorStop.Size = new System.Drawing.Size(134, 19);
             this.cbCPU_ErrorStop.TabIndex = 8;
@@ -404,7 +419,7 @@
             this.cbCPU.Checked = true;
             this.cbCPU.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbCPU.Location = new System.Drawing.Point(13, 11);
-            this.cbCPU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbCPU.Margin = new System.Windows.Forms.Padding(4);
             this.cbCPU.Name = "cbCPU";
             this.cbCPU.Size = new System.Drawing.Size(104, 19);
             this.cbCPU.TabIndex = 0;
@@ -419,9 +434,9 @@
             this.tabPage6.Controls.Add(this.gbMem);
             this.tabPage6.Controls.Add(this.cbMem);
             this.tabPage6.Location = new System.Drawing.Point(4, 25);
-            this.tabPage6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage6.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage6.Size = new System.Drawing.Size(403, 335);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "内存";
@@ -433,9 +448,9 @@
             this.gbMem.Controls.Add(this.cbMem_ErrorStop);
             this.gbMem.Controls.Add(this.label16);
             this.gbMem.Location = new System.Drawing.Point(13, 38);
-            this.gbMem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbMem.Margin = new System.Windows.Forms.Padding(4);
             this.gbMem.Name = "gbMem";
-            this.gbMem.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbMem.Padding = new System.Windows.Forms.Padding(4);
             this.gbMem.Size = new System.Drawing.Size(379, 134);
             this.gbMem.TabIndex = 7;
             this.gbMem.TabStop = false;
@@ -446,7 +461,7 @@
             this.cbMem_ErrorLocation.AutoSize = true;
             this.cbMem_ErrorLocation.Enabled = false;
             this.cbMem_ErrorLocation.Location = new System.Drawing.Point(8, 97);
-            this.cbMem_ErrorLocation.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbMem_ErrorLocation.Margin = new System.Windows.Forms.Padding(4);
             this.cbMem_ErrorLocation.Name = "cbMem_ErrorLocation";
             this.cbMem_ErrorLocation.Size = new System.Drawing.Size(255, 19);
             this.cbMem_ErrorLocation.TabIndex = 9;
@@ -459,7 +474,7 @@
             // 
             this.cbMem_ErrorStop.AutoSize = true;
             this.cbMem_ErrorStop.Location = new System.Drawing.Point(8, 70);
-            this.cbMem_ErrorStop.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbMem_ErrorStop.Margin = new System.Windows.Forms.Padding(4);
             this.cbMem_ErrorStop.Name = "cbMem_ErrorStop";
             this.cbMem_ErrorStop.Size = new System.Drawing.Size(134, 19);
             this.cbMem_ErrorStop.TabIndex = 8;
@@ -484,7 +499,7 @@
             this.cbMem.Checked = true;
             this.cbMem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbMem.Location = new System.Drawing.Point(13, 11);
-            this.cbMem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbMem.Margin = new System.Windows.Forms.Padding(4);
             this.cbMem.Name = "cbMem";
             this.cbMem.Size = new System.Drawing.Size(104, 19);
             this.cbMem.TabIndex = 6;
@@ -500,7 +515,7 @@
             this.tabPage7.Controls.Add(this.gbChkdsk);
             this.tabPage7.Controls.Add(this.cbDisk);
             this.tabPage7.Location = new System.Drawing.Point(4, 25);
-            this.tabPage7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage7.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Size = new System.Drawing.Size(403, 335);
             this.tabPage7.TabIndex = 2;
@@ -514,9 +529,9 @@
             this.gbDiskIO.Controls.Add(this.ebDisk_fragFile);
             this.gbDiskIO.Controls.Add(this.label19);
             this.gbDiskIO.Location = new System.Drawing.Point(13, 92);
-            this.gbDiskIO.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbDiskIO.Margin = new System.Windows.Forms.Padding(4);
             this.gbDiskIO.Name = "gbDiskIO";
-            this.gbDiskIO.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbDiskIO.Padding = new System.Windows.Forms.Padding(4);
             this.gbDiskIO.Size = new System.Drawing.Size(379, 152);
             this.gbDiskIO.TabIndex = 9;
             this.gbDiskIO.TabStop = false;
@@ -526,7 +541,7 @@
             // 
             this.rbDisk_max4GBBlock.AutoSize = true;
             this.rbDisk_max4GBBlock.Location = new System.Drawing.Point(12, 119);
-            this.rbDisk_max4GBBlock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbDisk_max4GBBlock.Margin = new System.Windows.Forms.Padding(4);
             this.rbDisk_max4GBBlock.Name = "rbDisk_max4GBBlock";
             this.rbDisk_max4GBBlock.Size = new System.Drawing.Size(176, 19);
             this.rbDisk_max4GBBlock.TabIndex = 10;
@@ -538,7 +553,7 @@
             // 
             this.rbDisk_min4GBBlock.AutoSize = true;
             this.rbDisk_min4GBBlock.Location = new System.Drawing.Point(12, 89);
-            this.rbDisk_min4GBBlock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbDisk_min4GBBlock.Margin = new System.Windows.Forms.Padding(4);
             this.rbDisk_min4GBBlock.Name = "rbDisk_min4GBBlock";
             this.rbDisk_min4GBBlock.Size = new System.Drawing.Size(168, 19);
             this.rbDisk_min4GBBlock.TabIndex = 9;
@@ -550,7 +565,7 @@
             // 
             this.ebDisk_fragFile.AutoSize = true;
             this.ebDisk_fragFile.Location = new System.Drawing.Point(12, 59);
-            this.ebDisk_fragFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ebDisk_fragFile.Margin = new System.Windows.Forms.Padding(4);
             this.ebDisk_fragFile.Name = "ebDisk_fragFile";
             this.ebDisk_fragFile.Size = new System.Drawing.Size(88, 19);
             this.ebDisk_fragFile.TabIndex = 8;
@@ -572,9 +587,9 @@
             // 
             this.gbChkdsk.Controls.Add(this.label17);
             this.gbChkdsk.Location = new System.Drawing.Point(13, 38);
-            this.gbChkdsk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbChkdsk.Margin = new System.Windows.Forms.Padding(4);
             this.gbChkdsk.Name = "gbChkdsk";
-            this.gbChkdsk.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbChkdsk.Padding = new System.Windows.Forms.Padding(4);
             this.gbChkdsk.Size = new System.Drawing.Size(379, 47);
             this.gbChkdsk.TabIndex = 8;
             this.gbChkdsk.TabStop = false;
@@ -596,7 +611,7 @@
             this.cbDisk.Checked = true;
             this.cbDisk.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbDisk.Location = new System.Drawing.Point(13, 11);
-            this.cbDisk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbDisk.Margin = new System.Windows.Forms.Padding(4);
             this.cbDisk.Name = "cbDisk";
             this.cbDisk.Size = new System.Drawing.Size(104, 19);
             this.cbDisk.TabIndex = 6;
@@ -613,7 +628,7 @@
             this.tabPage8.Controls.Add(this.cnNet_CommCheck);
             this.tabPage8.Controls.Add(this.cbNet);
             this.tabPage8.Location = new System.Drawing.Point(4, 25);
-            this.tabPage8.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage8.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Size = new System.Drawing.Size(403, 335);
             this.tabPage8.TabIndex = 3;
@@ -626,7 +641,7 @@
             this.cbNet_web.Checked = true;
             this.cbNet_web.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbNet_web.Location = new System.Drawing.Point(13, 65);
-            this.cbNet_web.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbNet_web.Margin = new System.Windows.Forms.Padding(4);
             this.cbNet_web.Name = "cbNet_web";
             this.cbNet_web.Size = new System.Drawing.Size(119, 19);
             this.cbNet_web.TabIndex = 9;
@@ -641,7 +656,7 @@
             this.cbNet_MAC.Checked = true;
             this.cbNet_MAC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbNet_MAC.Location = new System.Drawing.Point(13, 91);
-            this.cbNet_MAC.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbNet_MAC.Margin = new System.Windows.Forms.Padding(4);
             this.cbNet_MAC.Name = "cbNet_MAC";
             this.cbNet_MAC.Size = new System.Drawing.Size(247, 19);
             this.cbNet_MAC.TabIndex = 8;
@@ -657,7 +672,7 @@
             this.cnNet_CommCheck.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cnNet_CommCheck.Enabled = false;
             this.cnNet_CommCheck.Location = new System.Drawing.Point(13, 38);
-            this.cnNet_CommCheck.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cnNet_CommCheck.Margin = new System.Windows.Forms.Padding(4);
             this.cnNet_CommCheck.Name = "cnNet_CommCheck";
             this.cnNet_CommCheck.Size = new System.Drawing.Size(119, 19);
             this.cnNet_CommCheck.TabIndex = 7;
@@ -673,7 +688,7 @@
             this.cbNet.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbNet.Enabled = false;
             this.cbNet.Location = new System.Drawing.Point(13, 11);
-            this.cbNet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbNet.Margin = new System.Windows.Forms.Padding(4);
             this.cbNet.Name = "cbNet";
             this.cbNet.Size = new System.Drawing.Size(104, 19);
             this.cbNet.TabIndex = 6;
@@ -689,7 +704,7 @@
             this.tabPage9.Controls.Add(this.cbOutlet_COM);
             this.tabPage9.Controls.Add(this.cbOutlet);
             this.tabPage9.Location = new System.Drawing.Point(4, 25);
-            this.tabPage9.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage9.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Size = new System.Drawing.Size(403, 335);
             this.tabPage9.TabIndex = 4;
@@ -702,9 +717,9 @@
             this.gbOutlet_Audio.Controls.Add(this.cbOutlet_VolAuto);
             this.gbOutlet_Audio.Controls.Add(this.cbOutlet_audioPlay);
             this.gbOutlet_Audio.Location = new System.Drawing.Point(13, 91);
-            this.gbOutlet_Audio.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbOutlet_Audio.Margin = new System.Windows.Forms.Padding(4);
             this.gbOutlet_Audio.Name = "gbOutlet_Audio";
-            this.gbOutlet_Audio.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbOutlet_Audio.Padding = new System.Windows.Forms.Padding(4);
             this.gbOutlet_Audio.Size = new System.Drawing.Size(379, 77);
             this.gbOutlet_Audio.TabIndex = 9;
             this.gbOutlet_Audio.TabStop = false;
@@ -714,7 +729,7 @@
             // 
             this.cbOutlet_VolMax.AutoSize = true;
             this.cbOutlet_VolMax.Location = new System.Drawing.Point(144, 49);
-            this.cbOutlet_VolMax.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOutlet_VolMax.Margin = new System.Windows.Forms.Padding(4);
             this.cbOutlet_VolMax.Name = "cbOutlet_VolMax";
             this.cbOutlet_VolMax.Size = new System.Drawing.Size(119, 19);
             this.cbOutlet_VolMax.TabIndex = 2;
@@ -728,7 +743,7 @@
             // 
             this.cbOutlet_VolAuto.AutoSize = true;
             this.cbOutlet_VolAuto.Location = new System.Drawing.Point(8, 49);
-            this.cbOutlet_VolAuto.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOutlet_VolAuto.Margin = new System.Windows.Forms.Padding(4);
             this.cbOutlet_VolAuto.Name = "cbOutlet_VolAuto";
             this.cbOutlet_VolAuto.Size = new System.Drawing.Size(119, 19);
             this.cbOutlet_VolAuto.TabIndex = 1;
@@ -741,7 +756,7 @@
             // 
             this.cbOutlet_audioPlay.AutoSize = true;
             this.cbOutlet_audioPlay.Location = new System.Drawing.Point(8, 22);
-            this.cbOutlet_audioPlay.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOutlet_audioPlay.Margin = new System.Windows.Forms.Padding(4);
             this.cbOutlet_audioPlay.Name = "cbOutlet_audioPlay";
             this.cbOutlet_audioPlay.Size = new System.Drawing.Size(164, 19);
             this.cbOutlet_audioPlay.TabIndex = 0;
@@ -754,7 +769,7 @@
             // 
             this.cbOutlet_USB.AutoSize = true;
             this.cbOutlet_USB.Location = new System.Drawing.Point(13, 65);
-            this.cbOutlet_USB.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOutlet_USB.Margin = new System.Windows.Forms.Padding(4);
             this.cbOutlet_USB.Name = "cbOutlet_USB";
             this.cbOutlet_USB.Size = new System.Drawing.Size(113, 19);
             this.cbOutlet_USB.TabIndex = 8;
@@ -767,7 +782,7 @@
             // 
             this.cbOutlet_COM.AutoSize = true;
             this.cbOutlet_COM.Location = new System.Drawing.Point(13, 38);
-            this.cbOutlet_COM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOutlet_COM.Margin = new System.Windows.Forms.Padding(4);
             this.cbOutlet_COM.Name = "cbOutlet_COM";
             this.cbOutlet_COM.Size = new System.Drawing.Size(263, 19);
             this.cbOutlet_COM.TabIndex = 7;
@@ -782,7 +797,7 @@
             this.cbOutlet.Checked = true;
             this.cbOutlet.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbOutlet.Location = new System.Drawing.Point(13, 11);
-            this.cbOutlet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOutlet.Margin = new System.Windows.Forms.Padding(4);
             this.cbOutlet.Name = "cbOutlet";
             this.cbOutlet.Size = new System.Drawing.Size(104, 19);
             this.cbOutlet.TabIndex = 6;
@@ -799,7 +814,7 @@
             this.tabPage10.Controls.Add(this.cbOther_Preset);
             this.tabPage10.Controls.Add(this.cbOther_RTCLocal);
             this.tabPage10.Location = new System.Drawing.Point(4, 25);
-            this.tabPage10.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage10.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Size = new System.Drawing.Size(403, 335);
             this.tabPage10.TabIndex = 5;
@@ -810,7 +825,7 @@
             // 
             this.cbOther_AllInfo.AutoSize = true;
             this.cbOther_AllInfo.Location = new System.Drawing.Point(13, 277);
-            this.cbOther_AllInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOther_AllInfo.Margin = new System.Windows.Forms.Padding(4);
             this.cbOther_AllInfo.Name = "cbOther_AllInfo";
             this.cbOther_AllInfo.Size = new System.Drawing.Size(119, 19);
             this.cbOther_AllInfo.TabIndex = 9;
@@ -835,9 +850,9 @@
             this.gbPreset.Controls.Add(this.label20);
             this.gbPreset.Enabled = false;
             this.gbPreset.Location = new System.Drawing.Point(13, 65);
-            this.gbPreset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbPreset.Margin = new System.Windows.Forms.Padding(4);
             this.gbPreset.Name = "gbPreset";
-            this.gbPreset.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbPreset.Padding = new System.Windows.Forms.Padding(4);
             this.gbPreset.Size = new System.Drawing.Size(352, 205);
             this.gbPreset.TabIndex = 8;
             this.gbPreset.TabStop = false;
@@ -846,7 +861,7 @@
             // btnPreset_Disk
             // 
             this.btnPreset_Disk.Location = new System.Drawing.Point(283, 166);
-            this.btnPreset_Disk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPreset_Disk.Margin = new System.Windows.Forms.Padding(4);
             this.btnPreset_Disk.Name = "btnPreset_Disk";
             this.btnPreset_Disk.Size = new System.Drawing.Size(61, 26);
             this.btnPreset_Disk.TabIndex = 14;
@@ -856,7 +871,7 @@
             // tbPreset_Disk
             // 
             this.tbPreset_Disk.Location = new System.Drawing.Point(12, 169);
-            this.tbPreset_Disk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbPreset_Disk.Margin = new System.Windows.Forms.Padding(4);
             this.tbPreset_Disk.Name = "tbPreset_Disk";
             this.tbPreset_Disk.ReadOnly = true;
             this.tbPreset_Disk.Size = new System.Drawing.Size(261, 25);
@@ -865,7 +880,7 @@
             // btnPreset_VedioCard
             // 
             this.btnPreset_VedioCard.Location = new System.Drawing.Point(283, 121);
-            this.btnPreset_VedioCard.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPreset_VedioCard.Margin = new System.Windows.Forms.Padding(4);
             this.btnPreset_VedioCard.Name = "btnPreset_VedioCard";
             this.btnPreset_VedioCard.Size = new System.Drawing.Size(61, 26);
             this.btnPreset_VedioCard.TabIndex = 12;
@@ -875,7 +890,7 @@
             // tbPreset_VedioCard
             // 
             this.tbPreset_VedioCard.Location = new System.Drawing.Point(12, 124);
-            this.tbPreset_VedioCard.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbPreset_VedioCard.Margin = new System.Windows.Forms.Padding(4);
             this.tbPreset_VedioCard.Name = "tbPreset_VedioCard";
             this.tbPreset_VedioCard.ReadOnly = true;
             this.tbPreset_VedioCard.Size = new System.Drawing.Size(261, 25);
@@ -884,7 +899,7 @@
             // btnPreset_Mem
             // 
             this.btnPreset_Mem.Location = new System.Drawing.Point(283, 80);
-            this.btnPreset_Mem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPreset_Mem.Margin = new System.Windows.Forms.Padding(4);
             this.btnPreset_Mem.Name = "btnPreset_Mem";
             this.btnPreset_Mem.Size = new System.Drawing.Size(61, 26);
             this.btnPreset_Mem.TabIndex = 10;
@@ -894,7 +909,7 @@
             // tbPreset_Mem
             // 
             this.tbPreset_Mem.Location = new System.Drawing.Point(12, 82);
-            this.tbPreset_Mem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbPreset_Mem.Margin = new System.Windows.Forms.Padding(4);
             this.tbPreset_Mem.Name = "tbPreset_Mem";
             this.tbPreset_Mem.ReadOnly = true;
             this.tbPreset_Mem.Size = new System.Drawing.Size(261, 25);
@@ -903,7 +918,7 @@
             // btnPreset_CPU
             // 
             this.btnPreset_CPU.Location = new System.Drawing.Point(283, 35);
-            this.btnPreset_CPU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPreset_CPU.Margin = new System.Windows.Forms.Padding(4);
             this.btnPreset_CPU.Name = "btnPreset_CPU";
             this.btnPreset_CPU.Size = new System.Drawing.Size(61, 26);
             this.btnPreset_CPU.TabIndex = 8;
@@ -943,7 +958,7 @@
             // tbPreset_CPU
             // 
             this.tbPreset_CPU.Location = new System.Drawing.Point(12, 37);
-            this.tbPreset_CPU.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbPreset_CPU.Margin = new System.Windows.Forms.Padding(4);
             this.tbPreset_CPU.Name = "tbPreset_CPU";
             this.tbPreset_CPU.ReadOnly = true;
             this.tbPreset_CPU.Size = new System.Drawing.Size(261, 25);
@@ -963,7 +978,7 @@
             // 
             this.cbOther_Preset.AutoSize = true;
             this.cbOther_Preset.Location = new System.Drawing.Point(13, 38);
-            this.cbOther_Preset.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOther_Preset.Margin = new System.Windows.Forms.Padding(4);
             this.cbOther_Preset.Name = "cbOther_Preset";
             this.cbOther_Preset.Size = new System.Drawing.Size(134, 19);
             this.cbOther_Preset.TabIndex = 7;
@@ -977,7 +992,7 @@
             // 
             this.cbOther_RTCLocal.AutoSize = true;
             this.cbOther_RTCLocal.Location = new System.Drawing.Point(13, 11);
-            this.cbOther_RTCLocal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbOther_RTCLocal.Margin = new System.Windows.Forms.Padding(4);
             this.cbOther_RTCLocal.Name = "cbOther_RTCLocal";
             this.cbOther_RTCLocal.Size = new System.Drawing.Size(134, 19);
             this.cbOther_RTCLocal.TabIndex = 6;
@@ -1010,7 +1025,7 @@
             this.tabPage3.Controls.Add(this.lvClients);
             this.tabPage3.Controls.Add(this.label8);
             this.tabPage3.Location = new System.Drawing.Point(4, 25);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(836, 483);
             this.tabPage3.TabIndex = 2;
@@ -1020,7 +1035,7 @@
             // btnResult
             // 
             this.btnResult.Location = new System.Drawing.Point(109, 434);
-            this.btnResult.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnResult.Margin = new System.Windows.Forms.Padding(4);
             this.btnResult.Name = "btnResult";
             this.btnResult.Size = new System.Drawing.Size(59, 45);
             this.btnResult.TabIndex = 16;
@@ -1030,7 +1045,7 @@
             // btnPauseSelectedItem
             // 
             this.btnPauseSelectedItem.Location = new System.Drawing.Point(8, 330);
-            this.btnPauseSelectedItem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPauseSelectedItem.Margin = new System.Windows.Forms.Padding(4);
             this.btnPauseSelectedItem.Name = "btnPauseSelectedItem";
             this.btnPauseSelectedItem.Size = new System.Drawing.Size(61, 45);
             this.btnPauseSelectedItem.TabIndex = 15;
@@ -1060,7 +1075,7 @@
             // btnUploadNow
             // 
             this.btnUploadNow.Location = new System.Drawing.Point(8, 434);
-            this.btnUploadNow.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnUploadNow.Margin = new System.Windows.Forms.Padding(4);
             this.btnUploadNow.Name = "btnUploadNow";
             this.btnUploadNow.Size = new System.Drawing.Size(93, 45);
             this.btnUploadNow.TabIndex = 12;
@@ -1070,7 +1085,7 @@
             // btnStopSelectedItem
             // 
             this.btnStopSelectedItem.Location = new System.Drawing.Point(72, 330);
-            this.btnStopSelectedItem.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnStopSelectedItem.Margin = new System.Windows.Forms.Padding(4);
             this.btnStopSelectedItem.Name = "btnStopSelectedItem";
             this.btnStopSelectedItem.Size = new System.Drawing.Size(96, 45);
             this.btnStopSelectedItem.TabIndex = 10;
@@ -1087,7 +1102,7 @@
             "硬盘测试",
             "外设组件测试"});
             this.listBox1.Location = new System.Drawing.Point(8, 244);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listBox1.Margin = new System.Windows.Forms.Padding(4);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(159, 79);
             this.listBox1.TabIndex = 9;
@@ -1095,7 +1110,7 @@
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(8, 382);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(160, 45);
             this.button3.TabIndex = 8;
@@ -1109,7 +1124,7 @@
             this.columnHeader5});
             this.listView2.HideSelection = false;
             this.listView2.Location = new System.Drawing.Point(176, 244);
-            this.listView2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.listView2.Margin = new System.Windows.Forms.Padding(4);
             this.listView2.Name = "listView2";
             this.listView2.Size = new System.Drawing.Size(651, 235);
             this.listView2.TabIndex = 7;
@@ -1133,7 +1148,7 @@
             this.lvClients.GridLines = true;
             this.lvClients.HideSelection = false;
             this.lvClients.Location = new System.Drawing.Point(8, 65);
-            this.lvClients.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvClients.Margin = new System.Windows.Forms.Padding(4);
             this.lvClients.Name = "lvClients";
             this.lvClients.Size = new System.Drawing.Size(819, 156);
             this.lvClients.TabIndex = 6;
@@ -1167,7 +1182,7 @@
             this.tabPage4.Controls.Add(this.label28);
             this.tabPage4.Controls.Add(this.label27);
             this.tabPage4.Location = new System.Drawing.Point(4, 25);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(836, 483);
             this.tabPage4.TabIndex = 3;
@@ -1198,7 +1213,7 @@
             // 
             this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button5.Location = new System.Drawing.Point(585, 551);
-            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button5.Margin = new System.Windows.Forms.Padding(4);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(36, 31);
             this.button5.TabIndex = 11;
@@ -1321,10 +1336,14 @@
             // pbGlobalProgress
             // 
             this.pbGlobalProgress.Location = new System.Drawing.Point(97, 551);
-            this.pbGlobalProgress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pbGlobalProgress.Margin = new System.Windows.Forms.Padding(4);
             this.pbGlobalProgress.Name = "pbGlobalProgress";
             this.pbGlobalProgress.Size = new System.Drawing.Size(480, 31);
             this.pbGlobalProgress.TabIndex = 7;
+            // 
+            // serverMainBindingSource
+            // 
+            this.serverMainBindingSource.DataSource = typeof(Server.ServerMain);
             // 
             // ServerMain
             // 
@@ -1380,6 +1399,7 @@
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.serverMainBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1490,6 +1510,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem 刷新UUIDUToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 退出EToolStripMenuItem;
+        private System.Windows.Forms.Label 当前连接数;
+        private System.Windows.Forms.BindingSource serverMainBindingSource;
     }
 }
 

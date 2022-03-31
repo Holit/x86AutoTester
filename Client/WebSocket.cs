@@ -20,6 +20,10 @@ namespace Client
         {
             _ = GetServer();
         }
+        ~WebSocket()
+        {
+            if (serverWebSocket != null) serverWebSocket.Dispose();
+        }
         private async Task GetServer()
         {
             await Task.Run(async () =>
@@ -58,6 +62,8 @@ namespace Client
                             if (message.MessageType == AutoTestMessage.Message.MessageTypes.JoinServer && message.Content == "OK")
                             {
                                 serverWebSocket = webSocket;
+                                Program.ClientMain.setServerIP(endpoint.Address.ToString());
+                                Program.ClientMain.setServerUUID(Program.serverUUID = serverInfo.Content);
                                 Console.WriteLine("加入服务器成功");
                                 break;
                             }
@@ -82,13 +88,25 @@ namespace Client
             });
             await Task.Run(async () =>
             {
-                byte[] buffer = new byte[1024*1024];
-                CancellationToken cancellation = new CancellationToken();
-                while (true)
+                try
                 {
-                    WebSocketReceiveResult result = await serverWebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
-                    AutoTestMessage.Message message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.ASCII.GetString(buffer, 0, result.Count));
-                    HandleMessage(message);
+                    byte[] buffer = new byte[1024 * 1024];
+                    CancellationToken cancellation = new CancellationToken();
+                    while (true)
+                    {
+                        WebSocketReceiveResult result = await serverWebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
+                        AutoTestMessage.Message message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.ASCII.GetString(buffer, 0, result.Count));
+                        HandleMessage(message);
+                    }
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    Console.WriteLine("finally");
+                    serverWebSocket.Dispose();
                 }
             });
             return;
