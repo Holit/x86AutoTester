@@ -34,10 +34,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Fleck, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\WinUI\packages\Fleck.1.2.0\lib\net45\Fleck.dll</HintPath>
+      <HintPath>..\packages\Fleck.1.2.0\lib\net45\Fleck.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\WinUI\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -87,6 +87,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AutoTestMessage\AutoTestMessage.csproj">
+      <Project>{7e383cf6-a62b-4b96-b1dd-c7d8693cfcef}</Project>
+      <Name>AutoTestMessage</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{733F5CAF-C5C4-4D2D-AE81-9F3A8DC35FA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoTestMessage", "AutoTestMessage\AutoTestMessage.csproj", "{7E383CF6-A62B-4B96-B1DD-C7D8693CFCEF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{733F5CAF-C5C4-4D2D-AE81-9F3A8DC35FA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{733F5CAF-C5C4-4D2D-AE81-9F3A8DC35FA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{733F5CAF-C5C4-4D2D-AE81-9F3A8DC35FA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E383CF6-A62B-4B96-B1DD-C7D8693CFCEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E383CF6-A62B-4B96-B1DD-C7D8693CFCEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E383CF6-A62B-4B96-B1DD-C7D8693CFCEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E383CF6-A62B-4B96-B1DD-C7D8693CFCEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,7 @@ namespace Server
 {
     internal static class Program
     {
+        public static readonly string Uuid = Guid.NewGuid().ToString();
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
