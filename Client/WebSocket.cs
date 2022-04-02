@@ -1,23 +1,21 @@
-﻿using System;
+﻿using AutoTestMessage;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Management;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using AutoTestMessage;
-using Newtonsoft.Json;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
-using System.Management;
+using System.Threading.Tasks;
 using static AutoTestMessage.TesterMessage;
 
 namespace Client
 {
     public class WebSocket
     {
-        private AutoTestMessage.Message task = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.None };
+        private Message task = new Message { MessageType = Message.MessageTypes.None };
         private ClientWebSocket serverWebSocket = null;
         private Task getServerTask;
         private WebSocket()
@@ -41,29 +39,29 @@ namespace Client
                     try
                     {
                         string returnData = Encoding.ASCII.GetString(recData);
-                        AutoTestMessage.Message serverInfo = JsonConvert.DeserializeObject<AutoTestMessage.Message>(returnData);
+                        Message serverInfo = JsonConvert.DeserializeObject<Message>(returnData);
                         ClientWebSocket webSocket = new ClientWebSocket();
                         CancellationToken cancellation = new CancellationToken();
-                        
-                        await webSocket.ConnectAsync(new Uri("ws://"+ endpoint.Address+ ":6839"), cancellation);
 
-                        AutoTestMessage.Message message = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.ServerUuid };
+                        await webSocket.ConnectAsync(new Uri("ws://" + endpoint.Address + ":6839"), cancellation);
+
+                        Message message = new Message { MessageType = Message.MessageTypes.ServerUuid };
                         byte[] bytesMessage = Encoding.ASCII.GetBytes(message.ToString());
                         await webSocket.SendAsync(new ArraySegment<byte>(bytesMessage), WebSocketMessageType.Text, true, cancellation);
-                        WebSocketReceiveResult result=await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
-                        message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.ASCII.GetString(buffer, 0, result.Count));
+                        WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
+                        message = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(buffer, 0, result.Count));
                         if (message.Content == serverInfo.Content)
                         {
                             await webSocket.SendAsync(new ArraySegment<byte>(
                                 Encoding.ASCII.GetBytes(
-                                    new AutoTestMessage.Message
+                                    new Message
                                     {
-                                        MessageType = AutoTestMessage.Message.MessageTypes.JoinServer,
+                                        MessageType = Message.MessageTypes.JoinServer,
                                         Content = serverInfo.Content
                                     }.ToString())), WebSocketMessageType.Text, true, cancellation);
                             result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
-                            message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.ASCII.GetString(buffer, 0, result.Count));
-                            if (message.MessageType == AutoTestMessage.Message.MessageTypes.JoinServer && message.Content == "OK")
+                            message = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(buffer, 0, result.Count));
+                            if (message.MessageType == Message.MessageTypes.JoinServer && message.Content == "OK")
                             {
                                 serverWebSocket = webSocket;
                                 Program.ClientMain.setServerIP(endpoint.Address.ToString());
@@ -71,9 +69,9 @@ namespace Client
                                 Console.WriteLine("加入服务器成功");
                                 _ = webSocket.SendAsync(new ArraySegment<byte>(
                                     Encoding.ASCII.GetBytes(
-                                        new AutoTestMessage.Message
+                                        new Message
                                         {
-                                            MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
+                                            MessageType = Message.MessageTypes.CurrentTask,
                                             Content = task.ToString()
                                         }.ToString())), WebSocketMessageType.Text, true, cancellation);
                                 break;
@@ -84,11 +82,12 @@ namespace Client
                             }
                         }
                     }
-                    catch(JsonReaderException exception) {
+                    catch (JsonReaderException exception)
+                    {
                         Console.WriteLine("接收到不正确的消息");
                         Console.WriteLine(exception);
                     }
-                    catch(WebSocketException exception)
+                    catch (WebSocketException exception)
                     {
                         Console.WriteLine("连接到服务器异常");
                         Console.WriteLine(exception);
@@ -106,7 +105,7 @@ namespace Client
                       while (true)
                       {
                           WebSocketReceiveResult result = await serverWebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
-                          AutoTestMessage.Message message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.ASCII.GetString(buffer, 0, result.Count));
+                          Message message = JsonConvert.DeserializeObject<Message>(Encoding.ASCII.GetString(buffer, 0, result.Count));
                           HandleMessage(message);
                       }
                   }
@@ -130,15 +129,15 @@ namespace Client
                 return singleInstance;
             }
         }
-        private void HandleMessage(AutoTestMessage.Message message)
+        private void HandleMessage(Message message)
         {
-            if (message.MessageType == AutoTestMessage.Message.MessageTypes.WMIMessage)
+            if (message.MessageType == Message.MessageTypes.WMIMessage)
             {
                 _ = Task.Run(async () =>
                   {
-                      await SendMessage(new AutoTestMessage.Message
+                      await SendMessage(new Message
                       {
-                          MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
+                          MessageType = Message.MessageTypes.CurrentTask,
                           Content = (task = message).ToString()
                       });
                       ManagementObjectCollection managementBaseObjects = await WMITest.GetDeatils(message.Content);
@@ -153,38 +152,38 @@ namespace Client
                           }
                           wmiMessage.data.Add(data);
                       }
-                      await SendMessage(new AutoTestMessage.Message
+                      await SendMessage(new Message
                       {
-                          MessageType = AutoTestMessage.Message.MessageTypes.WMIMessage,
+                          MessageType = Message.MessageTypes.WMIMessage,
                           Content = wmiMessage.ToString()
                       });
-                      await SendMessage(new AutoTestMessage.Message
+                      await SendMessage(new Message
                       {
-                          MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
-                          Content = (task = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.None }).ToString()
+                          MessageType = Message.MessageTypes.CurrentTask,
+                          Content = (task = new Message { MessageType = Message.MessageTypes.None }).ToString()
                       });
                   });
             }
-            else if (message.MessageType == AutoTestMessage.Message.MessageTypes.TesterMessage)
+            else if (message.MessageType == Message.MessageTypes.TesterMessage)
             {
                 TesterMessage testerMessage = JsonConvert.DeserializeObject<TesterMessage>(message.Content);
                 _ = Task.Run(async () =>
                 {
-                    await SendMessage(new AutoTestMessage.Message
+                    await SendMessage(new Message
                     {
-                        MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
+                        MessageType = Message.MessageTypes.CurrentTask,
                         Content = (task = message).ToString()
                     });
-                    TestResult result =await TesterTest.startTesterAsync(testerMessage.data);
-                    await SendMessage(new AutoTestMessage.Message
+                    TestResult result = await TesterTest.startTesterAsync(testerMessage.data);
+                    await SendMessage(new Message
                     {
-                        MessageType = AutoTestMessage.Message.MessageTypes.WMIMessage,
+                        MessageType = Message.MessageTypes.WMIMessage,
                         Content = result.ToString()
                     });
-                    await SendMessage(new AutoTestMessage.Message
+                    await SendMessage(new Message
                     {
-                        MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
-                        Content = (task = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.None }).ToString()
+                        MessageType = Message.MessageTypes.CurrentTask,
+                        Content = (task = new Message { MessageType = Message.MessageTypes.None }).ToString()
                     });
                 });
             }
@@ -193,7 +192,7 @@ namespace Client
                 Console.WriteLine(message);
             }
         }
-        public async Task SendMessage(AutoTestMessage.Message message)
+        public async Task SendMessage(Message message)
         {
             await getServerTask;
             CancellationToken cancellation = new CancellationToken();
