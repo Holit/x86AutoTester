@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Management;
 using System.Text;
 using System.Threading.Tasks;
+using static AutoTestMessage.TesterMessage;
 
 namespace Client
 {
@@ -30,6 +32,30 @@ namespace Client
                 );
             }
             return ListViewMap[path];
+        }
+    }
+    public class TesterTest
+    {
+        public static async Task<TestResult> startTesterAsync(Dictionary<string,string> args)
+        {
+            ProcessStartInfo processInfo = new ProcessStartInfo();
+            processInfo.FileName = "Tester.exe";
+            string argString = "";
+            foreach(var i in args){
+                argString += " -" + i.Key + " " + i.Value;
+            }
+            processInfo.Arguments = argString;
+            Process pro = new Process();
+            pro.EnableRaisingEvents = true;
+            pro.StartInfo = processInfo;
+            pro.Exited += new EventHandler((obj, arg) =>
+            {
+                Console.WriteLine("exit");
+                Console.WriteLine(pro.ExitCode);
+            });
+            pro.Start();
+            await Task.Run(()=>pro.WaitForExit());
+            return (TestResult)pro.ExitCode;
         }
     }
 }

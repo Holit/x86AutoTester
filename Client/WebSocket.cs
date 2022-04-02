@@ -11,11 +11,13 @@ using Newtonsoft.Json;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Management;
+using static AutoTestMessage.TesterMessage;
 
 namespace Client
 {
     public class WebSocket
     {
+        private AutoTestMessage.Message task = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.None };
         private ClientWebSocket serverWebSocket = null;
         private Task getServerTask;
         private WebSocket()
@@ -67,6 +69,13 @@ namespace Client
                                 Program.ClientMain.setServerIP(endpoint.Address.ToString());
                                 Program.ClientMain.setServerUUID(Program.serverUUID = serverInfo.Content);
                                 Console.WriteLine("加入服务器成功");
+                                _ = webSocket.SendAsync(new ArraySegment<byte>(
+                                    Encoding.ASCII.GetBytes(
+                                        new AutoTestMessage.Message
+                                        {
+                                            MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
+                                            Content = task.ToString()
+                                        }.ToString())), WebSocketMessageType.Text, true, cancellation);
                                 break;
                             }
                             else
@@ -121,26 +130,62 @@ namespace Client
                 return singleInstance;
             }
         }
-        private async void HandleMessage(AutoTestMessage.Message message)
+        private void HandleMessage(AutoTestMessage.Message message)
         {
             if (message.MessageType == AutoTestMessage.Message.MessageTypes.WMIMessage)
             {
-                ManagementObjectCollection managementBaseObjects = await WMITest.GetDeatils(message.Content);
-                WMIMessage wmiMessage = new WMIMessage();
-                wmiMessage.path = message.Content;
-                foreach (ManagementObject mo in managementBaseObjects)
+                _ = Task.Run(async () =>
+                  {
+                      await SendMessage(new AutoTestMessage.Message
+                      {
+                          MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
+                          Content = (task = message).ToString()
+                      });
+                      ManagementObjectCollection managementBaseObjects = await WMITest.GetDeatils(message.Content);
+                      WMIMessage wmiMessage = new WMIMessage();
+                      wmiMessage.path = message.Content;
+                      foreach (ManagementObject mo in managementBaseObjects)
+                      {
+                          Dictionary<string, string> data = new Dictionary<string, string>();
+                          foreach (PropertyData pd in mo.Properties)
+                          {
+                              data.Add(pd.Name, pd.Value == null ? "null" : pd.Value.ToString());
+                          }
+                          wmiMessage.data.Add(data);
+                      }
+                      await SendMessage(new AutoTestMessage.Message
+                      {
+                          MessageType = AutoTestMessage.Message.MessageTypes.WMIMessage,
+                          Content = wmiMessage.ToString()
+                      });
+                      await SendMessage(new AutoTestMessage.Message
+                      {
+                          MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
+                          Content = (task = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.None }).ToString()
+                      });
+                  });
+            }
+            else if (message.MessageType == AutoTestMessage.Message.MessageTypes.TesterMessage)
+            {
+                TesterMessage testerMessage = JsonConvert.DeserializeObject<TesterMessage>(message.Content);
+                _ = Task.Run(async () =>
                 {
-                    Dictionary<string, string> data = new Dictionary<string, string>();
-                    foreach (PropertyData pd in mo.Properties)
+                    await SendMessage(new AutoTestMessage.Message
                     {
-                        data.Add(pd.Name, pd.Value == null ? "null" : pd.Value.ToString());
-                    }
-                    wmiMessage.data.Add(data);
-                }
-                SendMessage(new AutoTestMessage.Message
-                {
-                    MessageType = AutoTestMessage.Message.MessageTypes.WMIMessage,
-                    Content = wmiMessage.ToString()
+                        MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
+                        Content = (task = message).ToString()
+                    });
+                    TestResult result =await TesterTest.startTesterAsync(testerMessage.data);
+                    await SendMessage(new AutoTestMessage.Message
+                    {
+                        MessageType = AutoTestMessage.Message.MessageTypes.WMIMessage,
+                        Content = result.ToString()
+                    });
+                    await SendMessage(new AutoTestMessage.Message
+                    {
+                        MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
+                        Content = (task = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.None }).ToString()
+                    });
                 });
             }
             else
@@ -148,7 +193,7 @@ namespace Client
                 Console.WriteLine(message);
             }
         }
-        public async void SendMessage(AutoTestMessage.Message message)
+        public async Task SendMessage(AutoTestMessage.Message message)
         {
             await getServerTask;
             CancellationToken cancellation = new CancellationToken();
