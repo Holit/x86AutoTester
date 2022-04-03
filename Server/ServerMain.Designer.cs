@@ -39,6 +39,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.labelCurrentConnCount = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.pgPreset = new System.Windows.Forms.PropertyGrid();
+            this.tbDescription = new System.Windows.Forms.TextBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.btnSaveConfig = new System.Windows.Forms.Button();
             this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -78,6 +80,17 @@
             this.cbOutlet_USB = new System.Windows.Forms.CheckBox();
             this.cbOutlet_COM = new System.Windows.Forms.CheckBox();
             this.cbOutlet = new System.Windows.Forms.CheckBox();
+            this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.cbOther_AllInfo = new System.Windows.Forms.CheckBox();
+            this.gbPreset = new System.Windows.Forms.GroupBox();
+            this.lvPreset_Dev = new System.Windows.Forms.ListView();
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnAddDev = new System.Windows.Forms.Button();
+            this.combPreset_SelDev = new System.Windows.Forms.ComboBox();
+            this.btnPreset_CopyToAll = new System.Windows.Forms.Button();
+            this.cbOther_Preset = new System.Windows.Forms.CheckBox();
+            this.cbOther_RTCLocal = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.btnResult = new System.Windows.Forms.Button();
@@ -115,21 +128,9 @@
             this.退出EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label26 = new System.Windows.Forms.Label();
             this.pbGlobalProgress = new System.Windows.Forms.ProgressBar();
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.serverMainBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.tabPage11 = new System.Windows.Forms.TabPage();
-            this.cbOther_AllInfo = new System.Windows.Forms.CheckBox();
-            this.gbPreset = new System.Windows.Forms.GroupBox();
-            this.lvPreset_Dev = new System.Windows.Forms.ListView();
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.btnAddDev = new System.Windows.Forms.Button();
-            this.combPreset_SelDev = new System.Windows.Forms.ComboBox();
-            this.btnPreset_CopyToAll = new System.Windows.Forms.Button();
-            this.cbOther_Preset = new System.Windows.Forms.CheckBox();
-            this.cbOther_RTCLocal = new System.Windows.Forms.CheckBox();
-            this.pgPreset = new System.Windows.Forms.PropertyGrid();
-            this.tbDescription = new System.Windows.Forms.TextBox();
+            this.btnDelDev = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -144,13 +145,13 @@
             this.tabPage8.SuspendLayout();
             this.tabPage9.SuspendLayout();
             this.gbOutlet_Audio.SuspendLayout();
+            this.tabPage11.SuspendLayout();
+            this.gbPreset.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serverMainBindingSource)).BeginInit();
-            this.tabPage11.SuspendLayout();
-            this.gbPreset.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -176,7 +177,7 @@
             this.tabPage1.Controls.Add(this.labelCurrentConnCount);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(625, 418);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "服务器配置";
@@ -255,11 +256,33 @@
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(625, 418);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "配置文件详情";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // pgPreset
+            // 
+            this.pgPreset.Location = new System.Drawing.Point(318, 48);
+            this.pgPreset.Margin = new System.Windows.Forms.Padding(2);
+            this.pgPreset.Name = "pgPreset";
+            this.pgPreset.Size = new System.Drawing.Size(298, 256);
+            this.pgPreset.TabIndex = 12;
+            this.pgPreset.Visible = false;
+            // 
+            // tbDescription
+            // 
+            this.tbDescription.BackColor = System.Drawing.Color.White;
+            this.tbDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbDescription.Location = new System.Drawing.Point(318, 48);
+            this.tbDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tbDescription.Multiline = true;
+            this.tbDescription.Name = "tbDescription";
+            this.tbDescription.ReadOnly = true;
+            this.tbDescription.Size = new System.Drawing.Size(298, 100);
+            this.tbDescription.TabIndex = 11;
+            this.tbDescription.Text = "将在此处显示具体项目的描述，将鼠标悬停在任意控件上查看详情...";
             // 
             // btnSend
             // 
@@ -278,6 +301,7 @@
             this.btnSaveConfig.TabIndex = 7;
             this.btnSaveConfig.Text = "保存配置文件";
             this.btnSaveConfig.UseVisualStyleBackColor = true;
+            this.btnSaveConfig.Click += new System.EventHandler(this.btnSaveConfig_Click);
             // 
             // tabControl2
             // 
@@ -299,7 +323,7 @@
             this.tabPage5.Controls.Add(this.cbCPU);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage5.Size = new System.Drawing.Size(300, 289);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "处理器";
@@ -397,7 +421,7 @@
             this.tabPage6.Controls.Add(this.cbMem);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage6.Size = new System.Drawing.Size(300, 289);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "内存";
@@ -737,6 +761,142 @@
             this.cbOutlet.MouseEnter += new System.EventHandler(this.cbOutlet_MouseEnter);
             this.cbOutlet.MouseLeave += new System.EventHandler(this.cbOutlet_MouseLeave);
             // 
+            // tabPage11
+            // 
+            this.tabPage11.Controls.Add(this.cbOther_AllInfo);
+            this.tabPage11.Controls.Add(this.gbPreset);
+            this.tabPage11.Controls.Add(this.cbOther_Preset);
+            this.tabPage11.Controls.Add(this.cbOther_RTCLocal);
+            this.tabPage11.Location = new System.Drawing.Point(4, 22);
+            this.tabPage11.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabPage11.Name = "tabPage11";
+            this.tabPage11.Size = new System.Drawing.Size(300, 289);
+            this.tabPage11.TabIndex = 6;
+            this.tabPage11.Text = "校验";
+            this.tabPage11.UseVisualStyleBackColor = true;
+            // 
+            // cbOther_AllInfo
+            // 
+            this.cbOther_AllInfo.AutoSize = true;
+            this.cbOther_AllInfo.Location = new System.Drawing.Point(10, 56);
+            this.cbOther_AllInfo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbOther_AllInfo.Name = "cbOther_AllInfo";
+            this.cbOther_AllInfo.Size = new System.Drawing.Size(98, 17);
+            this.cbOther_AllInfo.TabIndex = 9;
+            this.cbOther_AllInfo.Text = "传递所有信息";
+            this.cbOther_AllInfo.UseVisualStyleBackColor = true;
+            this.cbOther_AllInfo.MouseEnter += new System.EventHandler(this.cbOther_AllInfo_MouseEnter_1);
+            this.cbOther_AllInfo.MouseLeave += new System.EventHandler(this.cbOther_AllInfo_MouseLeave_1);
+            // 
+            // gbPreset
+            // 
+            this.gbPreset.Controls.Add(this.btnDelDev);
+            this.gbPreset.Controls.Add(this.lvPreset_Dev);
+            this.gbPreset.Controls.Add(this.btnAddDev);
+            this.gbPreset.Controls.Add(this.combPreset_SelDev);
+            this.gbPreset.Controls.Add(this.btnPreset_CopyToAll);
+            this.gbPreset.Enabled = false;
+            this.gbPreset.Location = new System.Drawing.Point(10, 56);
+            this.gbPreset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbPreset.Name = "gbPreset";
+            this.gbPreset.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbPreset.Size = new System.Drawing.Size(264, 184);
+            this.gbPreset.TabIndex = 8;
+            this.gbPreset.TabStop = false;
+            this.gbPreset.Text = "自定义配置校验";
+            this.gbPreset.Visible = false;
+            // 
+            // lvPreset_Dev
+            // 
+            this.lvPreset_Dev.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader6});
+            this.lvPreset_Dev.FullRowSelect = true;
+            this.lvPreset_Dev.GridLines = true;
+            this.lvPreset_Dev.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lvPreset_Dev.HideSelection = false;
+            this.lvPreset_Dev.Location = new System.Drawing.Point(6, 24);
+            this.lvPreset_Dev.Name = "lvPreset_Dev";
+            this.lvPreset_Dev.Size = new System.Drawing.Size(252, 88);
+            this.lvPreset_Dev.TabIndex = 16;
+            this.lvPreset_Dev.UseCompatibleStateImageBehavior = false;
+            this.lvPreset_Dev.View = System.Windows.Forms.View.Details;
+            this.lvPreset_Dev.SelectedIndexChanged += new System.EventHandler(this.lvPreset_Dev_SelectedIndexChanged);
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "#";
+            this.columnHeader8.Width = 22;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "设备类型";
+            this.columnHeader9.Width = 70;
+            // 
+            // btnAddDev
+            // 
+            this.btnAddDev.Location = new System.Drawing.Point(194, 118);
+            this.btnAddDev.Name = "btnAddDev";
+            this.btnAddDev.Size = new System.Drawing.Size(28, 21);
+            this.btnAddDev.TabIndex = 15;
+            this.btnAddDev.Text = "+";
+            this.btnAddDev.UseVisualStyleBackColor = true;
+            this.btnAddDev.Click += new System.EventHandler(this.btnAddDev_Click);
+            // 
+            // combPreset_SelDev
+            // 
+            this.combPreset_SelDev.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combPreset_SelDev.FormattingEnabled = true;
+            this.combPreset_SelDev.Items.AddRange(new object[] {
+            "中央处理器设备",
+            "内存设备",
+            "驱动器设备",
+            "网络适配器设备",
+            "显示适配器设备"});
+            this.combPreset_SelDev.Location = new System.Drawing.Point(67, 118);
+            this.combPreset_SelDev.MaxDropDownItems = 5;
+            this.combPreset_SelDev.Name = "combPreset_SelDev";
+            this.combPreset_SelDev.Size = new System.Drawing.Size(121, 21);
+            this.combPreset_SelDev.TabIndex = 14;
+            this.combPreset_SelDev.SelectedValueChanged += new System.EventHandler(this.combPreset_SelDev_SelectedValueChanged);
+            // 
+            // btnPreset_CopyToAll
+            // 
+            this.btnPreset_CopyToAll.Enabled = false;
+            this.btnPreset_CopyToAll.Location = new System.Drawing.Point(6, 144);
+            this.btnPreset_CopyToAll.Name = "btnPreset_CopyToAll";
+            this.btnPreset_CopyToAll.Size = new System.Drawing.Size(252, 34);
+            this.btnPreset_CopyToAll.TabIndex = 13;
+            this.btnPreset_CopyToAll.Text = "拷贝到所有本类型设备";
+            this.btnPreset_CopyToAll.UseVisualStyleBackColor = true;
+            // 
+            // cbOther_Preset
+            // 
+            this.cbOther_Preset.AutoSize = true;
+            this.cbOther_Preset.Location = new System.Drawing.Point(10, 33);
+            this.cbOther_Preset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbOther_Preset.Name = "cbOther_Preset";
+            this.cbOther_Preset.Size = new System.Drawing.Size(110, 17);
+            this.cbOther_Preset.TabIndex = 7;
+            this.cbOther_Preset.Text = "校验自定义配置\r\n";
+            this.cbOther_Preset.UseVisualStyleBackColor = true;
+            this.cbOther_Preset.CheckedChanged += new System.EventHandler(this.cbOther_Preset_CheckedChanged_1);
+            this.cbOther_Preset.MouseEnter += new System.EventHandler(this.cbOther_Preset_MouseEnter_1);
+            this.cbOther_Preset.MouseLeave += new System.EventHandler(this.cbOther_Preset_MouseLeave_1);
+            // 
+            // cbOther_RTCLocal
+            // 
+            this.cbOther_RTCLocal.AutoSize = true;
+            this.cbOther_RTCLocal.Location = new System.Drawing.Point(10, 9);
+            this.cbOther_RTCLocal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbOther_RTCLocal.Name = "cbOther_RTCLocal";
+            this.cbOther_RTCLocal.Size = new System.Drawing.Size(110, 17);
+            this.cbOther_RTCLocal.TabIndex = 6;
+            this.cbOther_RTCLocal.Text = "重设为本机时间";
+            this.cbOther_RTCLocal.UseVisualStyleBackColor = true;
+            this.cbOther_RTCLocal.CheckedChanged += new System.EventHandler(this.cbOther_RTCLocal_CheckedChanged);
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -1032,6 +1192,7 @@
             // 
             // 刷新UUIDUToolStripMenuItem
             // 
+            this.刷新UUIDUToolStripMenuItem.Enabled = false;
             this.刷新UUIDUToolStripMenuItem.Name = "刷新UUIDUToolStripMenuItem";
             this.刷新UUIDUToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
             this.刷新UUIDUToolStripMenuItem.Text = "刷新UUID(&U)";
@@ -1058,168 +1219,25 @@
             this.pbGlobalProgress.Size = new System.Drawing.Size(360, 27);
             this.pbGlobalProgress.TabIndex = 7;
             // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "说明";
+            this.columnHeader6.Width = 150;
+            // 
             // serverMainBindingSource
             // 
             this.serverMainBindingSource.DataSource = typeof(Server.ServerMain);
             // 
-            // tabPage11
+            // btnDelDev
             // 
-            this.tabPage11.Controls.Add(this.cbOther_AllInfo);
-            this.tabPage11.Controls.Add(this.gbPreset);
-            this.tabPage11.Controls.Add(this.cbOther_Preset);
-            this.tabPage11.Controls.Add(this.cbOther_RTCLocal);
-            this.tabPage11.Location = new System.Drawing.Point(4, 22);
-            this.tabPage11.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage11.Name = "tabPage11";
-            this.tabPage11.Size = new System.Drawing.Size(300, 289);
-            this.tabPage11.TabIndex = 6;
-            this.tabPage11.Text = "校验";
-            this.tabPage11.UseVisualStyleBackColor = true;
-            // 
-            // cbOther_AllInfo
-            // 
-            this.cbOther_AllInfo.AutoSize = true;
-            this.cbOther_AllInfo.Location = new System.Drawing.Point(10, 56);
-            this.cbOther_AllInfo.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbOther_AllInfo.Name = "cbOther_AllInfo";
-            this.cbOther_AllInfo.Size = new System.Drawing.Size(98, 17);
-            this.cbOther_AllInfo.TabIndex = 9;
-            this.cbOther_AllInfo.Text = "传递所有信息";
-            this.cbOther_AllInfo.UseVisualStyleBackColor = true;
-            this.cbOther_AllInfo.MouseEnter += new System.EventHandler(this.cbOther_AllInfo_MouseEnter_1);
-            this.cbOther_AllInfo.MouseLeave += new System.EventHandler(this.cbOther_AllInfo_MouseLeave_1);
-            // 
-            // gbPreset
-            // 
-            this.gbPreset.Controls.Add(this.lvPreset_Dev);
-            this.gbPreset.Controls.Add(this.btnAddDev);
-            this.gbPreset.Controls.Add(this.combPreset_SelDev);
-            this.gbPreset.Controls.Add(this.btnPreset_CopyToAll);
-            this.gbPreset.Enabled = false;
-            this.gbPreset.Location = new System.Drawing.Point(10, 56);
-            this.gbPreset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbPreset.Name = "gbPreset";
-            this.gbPreset.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbPreset.Size = new System.Drawing.Size(264, 184);
-            this.gbPreset.TabIndex = 8;
-            this.gbPreset.TabStop = false;
-            this.gbPreset.Text = "自定义配置校验";
-            this.gbPreset.Visible = false;
-            // 
-            // lvPreset_Dev
-            // 
-            this.lvPreset_Dev.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader7,
-            this.columnHeader8,
-            this.columnHeader9});
-            this.lvPreset_Dev.FullRowSelect = true;
-            this.lvPreset_Dev.GridLines = true;
-            this.lvPreset_Dev.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lvPreset_Dev.HideSelection = false;
-            this.lvPreset_Dev.Location = new System.Drawing.Point(6, 24);
-            this.lvPreset_Dev.Name = "lvPreset_Dev";
-            this.lvPreset_Dev.Size = new System.Drawing.Size(252, 88);
-            this.lvPreset_Dev.TabIndex = 16;
-            this.lvPreset_Dev.UseCompatibleStateImageBehavior = false;
-            this.lvPreset_Dev.View = System.Windows.Forms.View.Details;
-            this.lvPreset_Dev.SelectedIndexChanged += new System.EventHandler(this.lvPreset_Dev_SelectedIndexChanged);
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "#";
-            this.columnHeader7.Width = 20;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "设备类型";
-            this.columnHeader8.Width = 63;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "说明";
-            this.columnHeader9.Width = 159;
-            // 
-            // btnAddDev
-            // 
-            this.btnAddDev.Location = new System.Drawing.Point(230, 118);
-            this.btnAddDev.Name = "btnAddDev";
-            this.btnAddDev.Size = new System.Drawing.Size(28, 21);
-            this.btnAddDev.TabIndex = 15;
-            this.btnAddDev.Text = "+";
-            this.btnAddDev.UseVisualStyleBackColor = true;
-            // 
-            // combPreset_SelDev
-            // 
-            this.combPreset_SelDev.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.combPreset_SelDev.FormattingEnabled = true;
-            this.combPreset_SelDev.Items.AddRange(new object[] {
-            "中央处理器设备",
-            "内存设备",
-            "驱动器设备",
-            "网络适配器设备",
-            "显示适配器设备"});
-            this.combPreset_SelDev.Location = new System.Drawing.Point(103, 118);
-            this.combPreset_SelDev.MaxDropDownItems = 5;
-            this.combPreset_SelDev.Name = "combPreset_SelDev";
-            this.combPreset_SelDev.Size = new System.Drawing.Size(121, 21);
-            this.combPreset_SelDev.TabIndex = 14;
-            // 
-            // btnPreset_CopyToAll
-            // 
-            this.btnPreset_CopyToAll.Enabled = false;
-            this.btnPreset_CopyToAll.Location = new System.Drawing.Point(6, 144);
-            this.btnPreset_CopyToAll.Name = "btnPreset_CopyToAll";
-            this.btnPreset_CopyToAll.Size = new System.Drawing.Size(252, 34);
-            this.btnPreset_CopyToAll.TabIndex = 13;
-            this.btnPreset_CopyToAll.Text = "拷贝到所有本类型设备";
-            this.btnPreset_CopyToAll.UseVisualStyleBackColor = true;
-            // 
-            // cbOther_Preset
-            // 
-            this.cbOther_Preset.AutoSize = true;
-            this.cbOther_Preset.Location = new System.Drawing.Point(10, 33);
-            this.cbOther_Preset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbOther_Preset.Name = "cbOther_Preset";
-            this.cbOther_Preset.Size = new System.Drawing.Size(110, 17);
-            this.cbOther_Preset.TabIndex = 7;
-            this.cbOther_Preset.Text = "校验自定义配置\r\n";
-            this.cbOther_Preset.UseVisualStyleBackColor = true;
-            this.cbOther_Preset.MouseEnter += new System.EventHandler(this.cbOther_Preset_MouseEnter_1);
-            this.cbOther_Preset.MouseLeave += new System.EventHandler(this.cbOther_Preset_MouseLeave_1);
-            // 
-            // cbOther_RTCLocal
-            // 
-            this.cbOther_RTCLocal.AutoSize = true;
-            this.cbOther_RTCLocal.Location = new System.Drawing.Point(10, 9);
-            this.cbOther_RTCLocal.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbOther_RTCLocal.Name = "cbOther_RTCLocal";
-            this.cbOther_RTCLocal.Size = new System.Drawing.Size(110, 17);
-            this.cbOther_RTCLocal.TabIndex = 6;
-            this.cbOther_RTCLocal.Text = "重设为本机时间";
-            this.cbOther_RTCLocal.UseVisualStyleBackColor = true;
-            this.cbOther_RTCLocal.CheckedChanged += new System.EventHandler(this.cbOther_RTCLocal_CheckedChanged);
-            // 
-            // pgPreset
-            // 
-            this.pgPreset.Location = new System.Drawing.Point(318, 48);
-            this.pgPreset.Margin = new System.Windows.Forms.Padding(2);
-            this.pgPreset.Name = "pgPreset";
-            this.pgPreset.Size = new System.Drawing.Size(298, 256);
-            this.pgPreset.TabIndex = 12;
-            this.pgPreset.Visible = false;
-            // 
-            // tbDescription
-            // 
-            this.tbDescription.BackColor = System.Drawing.Color.White;
-            this.tbDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbDescription.Location = new System.Drawing.Point(318, 48);
-            this.tbDescription.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tbDescription.Multiline = true;
-            this.tbDescription.Name = "tbDescription";
-            this.tbDescription.ReadOnly = true;
-            this.tbDescription.Size = new System.Drawing.Size(298, 100);
-            this.tbDescription.TabIndex = 11;
-            this.tbDescription.Text = "将在此处显示具体项目的描述，将鼠标悬停在任意控件上查看详情...";
+            this.btnDelDev.Enabled = false;
+            this.btnDelDev.Location = new System.Drawing.Point(228, 118);
+            this.btnDelDev.Name = "btnDelDev";
+            this.btnDelDev.Size = new System.Drawing.Size(28, 21);
+            this.btnDelDev.TabIndex = 17;
+            this.btnDelDev.Text = "-";
+            this.btnDelDev.UseVisualStyleBackColor = true;
+            this.btnDelDev.Click += new System.EventHandler(this.btnDelDev_Click);
             // 
             // ServerMain
             // 
@@ -1233,7 +1251,7 @@
             this.Controls.Add(this.button5);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ServerMain";
             this.Text = "x86自动测试系统 - 服务器端";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1263,6 +1281,9 @@
             this.tabPage9.PerformLayout();
             this.gbOutlet_Audio.ResumeLayout(false);
             this.gbOutlet_Audio.PerformLayout();
+            this.tabPage11.ResumeLayout(false);
+            this.tabPage11.PerformLayout();
+            this.gbPreset.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.tabPage4.ResumeLayout(false);
@@ -1272,9 +1293,6 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serverMainBindingSource)).EndInit();
-            this.tabPage11.ResumeLayout(false);
-            this.tabPage11.PerformLayout();
-            this.gbPreset.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1375,7 +1393,6 @@
         private System.Windows.Forms.CheckBox cbOther_AllInfo;
         private System.Windows.Forms.GroupBox gbPreset;
         private System.Windows.Forms.ListView lvPreset_Dev;
-        private System.Windows.Forms.ColumnHeader columnHeader7;
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.Button btnAddDev;
@@ -1383,6 +1400,8 @@
         private System.Windows.Forms.Button btnPreset_CopyToAll;
         private System.Windows.Forms.CheckBox cbOther_Preset;
         private System.Windows.Forms.CheckBox cbOther_RTCLocal;
+        private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.Button btnDelDev;
     }
 }
 

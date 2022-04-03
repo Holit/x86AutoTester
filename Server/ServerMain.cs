@@ -355,41 +355,70 @@ namespace Server
 
         private void btnAddDev_Click(object sender, EventArgs e)
         {
-            /*
-             * incomplete
             if(combPreset_SelDev.SelectedIndex != -1)
             {
                 if(combPreset_SelDev.SelectedItem.ToString() == "中央处理器设备")
                 {
-                    ConfigFile.CPU adding_cpu = new ConfigFile.CPU();
-                    pgPreset.SelectedObject = adding_cpu;
+                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.CPU;
+                    ((ConfigFile.CPU)pgPreset.SelectedObject).id = configFile.CPUs.Count + 1;
+                    configFile.CPUs.Add((ConfigFile.CPU)pgPreset.SelectedObject);
+                    ListViewItem listViewItem = new ListViewItem();
+                    listViewItem.Text = configFile.CPUs.Count.ToString();
+                    listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
+                    listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.CPU).Name);
+                    lvPreset_Dev.Items.Add(listViewItem);
                 }
-                ListViewItem listViewItem = new ListViewItem();
-                listViewItem.Text = combPreset_SelDev.SelectedItem.ToString();
-                listViewItem.SubItems.Add("空校验设备");
-                lvPreset_Dev.Items.Add(listViewItem);
+                else if (combPreset_SelDev.SelectedItem.ToString() == "内存设备")
+                {
+                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.Memory;
+                    ((ConfigFile.Memory)pgPreset.SelectedObject).id = configFile.Mems.Count + 1;
+                    configFile.Mems.Add(pgPreset.SelectedObject as ConfigFile.Memory);
+                    ListViewItem listViewItem = new ListViewItem();
+                    listViewItem.Text = configFile.Mems.Count.ToString();
+                    listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
+                    listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.Memory).SerialNumber);
+                    lvPreset_Dev.Items.Add(listViewItem);
+                }
+                else if (combPreset_SelDev.SelectedItem.ToString() == "驱动器设备")
+                {
+                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.Disk;
+                    ((ConfigFile.Disk)pgPreset.SelectedObject).id = configFile.Disks.Count + 1;
+                    configFile.Disks.Add(pgPreset.SelectedObject as ConfigFile.Disk);
+                    ListViewItem listViewItem = new ListViewItem();
+                    listViewItem.Text = configFile.Disks.Count.ToString();
+                    listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
+                    listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.Disk).Manufacturer);
+                    lvPreset_Dev.Items.Add(listViewItem);
+                }
+                else if (combPreset_SelDev.SelectedItem.ToString() == "网络适配器设备")
+                {
+                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.NetworkController;
+                    ((ConfigFile.NetworkController)pgPreset.SelectedObject).id = configFile.NetworkControllers.Count + 1;
+                    configFile.NetworkControllers.Add(pgPreset.SelectedObject as ConfigFile.NetworkController);
+                    ListViewItem listViewItem = new ListViewItem();
+                    listViewItem.Text = configFile.NetworkControllers.Count.ToString();
+                    listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
+                    listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.NetworkController).Description);
+                    lvPreset_Dev.Items.Add(listViewItem);
+                }
+                else if (combPreset_SelDev.SelectedItem.ToString() == "显示适配器设备")
+                {
+                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.GPU;
+                    ((ConfigFile.GPU)pgPreset.SelectedObject).id = configFile.GPUs.Count + 1;
+                    configFile.GPUs.Add(pgPreset.SelectedObject as ConfigFile.GPU);
+                    ListViewItem listViewItem = new ListViewItem();
+                    listViewItem.Text = configFile.GPUs.Count.ToString();
+                    listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
+                    listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.GPU).Name);
+                    lvPreset_Dev.Items.Add(listViewItem);
+                }
             }
-            */
+            
         }
 
         private void cbOther_RTCLocal_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbOther_Preset.Checked)
-            {
-                gbPreset.Enabled = true;
-                gbPreset.Visible = true;
-                cbOther_AllInfo.Location = new System.Drawing.Point(10, 248);
-                tbDescription.Location = new System.Drawing.Point(318, 310);
-                pgPreset.Visible = true;
-            }
-            else
-            {
-                gbPreset.Enabled = false;
-                gbPreset.Visible = false;
-                cbOther_AllInfo.Location = new System.Drawing.Point(10, 56);
-                tbDescription.Location = new System.Drawing.Point(318, 48);
-                pgPreset.Visible = false;
-            }
+
         }
 
         private void cbOther_Preset_MouseEnter_1(object sender, EventArgs e)
@@ -415,77 +444,109 @@ namespace Server
 
         private void lvPreset_Dev_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-            //incorrect verification method.
-            /*
+            //Do not modify.
+            //Incomplete.
+            combPreset_SelDev.SelectedItem = null;
             if (lvPreset_Dev.SelectedItems.Count  == 1)
             {
-                if (lvPreset_Dev.SelectedItems[0].Text == "中央处理器设备")
+                btnDelDev.Enabled = true;
+                if(lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "中央处理器设备")
                 {
-                    if (configFile.override_cpu_count == 16)
-                    {
-                        MessageBox.Show("可调校验设备数量已达上限");
-                    }
-                    else
-                    {
-                        configFile.override_cpu[configFile.override_cpu_count] = new ConfigFile.CPU();
-                        pgPreset.SelectedObject = configFile.override_cpu[configFile.override_cpu_count];
-                        pgPreset.Update();
-                        configFile.override_cpu_count++;
-                        
-                    }
+                    pgPreset.SelectedObject = null;
+                    pgPreset.SelectedObject = configFile.CPUs[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
+                    //adding dynamic listview.
+                    //adding delete button
                 }
-                else if (lvPreset_Dev.SelectedItems[0].Text == "内存设备")
+                else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "内存设备")
                 {
-                    if (configFile.override_mem_count == 16)
-                    {
-                        MessageBox.Show("可调校验设备数量已达上限");
-                    }
-                    else
-                    {
-                        configFile.override_mem[configFile.override_mem_count] = new ConfigFile.Memory();
-                        pgPreset.SelectedObject = configFile.override_mem[configFile.override_mem_count];
-                        configFile.override_mem_count++;
-                    }
+                    pgPreset.SelectedObject = null;
+                    pgPreset.SelectedObject = configFile.Mems[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
                 }
-                else if (lvPreset_Dev.SelectedItems[0].Text == "驱动器设备")
+                else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "驱动器设备")
                 {
-                    if (configFile.override_disk_count == 16)
-                    {
-                        MessageBox.Show("可调校验设备数量已达上限");
-                    }
-                    else
-                    {
-                        configFile.override_disk[configFile.override_disk_count] = new ConfigFile.Disk();
-                        pgPreset.SelectedObject = configFile.override_disk[configFile.override_disk_count];
-                        configFile.override_disk_count++;
-                    }
+                    pgPreset.SelectedObject = null;
+                    pgPreset.SelectedObject = configFile.Disks[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
                 }
-                else if (lvPreset_Dev.SelectedItems[0].Text == "网络适配器设备")
+                else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "网络适配器设备")
                 {
-                    if (configFile.override_netc_count == 16)
-                    {
-                        MessageBox.Show("可调校验设备数量已达上限");
-                    }
-                    else
-                    {
-                        configFile.override_netc[configFile.override_netc_count] = new ConfigFile.NetworkController();
-                        pgPreset.SelectedObject = configFile.override_netc[configFile.override_netc_count];
-                        configFile.override_netc_count++;
-                    }
+                    pgPreset.SelectedObject = null;
+                    pgPreset.SelectedObject = configFile.NetworkControllers[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
                 }
-                else if (lvPreset_Dev.SelectedItems[0].Text == "显示适配器设备")
+                else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "显示适配器设备")
                 {
-                    if (configFile.override_gpu_count == 16)
-                    {
-                        MessageBox.Show("可调校验设备数量已达上限");
-                    }
-                    configFile.override_gpu[configFile.override_gpu_count] = new ConfigFile.GPU();
-                    pgPreset.SelectedObject = configFile.override_gpu[configFile.override_gpu_count];
-                    configFile.override_gpu_count++;
+                    pgPreset.SelectedObject = null;
+                    pgPreset.SelectedObject = configFile.GPUs[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
                 }
             }
-            */
+        }
+
+        private void btnSaveConfig_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbOther_Preset_CheckedChanged_1(object sender, EventArgs e)
+        {
+
+            if (cbOther_Preset.Checked)
+            {
+                gbPreset.Enabled = true;
+                gbPreset.Visible = true;
+                cbOther_AllInfo.Location = new System.Drawing.Point(10, 248);
+                tbDescription.Location = new System.Drawing.Point(318, 310);
+                pgPreset.Visible = true;
+            }
+            else
+            {
+                gbPreset.Enabled = false;
+                gbPreset.Visible = false;
+                cbOther_AllInfo.Location = new System.Drawing.Point(10, 56);
+                tbDescription.Location = new System.Drawing.Point(318, 48);
+                pgPreset.Visible = false;
+            }
+        }
+
+        private void combPreset_SelDev_SelectedValueChanged(object sender, EventArgs e)
+        {
+            if(combPreset_SelDev.SelectedItem != null)
+            {
+                if (combPreset_SelDev.SelectedItem.ToString() == "中央处理器设备")
+                {
+                    ConfigFile.CPU cpu = new ConfigFile.CPU();
+                    pgPreset.SelectedObject = cpu;
+                }
+                else if (combPreset_SelDev.SelectedItem.ToString() == "内存设备")
+                {
+                    ConfigFile.Memory memory = new ConfigFile.Memory();
+                    pgPreset.SelectedObject = memory;
+                }
+                else if (combPreset_SelDev.SelectedItem.ToString() == "驱动器设备")
+                {
+                    ConfigFile.Disk disk = new ConfigFile.Disk();
+                    pgPreset.SelectedObject = disk;
+                }
+                else if (combPreset_SelDev.SelectedItem.ToString() == "网络适配器设备")
+                {
+                    ConfigFile.NetworkController network = new ConfigFile.NetworkController();
+                    pgPreset.SelectedObject = network;
+                }
+                else if (combPreset_SelDev.SelectedItem.ToString() == "显示适配器设备")
+                {
+                    ConfigFile.GPU gpu = new ConfigFile.GPU();
+                    pgPreset.SelectedObject = gpu;
+                }
+            }
+        }
+
+        private void btnDelDev_Click(object sender, EventArgs e)
+        {
+            DialogResult res= MessageBox.Show(this,"删除设备\n" + lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() + "\n描述："
+                + lvPreset_Dev.SelectedItems[0].SubItems[2].ToString() + " ?","删除指定设备"
+                ,MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2);
+            if (res == DialogResult.Yes)
+            {
+                //add here deleteing code.
+            }
         }
     }
 }
