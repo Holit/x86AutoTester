@@ -1,5 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AutoTestMessage
 {
@@ -20,10 +24,10 @@ namespace AutoTestMessage
         public enum TestResult { SUCCESS = 0, ARGS_ERROR = -1, FAIL_PASS_TEST = -2 }
         public Dictionary<string, string> data = new Dictionary<string, string>();
     }
-    public class Message : BaseMessage
+    public class Message:BaseMessage
     {
         public enum MessageTypes { None, ServerUuid, JoinServer, WMIMessage, TesterMessage, CurrentTask }
         public MessageTypes MessageType = MessageTypes.None;
-        public string Content = "";
+        public string Content="";
     }
 }
