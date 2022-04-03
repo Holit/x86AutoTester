@@ -14,6 +14,7 @@ namespace Server
 {
     public partial class ServerMain : Form
     {
+        public ConfigFile configFile = new ConfigFile();
         public ServerMain()
         {
             InitializeComponent();
@@ -299,6 +300,34 @@ namespace Server
             });
         }
 
+        private void ConcludeConfig()
+        {
+            configFile.senderUUID = label_uuid.Text;
+            configFile.CreationTime = DateTime.Now;
+            configFile.global_cpu = cbCPU.Checked;
+            configFile.global_mem = cbMem.Checked;
+            configFile.global_disk = cbDisk.Checked;
+            configFile.global_net = cbNet.Checked;
+
+            configFile.cpu_error_stop = cbCPU_ErrorStop.Checked;
+            configFile.cpu_all_temp = cbCPU_AllTemp.Checked;
+            configFile.cpu_all_fan_speed = cbCPU_allFanSpeed.Checked;
+            configFile.cpu_detailed_info = cbCPU_details.Checked;
+
+            configFile.mem_error_stop = cbMem_ErrorStop.Checked;
+            configFile.mem_error_address = cbMem_ErrorLocation.Checked;
+
+            configFile.net_test = cbNet_CommCheck.Checked;
+            configFile.net_mac = cbNet_MAC.Checked;
+            configFile.net_web_test = cbNet_web.Checked;
+
+            configFile.outlet_com = cbOutlet_COM.Checked;
+            configFile.outlet_usb = cbOutlet_USB.Checked;
+            configFile.audio_playback = cbOutlet_audioPlay.Checked;
+            configFile.audio_adjust_vol = cbOutlet_VolAuto.Checked;
+            configFile.audio_max_vol = cbOutlet_VolMax.Checked;
+
+        }
         public void setClientState(string client,string current,int finishedCount)
         {
             lvClients.Invoke((MethodInvoker)delegate
@@ -322,6 +351,141 @@ namespace Server
         public void setClientState(Client client)
         {
             setClientState(client.ClientUrl, client.currentTask.Describe, ClientTask.Tasks.Count - client.GetRemainTaskCount() - 1);
+        }
+
+        private void btnAddDev_Click(object sender, EventArgs e)
+        {
+            /*
+             * incomplete
+            if(combPreset_SelDev.SelectedIndex != -1)
+            {
+                if(combPreset_SelDev.SelectedItem.ToString() == "中央处理器设备")
+                {
+                    ConfigFile.CPU adding_cpu = new ConfigFile.CPU();
+                    pgPreset.SelectedObject = adding_cpu;
+                }
+                ListViewItem listViewItem = new ListViewItem();
+                listViewItem.Text = combPreset_SelDev.SelectedItem.ToString();
+                listViewItem.SubItems.Add("空校验设备");
+                lvPreset_Dev.Items.Add(listViewItem);
+            }
+            */
+        }
+
+        private void cbOther_RTCLocal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbOther_Preset.Checked)
+            {
+                gbPreset.Enabled = true;
+                gbPreset.Visible = true;
+                cbOther_AllInfo.Location = new System.Drawing.Point(10, 248);
+                tbDescription.Location = new System.Drawing.Point(318, 310);
+                pgPreset.Visible = true;
+            }
+            else
+            {
+                gbPreset.Enabled = false;
+                gbPreset.Visible = false;
+                cbOther_AllInfo.Location = new System.Drawing.Point(10, 56);
+                tbDescription.Location = new System.Drawing.Point(318, 48);
+                pgPreset.Visible = false;
+            }
+        }
+
+        private void cbOther_Preset_MouseEnter_1(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Other_Preset_Description;
+        }
+
+        private void cbOther_Preset_MouseLeave_1(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void cbOther_AllInfo_MouseEnter_1(object sender, EventArgs e)
+        {
+
+            tbDescription.Text = Properties.Resources.Other_AllInfo_Description;
+        }
+
+        private void cbOther_AllInfo_MouseLeave_1(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+
+        private void lvPreset_Dev_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            //incorrect verification method.
+            /*
+            if (lvPreset_Dev.SelectedItems.Count  == 1)
+            {
+                if (lvPreset_Dev.SelectedItems[0].Text == "中央处理器设备")
+                {
+                    if (configFile.override_cpu_count == 16)
+                    {
+                        MessageBox.Show("可调校验设备数量已达上限");
+                    }
+                    else
+                    {
+                        configFile.override_cpu[configFile.override_cpu_count] = new ConfigFile.CPU();
+                        pgPreset.SelectedObject = configFile.override_cpu[configFile.override_cpu_count];
+                        pgPreset.Update();
+                        configFile.override_cpu_count++;
+                        
+                    }
+                }
+                else if (lvPreset_Dev.SelectedItems[0].Text == "内存设备")
+                {
+                    if (configFile.override_mem_count == 16)
+                    {
+                        MessageBox.Show("可调校验设备数量已达上限");
+                    }
+                    else
+                    {
+                        configFile.override_mem[configFile.override_mem_count] = new ConfigFile.Memory();
+                        pgPreset.SelectedObject = configFile.override_mem[configFile.override_mem_count];
+                        configFile.override_mem_count++;
+                    }
+                }
+                else if (lvPreset_Dev.SelectedItems[0].Text == "驱动器设备")
+                {
+                    if (configFile.override_disk_count == 16)
+                    {
+                        MessageBox.Show("可调校验设备数量已达上限");
+                    }
+                    else
+                    {
+                        configFile.override_disk[configFile.override_disk_count] = new ConfigFile.Disk();
+                        pgPreset.SelectedObject = configFile.override_disk[configFile.override_disk_count];
+                        configFile.override_disk_count++;
+                    }
+                }
+                else if (lvPreset_Dev.SelectedItems[0].Text == "网络适配器设备")
+                {
+                    if (configFile.override_netc_count == 16)
+                    {
+                        MessageBox.Show("可调校验设备数量已达上限");
+                    }
+                    else
+                    {
+                        configFile.override_netc[configFile.override_netc_count] = new ConfigFile.NetworkController();
+                        pgPreset.SelectedObject = configFile.override_netc[configFile.override_netc_count];
+                        configFile.override_netc_count++;
+                    }
+                }
+                else if (lvPreset_Dev.SelectedItems[0].Text == "显示适配器设备")
+                {
+                    if (configFile.override_gpu_count == 16)
+                    {
+                        MessageBox.Show("可调校验设备数量已达上限");
+                    }
+                    configFile.override_gpu[configFile.override_gpu_count] = new ConfigFile.GPU();
+                    pgPreset.SelectedObject = configFile.override_gpu[configFile.override_gpu_count];
+                    configFile.override_gpu_count++;
+                }
+            }
+            */
         }
     }
 }
