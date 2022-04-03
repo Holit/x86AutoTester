@@ -16,6 +16,7 @@ namespace Server
         public ServerMain()
         {
             InitializeComponent();
+            setClientState("1", "2", 3);
         }
 
         private void 退出EToolStripMenuItem_Click(object sender, EventArgs e)
@@ -296,6 +297,18 @@ namespace Server
             {
                 当前连接数.Text = count.ToString();
             });
+        }
+
+        public void setClientState(string client,string current,int finishedCount)
+        {
+            lvClients.BeginUpdate();
+            ListViewItem item=lvClients.Items[client];
+            if (item == null) lvClients.Items.Add(item = new ListViewItem());
+            if (item.SubItems.Count <1) item.SubItems.Add(new ListViewItem.ListViewSubItem());
+            item.SubItems[0].Text = current;
+            if (item.SubItems.Count <2) item.SubItems.Add(new ListViewItem.ListViewSubItem());
+            item.SubItems[1].Text = current;
+            lvClients.EndUpdate();
         }
     }
 }

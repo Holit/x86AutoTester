@@ -1158,14 +1158,17 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "地址";
+            this.columnHeader1.Width = 85;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "当前项目";
+            this.columnHeader2.Width = 96;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "总体完成进度";
+            this.columnHeader3.Width = 125;
             // 
             // label8
             // 
