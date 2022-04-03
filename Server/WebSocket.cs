@@ -53,6 +53,20 @@ namespace Server
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
             foreach (NetworkInterface adapter in nics)
             {
+                bool isVirtual = false;
+                string[] macs = { "005056", "001C14" , "000C29" , "000569" , //VMware
+                                    "080027", //VirtualBox
+                                    "00155D" //Hyper-V
+                };
+                foreach(string mac in macs)
+                {
+                    if (adapter.GetPhysicalAddress().ToString().Contains(mac))
+                    {
+                        isVirtual = true;
+                        break;
+                    }
+                }
+                if (isVirtual) continue;
                 if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet || adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
                 {
                     bool isLocal = false;
@@ -75,7 +89,14 @@ namespace Server
                     {
                         if (ipadd.Address.AddressFamily == AddressFamily.InterNetwork)
                         {
-                            iPAddresses.Add(ipadd.Address);
+                            byte[] ipBytes = ipadd.Address.GetAddressBytes();
+                            byte[] maskBytes = ipadd.IPv4Mask.GetAddressBytes();
+                            byte[] broadBytes = new byte[ipBytes.Length];
+                            for(int i=0;i < ipBytes.Length; ++i)
+                            {
+                                broadBytes[i] = (byte)(ipBytes[i] | ~maskBytes[i]);
+                            }
+                            iPAddresses.Add(new IPAddress(broadBytes));
                         }
                     }
                 }
