@@ -18,29 +18,21 @@ namespace Server
         private class Client
         {
             public IWebSocketConnection Socket;
-            public Message currentTask = new Message { MessageType = Message.MessageTypes.None };
-            public List<Message> Task=new List<Message> {
-                new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_OperatingSystem" },
-                new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" },
-                new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" },
-                new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" },
-                new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" },
-                new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },
-                new Message { MessageType = Message.MessageTypes.TesterMessage, Content = 
-                    new TesterMessage{
-                        data = {
-                            { "operator" , "memoyTest" },
-                            { "reservedMemory" , (1024*1024*1024).ToString() },//1G保留空间
-                            { "memoryPerThread" , (1024*1024*512).ToString() },//512M每线程
-                            { "totalTime" , (2*60*1000).ToString() },//测试时间2分钟
-                            { "sleepTime" , (60*1000).ToString() },//线程睡眠时间1分钟
-                        }
-                    }.ToString()
-                    },
-            };
+            public ClientTask currentTask = new ClientTask(new Message { MessageType = Message.MessageTypes.None },true);
+            private List<ClientTask> Task=new List<ClientTask>(ClientTask.Tasks);
             public Client(IWebSocketConnection Socket)
             {
                 this.Socket = Socket;
+            }
+            public int GetRemainTaskCount()
+            {
+                return Task.Count();
+            }
+            public ClientTask GetNextTask()
+            {
+                currentTask = Task[0];
+                Task.RemoveAt(0);
+                return currentTask;
             }
         }
         private IDictionary<string, Client> dic_Sockets = new Dictionary<string, Client>();
@@ -142,25 +134,25 @@ namespace Server
                 return singleInstance;
             }
         }
-        private void HandleMessage(Message message, IWebSocketConnection socket)
+        private async void HandleMessage(Message message, IWebSocketConnection socket)
         {
+            string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
             if (message.MessageType == Message.MessageTypes.ServerUuid)
             {
-                socket.Send(new Message
+                _ = socket.Send(new Message
                 {
                     MessageType = Message.MessageTypes.ServerUuid,
                     Content = Program.Uuid
                 }.ToString());
             }else if (message.MessageType == Message.MessageTypes.JoinServer)
             {
-                socket.Send(new Message
+                _ = socket.Send(new Message
                 {
                     MessageType = Message.MessageTypes.JoinServer,
                     Content = message.Content == Program.Uuid ? "OK" : "FAIL"
                 }.ToString());
                 if (Program.Uuid == message.Content)
                 {
-                    string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
                     Console.WriteLine("客户端"+ clientUrl + "登录成功");
                     dic_Sockets.Add(clientUrl, new Client(socket));
                     Program.ServerMain.setClientCount(dic_Sockets.Count());
@@ -171,20 +163,18 @@ namespace Server
                 Message task = JsonConvert.DeserializeObject<Message>(message.Content);
                 if (task.MessageType == Message.MessageTypes.None)
                 {
-                    string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
-                    Console.WriteLine("客户端" + clientUrl + "完成任务" + dic_Sockets[clientUrl].currentTask.MessageType + "完成");
-                    if (dic_Sockets[clientUrl].Task.Count() != 0)
+                    Console.WriteLine("客户端" + clientUrl + "完成任务" + dic_Sockets[clientUrl].currentTask.TaskMessage.ToString() + "完成");
+                    await Task.Run(()=>dic_Sockets[clientUrl].currentTask.WaitForTaskFinished());
+                    if (dic_Sockets[clientUrl].GetRemainTaskCount() != 0)
                     {
-                        Message msg = dic_Sockets[clientUrl].currentTask = dic_Sockets[clientUrl].Task[0];
-                        socket.Send(msg.ToString());
-                        dic_Sockets[clientUrl].Task.RemoveAt(0);
+                        Message msg = dic_Sockets[clientUrl].GetNextTask().TaskMessage;
+                        _ = socket.Send(msg.ToString());
                     }
-
                 }
             }
             else
             {
-                Console.WriteLine(message.ToString());
+                dic_Sockets[clientUrl].currentTask.HandleMessage(message, socket);
             }
         }
     }
