@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Server.WebSocket;
 
 namespace Server
 {
@@ -16,7 +17,6 @@ namespace Server
         public ServerMain()
         {
             InitializeComponent();
-            setClientState("1", "2", 3);
         }
 
         private void 退出EToolStripMenuItem_Click(object sender, EventArgs e)
@@ -301,14 +301,27 @@ namespace Server
 
         public void setClientState(string client,string current,int finishedCount)
         {
-            lvClients.BeginUpdate();
-            ListViewItem item=lvClients.Items[client];
-            if (item == null) lvClients.Items.Add(item = new ListViewItem());
-            if (item.SubItems.Count <1) item.SubItems.Add(new ListViewItem.ListViewSubItem());
-            item.SubItems[0].Text = current;
-            if (item.SubItems.Count <2) item.SubItems.Add(new ListViewItem.ListViewSubItem());
-            item.SubItems[1].Text = current;
-            lvClients.EndUpdate();
+            lvClients.Invoke((MethodInvoker)delegate
+            {
+                lvClients.BeginUpdate();
+                ListViewItem item = lvClients.Items[client];
+                if (item == null)
+                {
+                    lvClients.Items.Add(item = new ListViewItem(client));
+                    item.Name = client;
+                }
+                if (item.SubItems.Count < 1) item.SubItems.Add(new ListViewItem.ListViewSubItem());
+                item.SubItems[0].Text = client;
+                if (item.SubItems.Count < 2) item.SubItems.Add(new ListViewItem.ListViewSubItem());
+                item.SubItems[1].Text = current;
+                if (item.SubItems.Count < 3) item.SubItems.Add(new ListViewItem.ListViewSubItem());
+                item.SubItems[2].Text = finishedCount + "/" + ClientTask.Tasks.Count();
+                lvClients.EndUpdate();
+            });
+        }
+        public void setClientState(Client client)
+        {
+            setClientState(client.ClientUrl, client.currentTask.Describe, ClientTask.Tasks.Count - client.GetRemainTaskCount() - 1);
         }
     }
 }

@@ -1158,17 +1158,17 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "地址";
-            this.columnHeader1.Width = 85;
+            this.columnHeader1.Width = 200;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "当前项目";
-            this.columnHeader2.Width = 96;
+            this.columnHeader2.Width = 150;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "总体完成进度";
-            this.columnHeader3.Width = 125;
+            this.columnHeader3.Width = 150;
             // 
             // label8
             // 
@@ -1260,7 +1260,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(865, 26);
+            this.menuStrip1.Size = new System.Drawing.Size(865, 30);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -1270,7 +1270,7 @@
             this.载入已有的配置文件LToolStripMenuItem,
             this.保存当前配置文件为服务器配置SToolStripMenuItem});
             this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
-            this.文件FToolStripMenuItem.Size = new System.Drawing.Size(71, 24);
+            this.文件FToolStripMenuItem.Size = new System.Drawing.Size(71, 28);
             this.文件FToolStripMenuItem.Text = "文件(&F)";
             // 
             // 载入已有的配置文件LToolStripMenuItem
@@ -1294,7 +1294,7 @@
             this.刷新UUIDUToolStripMenuItem,
             this.退出EToolStripMenuItem});
             this.服务器SToolStripMenuItem.Name = "服务器SToolStripMenuItem";
-            this.服务器SToolStripMenuItem.Size = new System.Drawing.Size(88, 24);
+            this.服务器SToolStripMenuItem.Size = new System.Drawing.Size(88, 28);
             this.服务器SToolStripMenuItem.Text = "服务器(&V)";
             // 
             // 启动测试BToolStripMenuItem

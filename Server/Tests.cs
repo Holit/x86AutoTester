@@ -6,18 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static Server.WebSocket;
 
 namespace Server
 {
     public class ClientTask
     {
         public static List<ClientTask> Tasks = new List<ClientTask> {
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_OperatingSystem" }),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" }),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" }),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" }),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" }),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" }),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_OperatingSystem" },"操作系统配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" },"CPU配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" },"内存配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" },"显卡配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" },"硬盘配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },"网卡配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
@@ -28,20 +29,23 @@ namespace Server
                             { "sleepTime" , (60*1000).ToString() },//线程睡眠时间1分钟
                         }
                     }.ToString()
-                    }),
+                    },"内存压力测试"),
             };
 
         private Message taskMessage;
         private ManualResetEvent manualEvent;
+        private string describe;
         public Message TaskMessage { get => taskMessage; }
+        public string Describe { get => describe; }
 
-        public ClientTask(Message TaskMessage,bool finished=false)
+        public ClientTask(Message TaskMessage,string Describe,bool finished=false)
         {
             taskMessage = TaskMessage;
             manualEvent = new ManualResetEvent(finished);
+            describe = Describe;
         }
 
-        public void HandleMessage(Message message, IWebSocketConnection socket)
+        public void HandleMessage(Message message, Client socket)
         {
             Console.WriteLine(message.ToString());
             manualEvent.Set();

@@ -15,14 +15,19 @@ namespace Server
 {
     public class WebSocket
     {
-        private class Client
+        public class Client
         {
             public IWebSocketConnection Socket;
-            public ClientTask currentTask = new ClientTask(new Message { MessageType = Message.MessageTypes.None },true);
+            private string clientUrl;
+            public string ClientUrl { get => clientUrl; }
+            public ClientTask currentTask = new ClientTask(new Message { MessageType = Message.MessageTypes.None },"",true);
             private List<ClientTask> Task=new List<ClientTask>(ClientTask.Tasks);
+
+
             public Client(IWebSocketConnection Socket)
             {
                 this.Socket = Socket;
+                clientUrl = Socket.ConnectionInfo.ClientIpAddress + ":" + Socket.ConnectionInfo.ClientPort;
             }
             public int GetRemainTaskCount()
             {
@@ -163,6 +168,7 @@ namespace Server
                 Message task = JsonConvert.DeserializeObject<Message>(message.Content);
                 if (task.MessageType == Message.MessageTypes.None)
                 {
+                    Program.ServerMain.setClientState(clientUrl, "等待任务下发", ClientTask.Tasks.Count() - dic_Sockets[clientUrl].GetRemainTaskCount());
                     Console.WriteLine("客户端" + clientUrl + "完成任务" + dic_Sockets[clientUrl].currentTask.TaskMessage.ToString() + "完成");
                     await Task.Run(()=>dic_Sockets[clientUrl].currentTask.WaitForTaskFinished());
                     if (dic_Sockets[clientUrl].GetRemainTaskCount() != 0)
@@ -171,10 +177,14 @@ namespace Server
                         _ = socket.Send(msg.ToString());
                     }
                 }
+                else
+                {
+                    Program.ServerMain.setClientState(dic_Sockets[clientUrl]);
+                }
             }
             else
             {
-                dic_Sockets[clientUrl].currentTask.HandleMessage(message, socket);
+                dic_Sockets[clientUrl].currentTask.HandleMessage(message, dic_Sockets[clientUrl]);
             }
         }
     }
