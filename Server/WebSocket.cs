@@ -82,7 +82,15 @@ namespace Server
             }
 
             UdpClient udpClient = new UdpClient();
-            List<IPEndPoint> iPEndPoints = new List<IPEndPoint>(iPAddresses.Select(t => new IPEndPoint(t, 6839)));
+
+            //debugging only
+            List<IPEndPoint> iPEndPoints = new List<IPEndPoint>();
+            foreach (IPAddress t in iPAddresses)
+            {
+                iPEndPoints.Add(new IPEndPoint(t, 6839));
+            }
+            //delete
+            //List<IPEndPoint> iPEndPoints = new List<IPEndPoint>(iPAddresses.Select(t => new IPEndPoint(t, 6839)));
             Message info = new Message { MessageType=Message.MessageTypes.ServerUuid,Content = Program.Uuid.ToString() };
             Byte[] sendBytes = Encoding.ASCII.GetBytes(info.ToString());
             await Task.Run(() =>
