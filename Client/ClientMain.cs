@@ -14,6 +14,7 @@ namespace Client
 {
     public partial class ClientMain : Form
     {
+        ConfigFile configFile;
         public ClientMain()
         {
             InitializeComponent();
@@ -44,7 +45,7 @@ namespace Client
             }
             return WMIClass;
         }
-        
+
         private async Task ShowDeatils(string path, string groupPropetry = "Name")
         {
             ManagementObjectCollection managementBaseObjects = await WMITest.GetDeatils(path);
@@ -130,7 +131,7 @@ namespace Client
 
         private void 复制值ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(lvDetails.SelectedItems.Count == 1)
+            if (lvDetails.SelectedItems.Count == 1)
             {
                 Clipboard.SetText(lvDetails.SelectedItems[0].SubItems[1].Text);
             }
@@ -158,6 +159,39 @@ namespace Client
             {
                 serverUUID.Text = s;
             });
+        }
+
+        private void 读入配置文件CToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.Filter = "x86自动测试软件配置文件|*.jht|任意文件|*.*";
+            openFileDialog1.Title = "手动读入配置文件";
+            
+            openFileDialog1.FileName = Environment.CurrentDirectory;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string path = openFileDialog1.FileName;
+
+                MessageBox.Show("尝试解释文件" + path);
+                if (System.IO.File.Exists(path))
+                {
+                    try
+                    {
+                        configFile = Newtonsoft.Json.JsonConvert.DeserializeObject(
+                            Encoding.UTF8.GetString(
+                                Convert.FromBase64String(
+                                    System.IO.File.ReadAllText(path)
+                                    ))
+                            , typeof(ConfigFile)) as ConfigFile;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("解释文件时出现异常：" + ex.Message);
+                        path = null;
+                    }
+                }
+            }
+            //debug only
+            MessageBox.Show(Newtonsoft.Json.JsonConvert.SerializeObject(configFile));
         }
     }
 }

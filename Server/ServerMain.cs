@@ -695,35 +695,44 @@ namespace Server
         private void 载入已有的配置文件LToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.Filter = "JSON配置文件|*.jht|所有文件|*.*";
-            openFileDialog1.ShowDialog();
-            string path = openFileDialog1.FileName;
-            MessageBox.Show("尝试解读文件" + path);
-            if(System.IO.File.Exists(path))
+            openFileDialog1.Title = "选择配置文件";
+            openFileDialog1.FileName = Environment.CurrentDirectory;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                try
+                string path = openFileDialog1.FileName;
+                //MessageBox.Show("尝试解释文件" + path);
+                if (System.IO.File.Exists(path))
                 {
-                    Newtonsoft.Json.JsonConvert.DeserializeObject(
-                        Encoding.Default.GetString(
-                            Convert.FromBase64String(
-                                System.IO.File.ReadAllText(path)
-                                ))
-                        ,typeof(ConfigFile));
+                    try
+                    {
+                        configFile = Newtonsoft.Json.JsonConvert.DeserializeObject(
+                            Encoding.Default.GetString(
+                                Convert.FromBase64String(
+                                    System.IO.File.ReadAllText(path)
+                                    ))
+                            , typeof(ConfigFile)) as ConfigFile;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("解释文件时出现异常：" + ex.Message);
+                        path = null;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("解释文件时出现异常：" + ex.Message);
-                    path = null;
-                }
-            }    
+            }
         }
 
         private void 保存当前配置文件为服务器配置SToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.Filter = "JSON配置文件|*.json";
+            saveFileDialog1.Filter = "JSON配置文件|*.jht|任意文件|*.*";
+            saveFileDialog1.Title = "保存配置文件";
+            saveFileDialog1.FileName = Environment.CurrentDirectory;
             saveFileDialog1.ShowDialog(this);
-            string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(configFile);
-            jsonres = Convert.ToBase64String(Encoding.Default.GetBytes(jsonres));
-            System.IO.File.WriteAllText(saveFileDialog1.FileName, jsonres);
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(configFile);
+                jsonres = Convert.ToBase64String(Encoding.Default.GetBytes(jsonres));
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, jsonres);
+            }
 
         }
     }
