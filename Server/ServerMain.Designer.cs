@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.当前连接数 = new System.Windows.Forms.Label();
+            this.lCurrentConnection = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label_uuid = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -90,7 +90,6 @@
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnAddDev = new System.Windows.Forms.Button();
             this.combPreset_SelDev = new System.Windows.Forms.ComboBox();
-            this.btnPreset_CopyToAll = new System.Windows.Forms.Button();
             this.cbOther_Preset = new System.Windows.Forms.CheckBox();
             this.cbOther_RTCLocal = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -131,6 +130,8 @@
             this.label26 = new System.Windows.Forms.Label();
             this.pbGlobalProgress = new System.Windows.Forms.ProgressBar();
             this.serverMainBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -168,7 +169,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.当前连接数);
+            this.tabPage1.Controls.Add(this.lCurrentConnection);
             this.tabPage1.Controls.Add(this.label6);
             this.tabPage1.Controls.Add(this.label_uuid);
             this.tabPage1.Controls.Add(this.label3);
@@ -183,14 +184,14 @@
             this.tabPage1.Text = "服务器配置";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // 当前连接数
+            // lCurrentConnection
             // 
-            this.当前连接数.AutoSize = true;
-            this.当前连接数.Location = new System.Drawing.Point(72, 58);
-            this.当前连接数.Name = "当前连接数";
-            this.当前连接数.Size = new System.Drawing.Size(13, 13);
-            this.当前连接数.TabIndex = 5;
-            this.当前连接数.Text = "0";
+            this.lCurrentConnection.AutoSize = true;
+            this.lCurrentConnection.Location = new System.Drawing.Point(72, 58);
+            this.lCurrentConnection.Name = "lCurrentConnection";
+            this.lCurrentConnection.Size = new System.Drawing.Size(13, 13);
+            this.lCurrentConnection.TabIndex = 5;
+            this.lCurrentConnection.Text = "0";
             // 
             // label6
             // 
@@ -286,6 +287,7 @@
             // 
             // btnSend
             // 
+            this.btnSend.Enabled = false;
             this.btnSend.Location = new System.Drawing.Point(217, 369);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(96, 32);
@@ -794,13 +796,12 @@
             this.gbPreset.Controls.Add(this.lvPreset_Dev);
             this.gbPreset.Controls.Add(this.btnAddDev);
             this.gbPreset.Controls.Add(this.combPreset_SelDev);
-            this.gbPreset.Controls.Add(this.btnPreset_CopyToAll);
             this.gbPreset.Enabled = false;
             this.gbPreset.Location = new System.Drawing.Point(10, 56);
             this.gbPreset.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gbPreset.Name = "gbPreset";
             this.gbPreset.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbPreset.Size = new System.Drawing.Size(264, 184);
+            this.gbPreset.Size = new System.Drawing.Size(264, 149);
             this.gbPreset.TabIndex = 8;
             this.gbPreset.TabStop = false;
             this.gbPreset.Text = "自定义配置校验";
@@ -871,22 +872,12 @@
             "驱动器设备",
             "网络适配器设备",
             "显示适配器设备"});
-            this.combPreset_SelDev.Location = new System.Drawing.Point(67, 118);
+            this.combPreset_SelDev.Location = new System.Drawing.Point(6, 118);
             this.combPreset_SelDev.MaxDropDownItems = 5;
             this.combPreset_SelDev.Name = "combPreset_SelDev";
-            this.combPreset_SelDev.Size = new System.Drawing.Size(121, 21);
+            this.combPreset_SelDev.Size = new System.Drawing.Size(182, 21);
             this.combPreset_SelDev.TabIndex = 14;
             this.combPreset_SelDev.SelectedValueChanged += new System.EventHandler(this.combPreset_SelDev_SelectedValueChanged);
-            // 
-            // btnPreset_CopyToAll
-            // 
-            this.btnPreset_CopyToAll.Enabled = false;
-            this.btnPreset_CopyToAll.Location = new System.Drawing.Point(6, 144);
-            this.btnPreset_CopyToAll.Name = "btnPreset_CopyToAll";
-            this.btnPreset_CopyToAll.Size = new System.Drawing.Size(252, 34);
-            this.btnPreset_CopyToAll.TabIndex = 13;
-            this.btnPreset_CopyToAll.Text = "拷贝到所有本类型设备";
-            this.btnPreset_CopyToAll.UseVisualStyleBackColor = true;
             // 
             // cbOther_Preset
             // 
@@ -1171,12 +1162,14 @@
             this.载入已有的配置文件LToolStripMenuItem.Name = "载入已有的配置文件LToolStripMenuItem";
             this.载入已有的配置文件LToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
             this.载入已有的配置文件LToolStripMenuItem.Text = "载入已有的配置文件(&L)";
+            this.载入已有的配置文件LToolStripMenuItem.Click += new System.EventHandler(this.载入已有的配置文件LToolStripMenuItem_Click);
             // 
             // 保存当前配置文件为服务器配置SToolStripMenuItem
             // 
             this.保存当前配置文件为服务器配置SToolStripMenuItem.Name = "保存当前配置文件为服务器配置SToolStripMenuItem";
             this.保存当前配置文件为服务器配置SToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
             this.保存当前配置文件为服务器配置SToolStripMenuItem.Text = "保存当前配置文件为服务器配置(S)";
+            this.保存当前配置文件为服务器配置SToolStripMenuItem.Click += new System.EventHandler(this.保存当前配置文件为服务器配置SToolStripMenuItem_Click);
             // 
             // 服务器SToolStripMenuItem
             // 
@@ -1239,6 +1232,10 @@
             // serverMainBindingSource
             // 
             this.serverMainBindingSource.DataSource = typeof(Server.ServerMain);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // ServerMain
             // 
@@ -1386,7 +1383,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem 刷新UUIDUToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 退出EToolStripMenuItem;
-        private System.Windows.Forms.Label 当前连接数;
+        private System.Windows.Forms.Label lCurrentConnection;
         private System.Windows.Forms.BindingSource serverMainBindingSource;
         private System.Windows.Forms.PropertyGrid pgPreset;
         private System.Windows.Forms.TextBox tbDescription;
@@ -1398,11 +1395,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.Button btnAddDev;
         private System.Windows.Forms.ComboBox combPreset_SelDev;
-        private System.Windows.Forms.Button btnPreset_CopyToAll;
         private System.Windows.Forms.CheckBox cbOther_Preset;
         private System.Windows.Forms.CheckBox cbOther_RTCLocal;
         private System.Windows.Forms.ColumnHeader columnHeader6;
         private System.Windows.Forms.Button btnDelDev;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

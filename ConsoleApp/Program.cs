@@ -129,9 +129,13 @@ class Component1
             Dictionary<string, string> info = new Dictionary<string, string>();
             foreach (var pro in cimObj.CimInstanceProperties)
             {
-                if (pro.Value != null)
+                if(pro!= null)
                 {
-                    info[pro.Name] = pro.Value.ToString();
+                    if (pro.Value != null)
+                    {
+                        //Warning???
+                        info[pro.Name] = pro.Value.ToString();
+                    }
                 }
             }
             computerInfo.info.Add(info);

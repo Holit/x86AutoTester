@@ -46,19 +46,19 @@ public class ConfigFile
     public enum OVERRIDE_FLAG
     {
         None = 0b_0000_0000,    // 0
-        CPU = 0b_0000_0001,     // 1
-        Memory = 0b_0000_0010,  // 2
-        GPU = 0b_0000_0100,     // 4
+        Processor = 0b_0000_0001,     // 1
+        PhysicalMemory = 0b_0000_0010,  // 2
+        VideoController = 0b_0000_0100,     // 4
         Disk = 0b_0000_1000,    // 8
-        NetworkController = 0b_0001_0000,  // 16
-        All = CPU | Memory| GPU | Disk | NetworkController // 31
+        NetworkAdapter = 0b_0001_0000,  // 16
+        All = Processor | PhysicalMemory| VideoController | Disk | NetworkAdapter // 31
     }
     public OVERRIDE_FLAG override_flag;
     public bool send_wmi_information;
 
     #region Verify configs
     //Win32_Processor
-    public class CPU
+    public class Processor
     {
         public int id;
         [Category("基本信息"), Description("处理器的名称\n该值来自 SMBIOS 信息中 Processor Information 结构的 Processor Version 成员。"), ReadOnly(false)]
@@ -76,9 +76,9 @@ public class ConfigFile
             "只有属性的前两个字节是有效的，并且包含 CPU 复位时 DX 寄存器的内容——所有其他字节都设置为 0（零），并且内容为 DWORD 格式。"), ReadOnly(false)]
         public string ProcessorId { get; set; }
     }
-    public List<CPU> CPUs = new List<CPU>();
+    public List<Processor> Processors = new List<Processor>();
     //Win32_PhysicalMemory
-    public class Memory
+    public class PhysicalMemory
     {
         public int id;
         [Category("基本信息"), Description("内存设备的名称.\n示例: SK Hynix"), ReadOnly(false)]
@@ -92,10 +92,10 @@ public class ConfigFile
         [Category("性能"), Description("物理内存的速度，以纳秒(ns)为单位。"), ReadOnly(false)]
         public string Speed { get; set; }
     }
-    public List<Memory> Mems = new List<Memory>();
+    public List<PhysicalMemory> PhysicalMemorys = new List<PhysicalMemory>();
 
     //Win32_VideoController
-    public class GPU
+    public class VideoController
     {
         public int id;
         [Category("基本信息"), Description("显示适配器名称\n示例：NVIDIA GeForce RTX 3080 Laptop GPU"), ReadOnly(false)]
@@ -107,7 +107,7 @@ public class ConfigFile
         [Category("基本信息"), Description("视频适配器的内存大小"), ReadOnly(false)]
         public string AdapterRAM { get; set; }
     }
-    public List<GPU> GPUs = new List<GPU>();
+    public List<VideoController> VideoControllers = new List<VideoController>();
 
     public class Disk
     {
@@ -125,7 +125,7 @@ public class ConfigFile
     }
     public List<Disk> Disks = new List<Disk>();
 
-    public class NetworkController
+    public class NetworkAdapter
     {
         public int id;
         [Category("基本信息"), Description("设备描述"), ReadOnly(false)]
@@ -135,6 +135,6 @@ public class ConfigFile
         [Category("基本信息"), Description("适配器速度\n以比特/秒为单位估计当前带宽。 对于带宽变化的端点或无法进行准确估计的端点，此属性应包含标称带宽。"), ReadOnly(false)]
         public string Speed { get; set; }
     }
-    public List<NetworkController> NetworkControllers = new List<NetworkController>();
+    public List<NetworkAdapter> NetworkAdapters = new List<NetworkAdapter>();
     #endregion
 }

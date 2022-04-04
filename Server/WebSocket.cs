@@ -49,6 +49,12 @@ namespace Server
         }
         private async Task BoardServer()
         {
+            //Task warning:
+            /*
+             * 事故多发路段
+             * 此处由于存在多线程，故可能存在一些奇奇怪怪的问题
+             * 代码不稳定
+             */
             List<IPAddress> iPAddresses = new List<IPAddress>();
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
             foreach (NetworkInterface adapter in nics)
@@ -67,7 +73,8 @@ namespace Server
                     }
                 }
                 if (isVirtual) continue;
-                if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet || adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet || 
+                    adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
                 {
                     bool isLocal = false;
                     IPInterfaceProperties ip = adapter.GetIPProperties();
@@ -103,8 +110,7 @@ namespace Server
             }
 
             UdpClient udpClient = new UdpClient();
-
-            List<IPEndPoint> iPEndPoints = new List<IPEndPoint>(iPAddresses.Select(t => new IPEndPoint(t, 6839)));
+            List<IPEndPoint> iPEndPoints = new List<IPEndPoint>(iPAddresses.Select(t => new IPEndPoint(t, 1919)));
             Message info = new Message { MessageType=Message.MessageTypes.ServerUuid,Content = Program.Uuid.ToString() };
             Byte[] sendBytes = Encoding.ASCII.GetBytes(info.ToString());
             await Task.Run(() =>
@@ -120,9 +126,10 @@ namespace Server
         }
         private void ListenClient()
         {
-            server = new WebSocketServer("ws://0.0.0.0:6839");
+            server = new WebSocketServer("ws://0.0.0.0:1919");
             server.Start(socket =>
             {
+                Console.WriteLine(DateTime.Now.ToString() + "|试图建立服务器：位于" + server.Location);
                 socket.OnOpen = () =>   //连接建立事件
                 {
                     string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;

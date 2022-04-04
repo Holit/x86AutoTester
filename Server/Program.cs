@@ -20,13 +20,6 @@ namespace Server
         static void Main()
         {
             //Will listen port 6839
-            //Incorrect debugging result:
-            /*
-             * 引发的异常:“System.Net.Sockets.SocketException”(位于 System.dll 中)
-             * 引发的异常:“System.TypeInitializationException”(位于 Server.exe 中)
-             * “System.TypeInitializationException”类型的未经处理的异常在 Server.exe 中发生 
-             * “Server.WebSocket”的类型初始值设定项引发异常。
-             */
             var webSocket =WebSocket.GetInstance;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

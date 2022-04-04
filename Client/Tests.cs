@@ -21,13 +21,12 @@ namespace Client
         {
             if (!ListViewMap.ContainsKey(path))
             {
-                ///应该改为异步操作
                 await Task.Run(() =>
                 {
-                    ManagementClass mProcessor = new ManagementClass(path);
-                    ManagementObjectCollection moCollectionProcessor = mProcessor.GetInstances();
-                    mProcessor.Dispose();
-                    ListViewMap[path] = moCollectionProcessor;
+                    ManagementClass managementClass = new ManagementClass(path);
+                    ManagementObjectCollection moCollection = managementClass.GetInstances();
+                    ListViewMap[path] = moCollection;
+                    managementClass.Dispose();
                 }
                 );
             }

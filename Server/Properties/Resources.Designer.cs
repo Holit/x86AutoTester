@@ -187,7 +187,7 @@ namespace Server.Properties {
         }
         
         /// <summary>
-        ///   查找类似 校验自定义的配置 的本地化字符串。
+        ///   查找类似 校验自定义的配置。如不启用此选项，则程序将录入当前计算机的配置信息并按照本机配置进行校验。 的本地化字符串。
         /// </summary>
         internal static string Other_Preset_Description {
             get {

@@ -160,7 +160,7 @@
     <value>校验所有可以获取到的配置信息。此信息将作为附件附加在日志后</value>
   </data>
   <data name="Other_Preset_Description" xml:space="preserve">
-    <value>校验自定义的配置</value>
+    <value>校验自定义的配置。如不启用此选项，则程序将录入当前计算机的配置信息并按照本机配置进行校验。</value>
   </data>
   <data name="Other_RTCLocal_Description" xml:space="preserve">
     <value>传递本机时间而不是互联网时间。在传递之前将传递一些测试封包以测试网络延迟均值。此延迟将被加和在传递的RTC上。</value>
