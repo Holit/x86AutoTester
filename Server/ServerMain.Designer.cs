@@ -83,9 +83,11 @@
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.cbOther_AllInfo = new System.Windows.Forms.CheckBox();
             this.gbPreset = new System.Windows.Forms.GroupBox();
+            this.btnDelDev = new System.Windows.Forms.Button();
             this.lvPreset_Dev = new System.Windows.Forms.ListView();
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnAddDev = new System.Windows.Forms.Button();
             this.combPreset_SelDev = new System.Windows.Forms.ComboBox();
             this.btnPreset_CopyToAll = new System.Windows.Forms.Button();
@@ -128,9 +130,7 @@
             this.退出EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label26 = new System.Windows.Forms.Label();
             this.pbGlobalProgress = new System.Windows.Forms.ProgressBar();
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.serverMainBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.btnDelDev = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -806,6 +806,17 @@
             this.gbPreset.Text = "自定义配置校验";
             this.gbPreset.Visible = false;
             // 
+            // btnDelDev
+            // 
+            this.btnDelDev.Enabled = false;
+            this.btnDelDev.Location = new System.Drawing.Point(228, 118);
+            this.btnDelDev.Name = "btnDelDev";
+            this.btnDelDev.Size = new System.Drawing.Size(28, 21);
+            this.btnDelDev.TabIndex = 17;
+            this.btnDelDev.Text = "-";
+            this.btnDelDev.UseVisualStyleBackColor = true;
+            this.btnDelDev.Click += new System.EventHandler(this.btnDelDev_Click);
+            // 
             // lvPreset_Dev
             // 
             this.lvPreset_Dev.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -817,6 +828,7 @@
             this.lvPreset_Dev.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.lvPreset_Dev.HideSelection = false;
             this.lvPreset_Dev.Location = new System.Drawing.Point(6, 24);
+            this.lvPreset_Dev.MultiSelect = false;
             this.lvPreset_Dev.Name = "lvPreset_Dev";
             this.lvPreset_Dev.Size = new System.Drawing.Size(252, 88);
             this.lvPreset_Dev.TabIndex = 16;
@@ -833,6 +845,11 @@
             // 
             this.columnHeader9.Text = "设备类型";
             this.columnHeader9.Width = 70;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "说明";
+            this.columnHeader6.Width = 150;
             // 
             // btnAddDev
             // 
@@ -1219,25 +1236,9 @@
             this.pbGlobalProgress.Size = new System.Drawing.Size(360, 27);
             this.pbGlobalProgress.TabIndex = 7;
             // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "说明";
-            this.columnHeader6.Width = 150;
-            // 
             // serverMainBindingSource
             // 
             this.serverMainBindingSource.DataSource = typeof(Server.ServerMain);
-            // 
-            // btnDelDev
-            // 
-            this.btnDelDev.Enabled = false;
-            this.btnDelDev.Location = new System.Drawing.Point(228, 118);
-            this.btnDelDev.Name = "btnDelDev";
-            this.btnDelDev.Size = new System.Drawing.Size(28, 21);
-            this.btnDelDev.TabIndex = 17;
-            this.btnDelDev.Text = "-";
-            this.btnDelDev.UseVisualStyleBackColor = true;
-            this.btnDelDev.Click += new System.EventHandler(this.btnDelDev_Click);
             // 
             // ServerMain
             // 

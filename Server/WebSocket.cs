@@ -146,9 +146,9 @@ namespace Server
                         Message message = JsonConvert.DeserializeObject<Message>(rawMessage);
                         HandleMessage(message, socket);
                     }
-                    catch (JsonReaderException exception)
+                    catch (JsonReaderException exception )
                     {
-                        Console.WriteLine("接收到不正确的消息");
+                        Console.WriteLine("接收到不正确的消息" + exception.Message);
                     }
                 };
             });

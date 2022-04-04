@@ -444,8 +444,6 @@ namespace Server
 
         private void lvPreset_Dev_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //Do not modify.
-            //Incomplete.
             combPreset_SelDev.SelectedItem = null;
             if (lvPreset_Dev.SelectedItems.Count  == 1)
             {
@@ -454,8 +452,7 @@ namespace Server
                 {
                     pgPreset.SelectedObject = null;
                     pgPreset.SelectedObject = configFile.CPUs[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
-                    //adding dynamic listview.
-                    //adding delete button
+                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = configFile.CPUs[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Name;
                 }
                 else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "内存设备")
                 {
@@ -545,7 +542,59 @@ namespace Server
                 ,MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2);
             if (res == DialogResult.Yes)
             {
-                //add here deleteing code.
+                if(lvPreset_Dev.SelectedItems.Count == 1)
+                {
+                    if (lvPreset_Dev.SelectedItems [0].SubItems[1].ToString() == "中央处理器设备")
+                    {
+                        foreach (ConfigFile.CPU dev in configFile.CPUs)
+                        {
+                            if(dev.id ==int.Parse( lvPreset_Dev.SelectedItems [0].SubItems[0].ToString()))
+                            {
+                                configFile.CPUs.Remove(dev);
+                            }
+                        }
+                    }
+                    else if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "内存设备")
+                    {
+                        foreach (ConfigFile.Memory dev in configFile.Mems)
+                        {
+                            if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
+                            {
+                                configFile.Mems.Remove(dev);
+                            }
+                        }
+                    }
+                    else if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "驱动器设备")
+                    {
+                        foreach (ConfigFile.Disk dev in configFile.Disks)
+                        {
+                            if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
+                            {
+                                configFile.Disks.Remove(dev);
+                            }
+                        }
+                    }
+                    else if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "网络适配器设备")
+                    {
+                        foreach (ConfigFile.NetworkController dev in configFile.NetworkControllers)
+                        {
+                            if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
+                            {
+                                configFile.NetworkControllers.Remove(dev);
+                            }
+                        }
+                    }
+                    else if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "显示适配器设备")
+                    {
+                        foreach (ConfigFile.GPU dev in configFile.GPUs)
+                        {
+                            if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
+                            {
+                                configFile.GPUs.Remove(dev);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
