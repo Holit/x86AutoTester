@@ -47,6 +47,11 @@ namespace Server
 
         public void HandleMessage(Message message, Client socket)
         {
+            if( message.MessageType == Message.MessageTypes.WMIMessage)
+            {
+                //add code here
+            }
+
             Console.WriteLine(message.ToString());
             manualEvent.Set();
         }

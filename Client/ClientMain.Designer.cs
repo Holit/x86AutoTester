@@ -35,6 +35,7 @@
             this.退出EToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.网络NToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.手动更改连接设定MToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.读入配置文件CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.测试TToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.启动测试默认配置文件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -55,9 +56,6 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label22 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.lvConfigsDetails = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label21 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -81,8 +79,8 @@
             this.serverIP = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
             this.serverUUID = new System.Windows.Forms.Label();
-            this.读入配置文件CToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.tbConfigFileDetail = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -119,13 +117,13 @@
             // 
             this.另存日志到ToolStripMenuItem.Enabled = false;
             this.另存日志到ToolStripMenuItem.Name = "另存日志到ToolStripMenuItem";
-            this.另存日志到ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.另存日志到ToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.另存日志到ToolStripMenuItem.Text = "保存日志到...(&S)";
             // 
             // 退出EToolStripMenuItem
             // 
             this.退出EToolStripMenuItem.Name = "退出EToolStripMenuItem";
-            this.退出EToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.退出EToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.退出EToolStripMenuItem.Text = "退出(&E)";
             this.退出EToolStripMenuItem.Click += new System.EventHandler(this.退出EToolStripMenuItem_Click);
             // 
@@ -144,6 +142,13 @@
             this.手动更改连接设定MToolStripMenuItem.Name = "手动更改连接设定MToolStripMenuItem";
             this.手动更改连接设定MToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.手动更改连接设定MToolStripMenuItem.Text = "手动更改连接设定(&M)";
+            // 
+            // 读入配置文件CToolStripMenuItem
+            // 
+            this.读入配置文件CToolStripMenuItem.Name = "读入配置文件CToolStripMenuItem";
+            this.读入配置文件CToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.读入配置文件CToolStripMenuItem.Text = "读入配置文件(&C)";
+            this.读入配置文件CToolStripMenuItem.Click += new System.EventHandler(this.读入配置文件CToolStripMenuItem_Click);
             // 
             // 测试TToolStripMenuItem
             // 
@@ -166,7 +171,7 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(11, 26);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(588, 342);
@@ -183,9 +188,9 @@
             this.tabPage1.Controls.Add(this.rbCPU);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage1.Size = new System.Drawing.Size(580, 316);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "系统";
@@ -339,9 +344,9 @@
             this.tabPage2.Controls.Add(this.progressBar1);
             this.tabPage2.Controls.Add(this.label21);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage2.Size = new System.Drawing.Size(580, 316);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "配置文件";
@@ -358,35 +363,13 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.lvConfigsDetails);
+            this.groupBox2.Controls.Add(this.tbConfigFileDetail);
             this.groupBox2.Location = new System.Drawing.Point(8, 71);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(567, 240);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "配置文件详情";
-            // 
-            // lvConfigsDetails
-            // 
-            this.lvConfigsDetails.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2});
-            this.lvConfigsDetails.GridLines = true;
-            this.lvConfigsDetails.HideSelection = false;
-            this.lvConfigsDetails.Location = new System.Drawing.Point(6, 19);
-            this.lvConfigsDetails.Name = "lvConfigsDetails";
-            this.lvConfigsDetails.Size = new System.Drawing.Size(555, 215);
-            this.lvConfigsDetails.TabIndex = 0;
-            this.lvConfigsDetails.UseCompatibleStateImageBehavior = false;
-            this.lvConfigsDetails.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "项目";
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "值";
             // 
             // progressBar1
             // 
@@ -580,16 +563,20 @@
             this.serverUUID.TabIndex = 4;
             this.serverUUID.Text = "(未连接)";
             // 
-            // 读入配置文件CToolStripMenuItem
-            // 
-            this.读入配置文件CToolStripMenuItem.Name = "读入配置文件CToolStripMenuItem";
-            this.读入配置文件CToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.读入配置文件CToolStripMenuItem.Text = "读入配置文件(&C)";
-            this.读入配置文件CToolStripMenuItem.Click += new System.EventHandler(this.读入配置文件CToolStripMenuItem_Click);
-            // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // tbConfigFileDetail
+            // 
+            this.tbConfigFileDetail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbConfigFileDetail.Location = new System.Drawing.Point(3, 16);
+            this.tbConfigFileDetail.Multiline = true;
+            this.tbConfigFileDetail.Name = "tbConfigFileDetail";
+            this.tbConfigFileDetail.ReadOnly = true;
+            this.tbConfigFileDetail.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbConfigFileDetail.Size = new System.Drawing.Size(561, 221);
+            this.tbConfigFileDetail.TabIndex = 0;
             // 
             // ClientMain
             // 
@@ -604,7 +591,7 @@
             this.Controls.Add(this.label19);
             this.Controls.Add(this.serverIP);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(626, 478);
             this.MinimizeBox = false;
@@ -621,6 +608,7 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             this.ResumeLayout(false);
@@ -642,9 +630,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ListView lvConfigsDetails;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TabPage tabPage3;
@@ -684,6 +669,7 @@
         private System.Windows.Forms.ToolStripMenuItem 复制项目和值ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 读入配置文件CToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.TextBox tbConfigFileDetail;
     }
 }
 

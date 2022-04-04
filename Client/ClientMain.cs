@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Client
 {
@@ -190,8 +192,30 @@ namespace Client
                     }
                 }
             }
-            //debug only
-            MessageBox.Show(Newtonsoft.Json.JsonConvert.SerializeObject(configFile));
+            //格式化JSON
+            JsonSerializer serializer = new JsonSerializer();
+            TextReader tr = new StringReader(Newtonsoft.Json.JsonConvert.SerializeObject(configFile));
+            JsonTextReader jtr = new JsonTextReader(tr);
+            object obj = serializer.Deserialize(jtr);
+            if (obj != null)
+            {
+                StringWriter textWriter = new StringWriter();
+                JsonTextWriter jsonWriter = new JsonTextWriter(textWriter)
+                {
+                    Formatting = Formatting.Indented,
+                    Indentation = 4,
+                    IndentChar = ' '
+                };
+                serializer.Serialize(jsonWriter, obj);
+                tbConfigFileDetail.Text = textWriter.ToString();
+            }
+            else
+            {
+                tbConfigFileDetail.Text = Newtonsoft.Json.JsonConvert.SerializeObject(configFile);
+            }
+
+            //MessageBox.Show(Newtonsoft.Json.JsonConvert.SerializeObject(configFile));
         }
+
     }
 }
