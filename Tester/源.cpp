@@ -102,9 +102,11 @@ void memoryTest() {
 void cpuTest() {
 	DWORD totalTime = atoi(args["totalTime"].c_str());
 	if (totalTime == 0)exit(ARGS_ERROR);
-	list<HANDLE> threads;
+	HANDLE* threads;
+	int threadCount = 0;
+	bool isExit = false;
 	auto cpuTestThread = [](void* args) ->DWORD{
-		while (true) {
+		while (!*(bool*)args) {
 			sqrt(rand());
 		}
 		return 0;
@@ -112,17 +114,38 @@ void cpuTest() {
 	if(args["thread"] == "auto") {
 		SYSTEM_INFO systemInfo;
 		GetSystemInfo(&systemInfo);
+		threads = new HANDLE[threadCount = systemInfo.dwNumberOfProcessors];
 		for (DWORD i = 0; i < systemInfo.dwNumberOfProcessors; ++i) {
-			HANDLE handle = CreateThread(nullptr, 0, cpuTestThread, nullptr, 0, nullptr);
+			HANDLE handle = CreateThread(nullptr, 0, cpuTestThread, &isExit, 0, nullptr);
 			if (handle == 0)exit(FAIL_PASS_TEST);
 			SetThreadAffinityMask(handle, static_cast<DWORD_PTR>(1) << i);
-			threads.push_back(handle);
+			threads[i]=handle;
+		}
+	}
+	else {
+		threadCount= atoi(args["thread"].c_str());
+		if (threadCount == 0)exit(ARGS_ERROR);
+		threads = new HANDLE[threadCount];
+		for (DWORD i = 0; i < threadCount; ++i) {
+			HANDLE handle = CreateThread(nullptr, 0, cpuTestThread, &isExit, 0, nullptr);
+			if (handle == 0)exit(FAIL_PASS_TEST);
+			threads[i] = handle;
 		}
 	}
 	cout << "²âÊÔÖÐ... " << endl;
 	Sleep(totalTime);
-	for (auto thread : threads) {
-		TerminateThread(thread, 0);
+	isExit = true;
+	DWORD dwWaitResult = WaitForMultipleObjects(
+		threadCount,
+		threads,
+		TRUE,
+		INFINITE);
+	switch (dwWaitResult)
+	{
+	case WAIT_OBJECT_0:
+		exit(SUCCESS);
+	default:
+		exit(FAIL_PASS_TEST);
 	}
 	exit(SUCCESS);
 }
