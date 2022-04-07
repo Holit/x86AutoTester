@@ -13,6 +13,15 @@ namespace Server
     public class ClientTask
     {
         public static List<ClientTask> Tasks = new List<ClientTask> {
+                new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
+                    new TesterMessage{
+                        data = {
+                            { "operator" , "cpuTest" },
+                            { "thread" , "auto" },
+                            { "totalTime" , (2*60*1000).ToString() }
+                        }
+                    }.ToString()
+                    },"CPU压力测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_OperatingSystem" },"操作系统配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" },"CPU配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" },"内存配置校验"),

@@ -110,7 +110,7 @@ namespace Server
             }
 
             UdpClient udpClient = new UdpClient();
-            List<IPEndPoint> iPEndPoints = new List<IPEndPoint>(iPAddresses.Select(t => new IPEndPoint(t, 1919)));
+            List<IPEndPoint> iPEndPoints = new List<IPEndPoint>(iPAddresses.Select(t => new IPEndPoint(t, 6839)));
             Message info = new Message { MessageType=Message.MessageTypes.ServerUuid,Content = Program.Uuid.ToString() };
             Byte[] sendBytes = Encoding.ASCII.GetBytes(info.ToString());
             await Task.Run(() =>
@@ -126,7 +126,7 @@ namespace Server
         }
         private void ListenClient()
         {
-            server = new WebSocketServer("ws://0.0.0.0:1919");
+            server = new WebSocketServer("ws://0.0.0.0:6839");
             server.Start(socket =>
             {
                 Console.WriteLine(DateTime.Now.ToString() + "|试图建立服务器：位于" + server.Location);

@@ -4,6 +4,7 @@
 #include<Windows.h>
 #include<stdlib.h>
 #include<thread>
+#include<processthreadsapi.h>
 #include<list>
 #include<sstream>
 
@@ -14,6 +15,7 @@ const int ARGS_ERROR=-1;
 const int FAIL_PASS_TEST = -2;
 
 void memoryTest();
+void cpuTest();
 
 map<string, string> args;
 
@@ -30,6 +32,9 @@ int main(int num,char* arg[]) {
 	if (args["operator"] == "memoyTest") {
 		memoryTest();
 	}
+	else if (args["operator"] == "cpuTest") {
+		cpuTest();
+	}
 	else {
 		cout << "未知的operator " << args["operator"] << endl;
 		return ARGS_ERROR;
@@ -38,10 +43,10 @@ int main(int num,char* arg[]) {
 }
 
 void memoryTest() {
-	long long reservedMemory = _atoi64(args["reservedMemory"].c_str());
+	DWORDLONG reservedMemory = _atoi64(args["reservedMemory"].c_str());
 	long long memoryPerThread = _atoi64(args["memoryPerThread"].c_str());
-	long long sleepTime = _atoi64(args["sleepTime"].c_str());
-	long long totalTime = _atoi64(args["totalTime"].c_str());
+	DWORD sleepTime = atoi(args["sleepTime"].c_str());
+	DWORD totalTime = atoi(args["totalTime"].c_str());
 	if (memoryPerThread == 0 || totalTime == 0)exit(ARGS_ERROR);
 	MEMORYSTATUSEX statex;
 	statex.dwLength = sizeof(statex);
@@ -92,4 +97,32 @@ void memoryTest() {
 		t.join();
 	}
 	cout << "内存测试成功" << endl;
+}
+
+void cpuTest() {
+	DWORD totalTime = atoi(args["totalTime"].c_str());
+	if (totalTime == 0)exit(ARGS_ERROR);
+	list<HANDLE> threads;
+	auto cpuTestThread = [](void* args) ->DWORD{
+		while (true) {
+			sqrt(rand());
+		}
+		return 0;
+	};
+	if(args["thread"] == "auto") {
+		SYSTEM_INFO systemInfo;
+		GetSystemInfo(&systemInfo);
+		for (DWORD i = 0; i < systemInfo.dwNumberOfProcessors; ++i) {
+			HANDLE handle = CreateThread(nullptr, 0, cpuTestThread, nullptr, 0, nullptr);
+			if (handle == 0)exit(FAIL_PASS_TEST);
+			SetThreadAffinityMask(handle, static_cast<DWORD_PTR>(1) << i);
+			threads.push_back(handle);
+		}
+	}
+	cout << "测试中... " << endl;
+	Sleep(totalTime);
+	for (auto thread : threads) {
+		TerminateThread(thread, 0);
+	}
+	exit(SUCCESS);
 }
