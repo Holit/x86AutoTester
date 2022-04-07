@@ -13,12 +13,13 @@ using namespace std;
 const int SUCCESS=0;
 const int ARGS_ERROR=-1;
 const int FAIL_PASS_TEST = -2;
-
+void Usage();
 void memoryTest();
 void cpuTest();
 
 map<string, string> args;
 
+bool isPrintf = false;
 int main(int num,char* arg[]) {
 	for (int i = 1; i < num; i += 2) {
 		if (arg[i][0] == '-' && i + 1 < num) {
@@ -26,10 +27,15 @@ int main(int num,char* arg[]) {
 		}
 		else {
 			cout << "参数错误" << endl;
+			Usage();
 			return ARGS_ERROR;
 		}
 	}
-	if (args["operator"] == "memoyTest") {
+	if (args["output"] == "true")
+	{
+		isPrintf = true;
+	}
+	if (args["operator"] == "memoryTest") {
 		memoryTest();
 	}
 	else if (args["operator"] == "cpuTest") {
@@ -37,11 +43,37 @@ int main(int num,char* arg[]) {
 	}
 	else {
 		cout << "未知的operator " << args["operator"] << endl;
+		Usage();
 		return ARGS_ERROR;
 	}
 	return SUCCESS;
 }
 
+void Usage()
+{
+	printf("x86自动测试软件 命令行测试实例工具\n"
+		"此工具默认配置与自动测试套件一同运行，不应该手动运行\n"
+		"=================\n\n"
+		"对计算机硬件进行一系列压力测试、调用外部软件对计算机硬件进行\n"
+		" 测试\n\n"
+		"Tester --operator [opn] <--output> args\n\n"
+		"--operator\t指定测试对象\n"
+		"--output\t打开回显\n"
+		"\t当前可选对象：cpuTest, memoryTest\n"
+		"\t cpuTest: 对计算机中央处理器执行压力测试\n"
+		"\t memoryTest：对计算机内存执行压力测试。警告：此测试对于32位计算机\n"
+		"\t  可能无效。您可以进行多程序同时运行检查整个内存结构和完整性\n"
+		"args\t测试对象所需要的参数\n"
+		"\tcpuTest:\n"
+		"\t --totalTime\t指定执行测试的总时长\n"
+		"\t --thread\t指定执行测试的线程数，指定为 auto 可自动分配\n"
+		"\tmemoryTest:\n"
+		"\t --reservedMemory\t内存测试的总预留内存\n"
+		"\t --memoryPerThread\t各线程申请的内存，单位为字节\n"
+		"\t --sleepTime\t各线程保留的时间，超过此时间将释放内存。建议设置等于totalTime\n"
+		"\t --totalTime\t指定执行测试的总时长\n"
+	);
+}
 void memoryTest() {
 	DWORDLONG reservedMemory = _atoi64(args["reservedMemory"].c_str());
 	long long memoryPerThread = _atoi64(args["memoryPerThread"].c_str());
@@ -56,36 +88,63 @@ void memoryTest() {
 	bool runing = true;
 	while (statex.ullAvailPhys > reservedMemory) {
 		GlobalMemoryStatusEx(&statex);
-		printf("剩余物理内存 %I64d\n",statex.ullAvailPhys);
+		if (isPrintf)
+		{
+			printf("剩余物理内存 %I64d\n", statex.ullAvailPhys);
+		}
 		threads.push_back(thread([&memoryPerThread, &sleepTime,&runing]() {
 			stringstream ss;
 			while (true) {
 				char* p = (char*)malloc(memoryPerThread);
 				if (p == nullptr) { 
-					ss << "线程: " << this_thread::get_id() << " 申请内存失败" << endl;
-					cout << ss.str(); ss.clear();
+					if (isPrintf) 
+					{
+						ss << "线程: " << this_thread::get_id() << " 申请内存失败" << endl;
+						cout << ss.str(); 
+						ss.clear();
+					}
 					exit(FAIL_PASS_TEST); 
 				}
-				ss << "线程: " << this_thread::get_id() << " 成功申请内存" << memoryPerThread << endl;
-				cout << ss.str(); ss.str("");
+				if (isPrintf)
+				{
+					ss << "线程: " << this_thread::get_id() << " 成功申请内存" << memoryPerThread << endl;
+					cout << ss.str();
+					ss.clear();
+				}
 				for (int i = 0; i < memoryPerThread; ++i) {
 					p[i] = (char)i;
 				}
-				ss << "线程: " << this_thread::get_id() << " sleep开始"<< endl;
-				cout << ss.str(); ss.str("");
+				if (isPrintf)
+				{
+					ss << "线程: " << this_thread::get_id() << " sleep开始" << endl;
+					cout << ss.str(); 
+					ss.clear();
+				}
 				Sleep(sleepTime);
-				ss << "线程: " << this_thread::get_id() << " sleep结束" << endl;
-				cout << ss.str(); ss.str("");
+				if (isPrintf)
+				{
+					ss << "线程: " << this_thread::get_id() << " sleep结束" << endl;
+					cout << ss.str();
+					ss.clear();
+				}
 				for (int i = 0; i < memoryPerThread; ++i) {
 					if (p[i] != (char)i) {
-						ss << "线程: " << this_thread::get_id() << " 校验失败" << endl;
-						cout << ss.str(); ss.str("");
+						if (isPrintf)
+						{
+							ss << "线程: " << this_thread::get_id() << " 校验失败" << endl;
+							cout << ss.str(); 
+							ss.clear();
+						}
 						exit(FAIL_PASS_TEST);
 					}
 				}
 				free(p);
-				ss << "线程: " << this_thread::get_id() << " 释放内存" << endl;
-				cout << ss.str(); ss.str("");
+				if (isPrintf)
+				{
+					ss << "线程: " << this_thread::get_id() << " 释放内存" << endl;
+					cout << ss.str(); 
+					ss.clear();
+				}
 				if (!runing)return;
 			}
 			}));
