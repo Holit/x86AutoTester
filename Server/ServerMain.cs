@@ -15,7 +15,6 @@ namespace Server
 {
     public partial class ServerMain : Form
     {
-        public ConfigFile configFile = new ConfigFile();
         public ServerMain()
         {
             InitializeComponent();
@@ -326,35 +325,35 @@ namespace Server
 
         private void ConcludeConfig()
         {
-            configFile.senderUUID = label_uuid.Text;
-            configFile.CreationTime = DateTime.Now;
-            configFile.global_cpu = cbCPU.Checked;
-            configFile.global_mem = cbMem.Checked;
-            configFile.global_disk = cbDisk.Checked;
-            configFile.global_net = cbNet.Checked;
+            Program.configFile.senderUUID = label_uuid.Text;
+            Program.configFile.CreationTime = DateTime.Now;
+            Program.configFile.global_cpu = cbCPU.Checked;
+            Program.configFile.global_mem = cbMem.Checked;
+            Program.configFile.global_disk = cbDisk.Checked;
+            Program.configFile.global_net = cbNet.Checked;
 
-            configFile.cpu_error_stop = cbCPU_ErrorStop.Checked;
-            configFile.cpu_all_temp = cbCPU_AllTemp.Checked;
-            configFile.cpu_all_fan_speed = cbCPU_allFanSpeed.Checked;
-            configFile.cpu_detailed_info = cbCPU_details.Checked;
+            Program.configFile.cpu_error_stop = cbCPU_ErrorStop.Checked;
+            Program.configFile.cpu_all_temp = cbCPU_AllTemp.Checked;
+            Program.configFile.cpu_all_fan_speed = cbCPU_allFanSpeed.Checked;
+            Program.configFile.cpu_detailed_info = cbCPU_details.Checked;
 
-            configFile.mem_error_stop = cbMem_ErrorStop.Checked;
-            configFile.mem_error_address = cbMem_ErrorLocation.Checked;
+            Program.configFile.mem_error_stop = cbMem_ErrorStop.Checked;
+            Program.configFile.mem_error_address = cbMem_ErrorLocation.Checked;
 
-            configFile.net_test = cbNet_CommCheck.Checked;
-            configFile.net_mac = cbNet_MAC.Checked;
-            configFile.net_web_test = cbNet_web.Checked;
+            Program.configFile.net_test = cbNet_CommCheck.Checked;
+            Program.configFile.net_mac = cbNet_MAC.Checked;
+            Program.configFile.net_web_test = cbNet_web.Checked;
 
-            configFile.outlet_com = cbOutlet_COM.Checked;
-            configFile.outlet_usb = cbOutlet_USB.Checked;
-            configFile.audio_playback = cbOutlet_audioPlay.Checked;
-            configFile.audio_adjust_vol = cbOutlet_VolAuto.Checked;
-            configFile.audio_max_vol = cbOutlet_VolMax.Checked;
+            Program.configFile.outlet_com = cbOutlet_COM.Checked;
+            Program.configFile.outlet_usb = cbOutlet_USB.Checked;
+            Program.configFile.audio_playback = cbOutlet_audioPlay.Checked;
+            Program.configFile.audio_adjust_vol = cbOutlet_VolAuto.Checked;
+            Program.configFile.audio_max_vol = cbOutlet_VolMax.Checked;
             //add default device.
             //请将此部分写为异步操作
             //阻塞执行可能需要1~3s的卡顿。
 
-            if((configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Processor) == ConfigFile.OVERRIDE_FLAG.None)
+            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Processor) == ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_Processor");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
@@ -364,14 +363,14 @@ namespace Server
                     dev.Family = mo["Family"].ToString();
                     dev.Name = mo["Name"].ToString();
                     dev.Manufacturer = mo["Manufacturer"].ToString();
-                    dev.id = configFile.Processors.Count + 1;
+                    dev.id = Program.configFile.Processors.Count + 1;
                     dev.MaxClockSpeed = mo["MaxClockSpeed"].ToString();
                     dev.ProcessorId = mo["ProcessorId"].ToString();
-                    configFile.Processors.Add(dev);
+                    Program.configFile.Processors.Add(dev);
                 }
                 managementClass.Dispose();
             }            
-            if((configFile.override_flag & ConfigFile.OVERRIDE_FLAG.PhysicalMemory) == ConfigFile.OVERRIDE_FLAG.None)
+            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.PhysicalMemory) == ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_PhysicalMemory");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
@@ -383,63 +382,63 @@ namespace Server
                     dev.Manufacturer = mo["Manufacturer"].ToString();
                     dev.Capacity = mo["Capacity"].ToString();
                     dev.Speed = mo["Speed"].ToString();
-                    dev.id = configFile.PhysicalMemorys.Count + 1;
-                    configFile.PhysicalMemorys.Add(dev);
+                    dev.id = Program.configFile.PhysicalMemorys.Count + 1;
+                    Program.configFile.PhysicalMemorys.Add(dev);
                 }
                 managementClass.Dispose();
             }            
-            if((configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Disk) == ConfigFile.OVERRIDE_FLAG.None)
+            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Disk) == ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_DiskDrive");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
                 foreach (ManagementObject mo in moCollection)
                 {
                     ConfigFile.Disk dev = new ConfigFile.Disk();
-                    dev.id = configFile.Disks.Count + 1;
+                    dev.id = Program.configFile.Disks.Count + 1;
                     dev.Manufacturer = mo["Manufacturer"].ToString();
                     dev.MediaType = mo["MediaType"].ToString();
                     dev.Model = mo["Model"].ToString();
                     dev.SerialNumber = mo["SerialNumber"] == null ? "null"  : mo["SerialNumber"].ToString();
                     dev.Size = mo["Size"].ToString();
-                    configFile.Disks.Add(dev);
+                    Program.configFile.Disks.Add(dev);
                 }
                 managementClass.Dispose();
             }            
-            if((configFile.override_flag & ConfigFile.OVERRIDE_FLAG.NetworkAdapter) == ConfigFile.OVERRIDE_FLAG.NetworkAdapter)
+            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.NetworkAdapter) == ConfigFile.OVERRIDE_FLAG.NetworkAdapter)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_NetworkAdapter");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
                 foreach (ManagementObject mo in moCollection)
                 {
                     ConfigFile.NetworkAdapter dev = new ConfigFile.NetworkAdapter();
-                    dev.id = configFile.NetworkAdapters.Count + 1;
+                    dev.id = Program.configFile.NetworkAdapters.Count + 1;
                     dev.Description = mo["Description"].ToString();
                     dev.GUID = mo["GUID"].ToString();
                     dev.Speed = mo["Speed"].ToString();
-                    configFile.NetworkAdapters.Add(dev);
+                    Program.configFile.NetworkAdapters.Add(dev);
                 }
                 managementClass.Dispose();
             }            
-            if((configFile.override_flag & ConfigFile.OVERRIDE_FLAG.VideoController) == ConfigFile.OVERRIDE_FLAG.None)
+            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.VideoController) == ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_VideoController");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
                 foreach (ManagementObject mo in moCollection)
                 {
                     ConfigFile.VideoController dev = new ConfigFile.VideoController();
-                    dev.id = configFile.VideoControllers.Count + 1;
+                    dev.id = Program.configFile.VideoControllers.Count + 1;
                     dev.AdapterCompatibility = mo["AdapterCompatibility"].ToString();
                     dev.AdapterRAM = mo["AdapterRAM"].ToString();
                     dev.Name = mo["Name"].ToString();
                     dev.VideoProcessor = mo["VideoProcessor"].ToString();
-                    configFile.VideoControllers.Add(dev);
+                    Program.configFile.VideoControllers.Add(dev);
                 }
                 managementClass.Dispose();
             }
             //////////////////////////////////////////////////////////////////////////
             ///保存到配置文件（jht文件）
             ///这里做了base64编码，为了防止一些文字在传递过程中出现编码错误
-            string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(configFile);
+            string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(Program.configFile);
             jsonres = Convert.ToBase64String(Encoding.Default.GetBytes(jsonres));
             System.IO.File.WriteAllText("configfile.jht", jsonres);
         }
@@ -474,55 +473,55 @@ namespace Server
             {
                 if(combPreset_SelDev.SelectedItem.ToString() == "中央处理器设备")
                 {
-                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.Processor;
-                    ((ConfigFile.Processor)pgPreset.SelectedObject).id = configFile.Processors.Count + 1;
-                    configFile.Processors.Add((ConfigFile.Processor)pgPreset.SelectedObject);
+                    Program.configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.Processor;
+                    ((ConfigFile.Processor)pgPreset.SelectedObject).id = Program.configFile.Processors.Count + 1;
+                    Program.configFile.Processors.Add((ConfigFile.Processor)pgPreset.SelectedObject);
                     ListViewItem listViewItem = new ListViewItem();
-                    listViewItem.Text = configFile.Processors.Count.ToString();
+                    listViewItem.Text = Program.configFile.Processors.Count.ToString();
                     listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
                     listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.Processor).Name);
                     lvPreset_Dev.Items.Add(listViewItem);
                 }
                 else if (combPreset_SelDev.SelectedItem.ToString() == "内存设备")
                 {
-                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.PhysicalMemory;
-                    ((ConfigFile.PhysicalMemory)pgPreset.SelectedObject).id = configFile.PhysicalMemorys.Count + 1;
-                    configFile.PhysicalMemorys.Add(pgPreset.SelectedObject as ConfigFile.PhysicalMemory);
+                    Program.configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.PhysicalMemory;
+                    ((ConfigFile.PhysicalMemory)pgPreset.SelectedObject).id = Program.configFile.PhysicalMemorys.Count + 1;
+                    Program.configFile.PhysicalMemorys.Add(pgPreset.SelectedObject as ConfigFile.PhysicalMemory);
                     ListViewItem listViewItem = new ListViewItem();
-                    listViewItem.Text = configFile.PhysicalMemorys.Count.ToString();
+                    listViewItem.Text = Program.configFile.PhysicalMemorys.Count.ToString();
                     listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
                     listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.PhysicalMemory).SerialNumber);
                     lvPreset_Dev.Items.Add(listViewItem);
                 }
                 else if (combPreset_SelDev.SelectedItem.ToString() == "驱动器设备")
                 {
-                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.Disk;
-                    ((ConfigFile.Disk)pgPreset.SelectedObject).id = configFile.Disks.Count + 1;
-                    configFile.Disks.Add(pgPreset.SelectedObject as ConfigFile.Disk);
+                    Program.configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.Disk;
+                    ((ConfigFile.Disk)pgPreset.SelectedObject).id = Program.configFile.Disks.Count + 1;
+                    Program.configFile.Disks.Add(pgPreset.SelectedObject as ConfigFile.Disk);
                     ListViewItem listViewItem = new ListViewItem();
-                    listViewItem.Text = configFile.Disks.Count.ToString();
+                    listViewItem.Text = Program.configFile.Disks.Count.ToString();
                     listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
                     listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.Disk).Manufacturer);
                     lvPreset_Dev.Items.Add(listViewItem);
                 }
                 else if (combPreset_SelDev.SelectedItem.ToString() == "网络适配器设备")
                 {
-                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.NetworkAdapter;
-                    ((ConfigFile.NetworkAdapter)pgPreset.SelectedObject).id = configFile.NetworkAdapters.Count + 1;
-                    configFile.NetworkAdapters.Add(pgPreset.SelectedObject as ConfigFile.NetworkAdapter);
+                    Program.configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.NetworkAdapter;
+                    ((ConfigFile.NetworkAdapter)pgPreset.SelectedObject).id = Program.configFile.NetworkAdapters.Count + 1;
+                    Program.configFile.NetworkAdapters.Add(pgPreset.SelectedObject as ConfigFile.NetworkAdapter);
                     ListViewItem listViewItem = new ListViewItem();
-                    listViewItem.Text = configFile.NetworkAdapters.Count.ToString();
+                    listViewItem.Text = Program.configFile.NetworkAdapters.Count.ToString();
                     listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
                     listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.NetworkAdapter).Description);
                     lvPreset_Dev.Items.Add(listViewItem);
                 }
                 else if (combPreset_SelDev.SelectedItem.ToString() == "显示适配器设备")
                 {
-                    configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.VideoController;
-                    ((ConfigFile.VideoController)pgPreset.SelectedObject).id = configFile.VideoControllers.Count + 1;
-                    configFile.VideoControllers.Add(pgPreset.SelectedObject as ConfigFile.VideoController);
+                    Program.configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.VideoController;
+                    ((ConfigFile.VideoController)pgPreset.SelectedObject).id = Program.configFile.VideoControllers.Count + 1;
+                    Program.configFile.VideoControllers.Add(pgPreset.SelectedObject as ConfigFile.VideoController);
                     ListViewItem listViewItem = new ListViewItem();
-                    listViewItem.Text = configFile.VideoControllers.Count.ToString();
+                    listViewItem.Text = Program.configFile.VideoControllers.Count.ToString();
                     listViewItem.SubItems.Add(combPreset_SelDev.SelectedItem.ToString());
                     listViewItem.SubItems.Add((pgPreset.SelectedObject as ConfigFile.VideoController).Name);
                     lvPreset_Dev.Items.Add(listViewItem);
@@ -540,32 +539,32 @@ namespace Server
                 if(lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "中央处理器设备")
                 {
                     pgPreset.SelectedObject = null;
-                    pgPreset.SelectedObject = configFile.Processors[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
-                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = configFile.Processors[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Name;
+                    pgPreset.SelectedObject = Program.configFile.Processors[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
+                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = Program.configFile.Processors[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Name;
                 }
                 else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "内存设备")
                 {
                     pgPreset.SelectedObject = null;
-                    pgPreset.SelectedObject = configFile.PhysicalMemorys[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
-                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = configFile.PhysicalMemorys[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Manufacturer;
+                    pgPreset.SelectedObject = Program.configFile.PhysicalMemorys[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
+                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = Program.configFile.PhysicalMemorys[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Manufacturer;
                 }
                 else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "驱动器设备")
                 {
                     pgPreset.SelectedObject = null;
-                    pgPreset.SelectedObject = configFile.Disks[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
-                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = configFile.Disks[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Manufacturer;
+                    pgPreset.SelectedObject = Program.configFile.Disks[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
+                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = Program.configFile.Disks[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Manufacturer;
                 }
                 else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "网络适配器设备")
                 {
                     pgPreset.SelectedObject = null;
-                    pgPreset.SelectedObject = configFile.NetworkAdapters[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
-                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = configFile.NetworkAdapters[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Description;
+                    pgPreset.SelectedObject = Program.configFile.NetworkAdapters[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
+                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = Program.configFile.NetworkAdapters[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Description;
                 }
                 else if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "显示适配器设备")
                 {
                     pgPreset.SelectedObject = null;
-                    pgPreset.SelectedObject = configFile.VideoControllers[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
-                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = configFile.VideoControllers[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Name;
+                    pgPreset.SelectedObject = Program.configFile.VideoControllers[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
+                    lvPreset_Dev.SelectedItems[0].SubItems[2].Text = Program.configFile.VideoControllers[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1].Name;
                 }
             }
         }
@@ -640,51 +639,51 @@ namespace Server
                 {
                     if (lvPreset_Dev.SelectedItems [0].SubItems[1].ToString() == "中央处理器设备")
                     {
-                        foreach (ConfigFile.Processor dev in configFile.Processors)
+                        foreach (ConfigFile.Processor dev in Program.configFile.Processors)
                         {
                             if(dev.id ==int.Parse( lvPreset_Dev.SelectedItems [0].SubItems[0].ToString()))
                             {
-                                configFile.Processors.Remove(dev);
+                                Program.configFile.Processors.Remove(dev);
                             }
                         }
                     }
                     else if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "内存设备")
                     {
-                        foreach (ConfigFile.PhysicalMemory dev in configFile.PhysicalMemorys)
+                        foreach (ConfigFile.PhysicalMemory dev in Program.configFile.PhysicalMemorys)
                         {
                             if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
                             {
-                                configFile.PhysicalMemorys.Remove(dev);
+                                Program.configFile.PhysicalMemorys.Remove(dev);
                             }
                         }
                     }
                     else if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "驱动器设备")
                     {
-                        foreach (ConfigFile.Disk dev in configFile.Disks)
+                        foreach (ConfigFile.Disk dev in Program.configFile.Disks)
                         {
                             if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
                             {
-                                configFile.Disks.Remove(dev);
+                                Program.configFile.Disks.Remove(dev);
                             }
                         }
                     }
                     else if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "网络适配器设备")
                     {
-                        foreach (ConfigFile.NetworkAdapter dev in configFile.NetworkAdapters)
+                        foreach (ConfigFile.NetworkAdapter dev in Program.configFile.NetworkAdapters)
                         {
                             if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
                             {
-                                configFile.NetworkAdapters.Remove(dev);
+                                Program.configFile.NetworkAdapters.Remove(dev);
                             }
                         }
                     }
                     else if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "显示适配器设备")
                     {
-                        foreach (ConfigFile.VideoController dev in configFile.VideoControllers)
+                        foreach (ConfigFile.VideoController dev in Program.configFile.VideoControllers)
                         {
                             if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
                             {
-                                configFile.VideoControllers.Remove(dev);
+                                Program.configFile.VideoControllers.Remove(dev);
                             }
                         }
                     }
@@ -705,7 +704,7 @@ namespace Server
                 {
                     try
                     {
-                        configFile = Newtonsoft.Json.JsonConvert.DeserializeObject(
+                        Program.configFile = Newtonsoft.Json.JsonConvert.DeserializeObject(
                             Encoding.Default.GetString(
                                 Convert.FromBase64String(
                                     System.IO.File.ReadAllText(path)
@@ -729,7 +728,7 @@ namespace Server
             saveFileDialog1.ShowDialog(this);
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(configFile);
+                string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(Program.configFile);
                 jsonres = Convert.ToBase64String(Encoding.Default.GetBytes(jsonres));
                 System.IO.File.WriteAllText(saveFileDialog1.FileName, jsonres);
             }
@@ -740,10 +739,16 @@ namespace Server
         {
             if((Control.ModifierKeys & Keys.Control) == Keys.Control)
             {
-                MessageBox.Show("试图执行特殊代码");
-                AutoTestMessage.Message wmiMessage = new AutoTestMessage.Message();
-                ClientTask task = new ClientTask(wmiMessage, "null");
-                task.HandleMessage(wmiMessage, null);
+                DialogResult dr =  MessageBox.Show("试图执行特殊代码，点击确定以继续\n( *^-^)ρ(*╯^╰)","BACKDOOR",MessageBoxButtons.OKCancel);
+                if(dr == DialogResult.OK)
+                {
+                    AutoTestMessage.Message wmiMessage = new AutoTestMessage.Message();
+                    wmiMessage.MessageType = AutoTestMessage.Message.MessageTypes.WMIMessage;
+                    wmiMessage.Content = "{\"path\":\"Win32_OperatingSystem\",\"data\":[{\"BootDevice\":\"\\\\Device\\\\HarddiskVolume5\",\"BuildNumber\":\"19044\",\"BuildType\":\"Multiprocessor Free\",\"Caption\":\"Microsoft Windows 10 专业版\",\"CodeSet\":\"936\",\"CountryCode\":\"86\",\"CreationClassName\":\"Win32_OperatingSystem\",\"CSCreationClassName\":\"Win32_ComputerSystem\",\"CSDVersion\":\"null\",\"CSName\":\"DESKTOP-R4HE07I\",\"CurrentTimeZone\":\"480\",\"DataExecutionPrevention_32BitApplications\":\"True\",\"DataExecutionPrevention_Available\":\"True\",\"DataExecutionPrevention_Drivers\":\"True\",\"DataExecutionPrevention_SupportPolicy\":\"2\",\"Debug\":\"False\",\"Description\":\"\",\"Distributed\":\"False\",\"EncryptionLevel\":\"256\",\"ForegroundApplicationBoost\":\"2\",\"FreePhysicalMemory\":\"3632372\",\"FreeSpaceInPagingFiles\":\"14064884\",\"FreeVirtualMemory\":\"13209544\",\"InstallDate\":\"20220103221354.000000+480\",\"LargeSystemCache\":\"null\",\"LastBootUpTime\":\"20220407175232.500492+480\",\"LocalDateTime\":\"20220407185320.084000+480\",\"Locale\":\"0804\",\"Manufacturer\":\"Microsoft Corporation\",\"MaxNumberOfProcesses\":\"4294967295\",\"MaxProcessMemorySize\":\"137438953344\",\"MUILanguages\":\"System.String[]\",\"Name\":\"Microsoft Windows 10 专业版|C:\\\\WINDOWS|\\\\Device\\\\Harddisk0\\\\Partition3\",\"NumberOfLicensedUsers\":\"0\",\"NumberOfProcesses\":\"278\",\"NumberOfUsers\":\"3\",\"OperatingSystemSKU\":\"48\",\"Organization\":\"null\",\"OSArchitecture\":\"64 位\",\"OSLanguage\":\"2052\",\"OSProductSuite\":\"256\",\"OSType\":\"18\",\"OtherTypeDescription\":\"null\",\"PAEEnabled\":\"null\",\"PlusProductID\":\"null\",\"PlusVersionNumber\":\"null\",\"PortableOperatingSystem\":\"False\",\"Primary\":\"True\",\"ProductType\":\"1\",\"RegisteredUser\":\"海阔天空jht3\",\"SerialNumber\":\"00331-20020-00000-AA555\",\"ServicePackMajorVersion\":\"0\",\"ServicePackMinorVersion\":\"0\",\"SizeStoredInPagingFiles\":\"14155776\",\"Status\":\"OK\",\"SuiteMask\":\"272\",\"SystemDevice\":\"\\\\Device\\\\HarddiskVolume7\",\"SystemDirectory\":\"C:\\\\WINDOWS\\\\system32\",\"SystemDrive\":\"C:\",\"TotalSwapSpaceSize\":\"null\",\"TotalVirtualMemorySize\":\"30804276\",\"TotalVisibleMemorySize\":\"16648500\",\"Version\":\"10.0.19044\",\"WindowsDirectory\":\"C:\\\\WINDOWS\"}]}";
+
+                    ClientTask task = new ClientTask(wmiMessage, "null");
+                    task.HandleMessage(wmiMessage, null);
+                }
             }
         }
     }

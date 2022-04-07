@@ -11,6 +11,7 @@ namespace Server
         public static readonly string Uuid = Guid.NewGuid().ToString();
         private static ServerMain serverMain = null;
 
+        public static ConfigFile configFile = new ConfigFile();
         public static ServerMain ServerMain { get => serverMain; }
 
         /// <summary>

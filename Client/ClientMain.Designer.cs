@@ -56,6 +56,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label22 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tbConfigFileDetail = new System.Windows.Forms.TextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label21 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -80,7 +81,6 @@
             this.label23 = new System.Windows.Forms.Label();
             this.serverUUID = new System.Windows.Forms.Label();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.tbConfigFileDetail = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -100,7 +100,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(610, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(605, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -171,7 +171,7 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(11, 26);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(588, 342);
@@ -188,9 +188,9 @@
             this.tabPage1.Controls.Add(this.rbCPU);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Size = new System.Drawing.Size(580, 316);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "系统";
@@ -344,9 +344,9 @@
             this.tabPage2.Controls.Add(this.progressBar1);
             this.tabPage2.Controls.Add(this.label21);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Size = new System.Drawing.Size(580, 316);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "配置文件";
@@ -370,6 +370,17 @@
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "配置文件详情";
+            // 
+            // tbConfigFileDetail
+            // 
+            this.tbConfigFileDetail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbConfigFileDetail.Location = new System.Drawing.Point(3, 16);
+            this.tbConfigFileDetail.Multiline = true;
+            this.tbConfigFileDetail.Name = "tbConfigFileDetail";
+            this.tbConfigFileDetail.ReadOnly = true;
+            this.tbConfigFileDetail.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbConfigFileDetail.Size = new System.Drawing.Size(561, 221);
+            this.tbConfigFileDetail.TabIndex = 0;
             // 
             // progressBar1
             // 
@@ -521,16 +532,17 @@
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(431, 411);
+            this.label18.Location = new System.Drawing.Point(426, 391);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(164, 13);
             this.label18.TabIndex = 2;
             this.label18.Text = "x86Tester Client Copyright(C) ???";
+            this.label18.Click += new System.EventHandler(this.label18_Click);
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(15, 382);
+            this.label19.Location = new System.Drawing.Point(12, 370);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(70, 13);
             this.label19.TabIndex = 0;
@@ -539,7 +551,7 @@
             // serverIP
             // 
             this.serverIP.AutoSize = true;
-            this.serverIP.Location = new System.Drawing.Point(91, 382);
+            this.serverIP.Location = new System.Drawing.Point(88, 370);
             this.serverIP.Name = "serverIP";
             this.serverIP.Size = new System.Drawing.Size(49, 13);
             this.serverIP.TabIndex = 1;
@@ -548,7 +560,7 @@
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(15, 411);
+            this.label23.Location = new System.Drawing.Point(12, 390);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(106, 13);
             this.label23.TabIndex = 3;
@@ -557,7 +569,7 @@
             // serverUUID
             // 
             this.serverUUID.AutoSize = true;
-            this.serverUUID.Location = new System.Drawing.Point(127, 411);
+            this.serverUUID.Location = new System.Drawing.Point(124, 390);
             this.serverUUID.Name = "serverUUID";
             this.serverUUID.Size = new System.Drawing.Size(49, 13);
             this.serverUUID.TabIndex = 4;
@@ -567,22 +579,11 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // tbConfigFileDetail
-            // 
-            this.tbConfigFileDetail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbConfigFileDetail.Location = new System.Drawing.Point(3, 16);
-            this.tbConfigFileDetail.Multiline = true;
-            this.tbConfigFileDetail.Name = "tbConfigFileDetail";
-            this.tbConfigFileDetail.ReadOnly = true;
-            this.tbConfigFileDetail.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbConfigFileDetail.Size = new System.Drawing.Size(561, 221);
-            this.tbConfigFileDetail.TabIndex = 0;
-            // 
             // ClientMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(610, 439);
+            this.ClientSize = new System.Drawing.Size(605, 424);
             this.Controls.Add(this.serverUUID);
             this.Controls.Add(this.label23);
             this.Controls.Add(this.label18);
@@ -591,11 +592,11 @@
             this.Controls.Add(this.label19);
             this.Controls.Add(this.serverIP);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(626, 478);
+            this.MaximumSize = new System.Drawing.Size(621, 463);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(626, 478);
+            this.MinimumSize = new System.Drawing.Size(621, 463);
             this.Name = "ClientMain";
             this.Text = "x86自动测试系统 -测试器端";
             this.Load += new System.EventHandler(this.ClientMain_Load);

@@ -57,11 +57,39 @@ namespace Server
         {
             if( message.MessageType == Message.MessageTypes.WMIMessage)
             {
-                //add code here
-
+                object recv = Newtonsoft.Json.JsonConvert.DeserializeObject(message.Content,typeof(WMIMessage));
+                WMIMessage wmiMessage = recv as WMIMessage;
+                ConfigFile verifying = Program.configFile;
+                
+                if(wmiMessage != null && wmiMessage.data != null)
+                {
+                    if(wmiMessage.path == "Win32_Processor")
+                    {
+                        //test code, only for debugging.
+                        foreach (Dictionary<string,string> _data in wmiMessage.data)
+                        {
+                            verifying.Processors.Remove((ConfigFile.Processor)
+                                (from items in verifying.Processors where (items.ProcessorId == _data["ProcessorId"] 
+                                                                        && items.Name == _data["Name"]
+                                                                        && items.Manufacturer == _data["Manufacturer"]
+                                                                        && items.Family == _data["Family"]
+                                                                        && items.MaxClockSpeed == _data["MaxClockSpeed"]) 
+                                 select items).GetEnumerator().Current);
+                        }
+                        if(verifying.Processors.Count > 0)
+                        {
+                            //result
+                            Console.WriteLine("Win32_Processor 校验失败。存在一个或多个未期许的硬件");
+                            Console.WriteLine("DEBUGONLY:verifying.Processors.Count = " + verifying.Processors.Count.ToString());
+                        }
+                        else
+                        {
+                            Console.WriteLine("Win32_Processor 校验通过");
+                        }
+                    }
+                }
             }
 
-            Console.WriteLine(message.ToString());
             manualEvent.Set();
         }
         public void WaitForTaskFinished()

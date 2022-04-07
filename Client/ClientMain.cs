@@ -217,5 +217,14 @@ namespace Client
             //MessageBox.Show(Newtonsoft.Json.JsonConvert.SerializeObject(configFile));
         }
 
+        private void label18_Click(object sender, EventArgs e)
+        {
+                                                                                                                                                                                                                    if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                        MessageBox.Show("笨蛋！客户端开错了！\n(ノ｀Д)ノ\t(′д｀σ)σ\n\n来都来了，大佬别走","版权小人");
+                                                                                                                                                                                                                        MessageBox.Show("不能让开发者看到这段东西\n(;´༎ຶД༎ຶ`)", "版权小人");
+                                                                                                                                                                                                                        MessageBox.Show("别删除我呜呜\n━((*′д｀)爻(′д｀*))━!!!!", "版权小人");
+                                                                                                                                                                                                                    }
+        }
     }
 }
