@@ -735,5 +735,16 @@ namespace Server
             }
 
         }
+
+        private void label_backdoor_Click(object sender, EventArgs e)
+        {
+            if((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                MessageBox.Show("试图执行特殊代码");
+                AutoTestMessage.Message wmiMessage = new AutoTestMessage.Message();
+                ClientTask task = new ClientTask(wmiMessage, "null");
+                task.HandleMessage(wmiMessage, null);
+            }
+        }
     }
 }

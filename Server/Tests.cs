@@ -40,7 +40,6 @@ namespace Server
                     }.ToString()
                     },"内存压力测试"),
             };
-
         private Message taskMessage;
         private ManualResetEvent manualEvent;
         private string describe;
@@ -59,6 +58,7 @@ namespace Server
             if( message.MessageType == Message.MessageTypes.WMIMessage)
             {
                 //add code here
+
             }
 
             Console.WriteLine(message.ToString());

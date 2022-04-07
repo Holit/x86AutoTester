@@ -49,30 +49,29 @@ namespace Server
         }
         private async Task BoardServer()
         {
-            //Task warning:
-            /*
-             * 事故多发路段
-             * 此处由于存在多线程，故可能存在一些奇奇怪怪的问题
-             * 代码不稳定
-             */
             List<IPAddress> iPAddresses = new List<IPAddress>();
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
             foreach (NetworkInterface adapter in nics)
             {
-                bool isVirtual = false;
+                bool invaildAdapter = false;
                 string[] macs = { "005056", "001C14" , "000C29" , "000569" , //VMware
                                     "080027", //VirtualBox
                                     "00155D" //Hyper-V
                 };
                 foreach(string mac in macs)
                 {
-                    if (adapter.GetPhysicalAddress().ToString().Contains(mac))
+                    //Contains可能不安全，建议改为substr方法
+                    if (adapter.GetPhysicalAddress().ToString().Contains(mac)
+                        || adapter.Speed == -1
+                        || adapter.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Down
+                        )
                     {
-                        isVirtual = true;
+                        invaildAdapter = true;
+
                         break;
                     }
                 }
-                if (isVirtual) continue;
+                if (invaildAdapter) continue;
                 if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet || 
                     adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
                 {
