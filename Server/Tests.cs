@@ -89,7 +89,36 @@ namespace Server
                     }
                 }
             }
-
+            //时间同步
+            //获取客户端时间，并做到毫秒级相减，然后看是否大于2s。
+            //硬编码值可调
+            else if (message.MessageType == Message.MessageTypes.TimeSync)
+            {
+                if (message.Content != null)
+                {
+                    long recvTimeStamp = Newtonsoft.Json.JsonConvert.DeserializeObject<long>(message.Content);
+                    long delta = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - recvTimeStamp;
+                    if (delta > 2 * 1000)
+                    {
+                        Console.WriteLine("RTC 校验失败。时间差为" + delta);
+                    }
+                }
+            }
+            else if (message.MessageType == Message.MessageTypes.MACVerify)
+            {
+                List<System.Management.ManagementObject> manageObjects =
+                    (List<System.Management.ManagementObject>)
+                    Newtonsoft.Json.JsonConvert.DeserializeObject(message.Content);
+                if(manageObjects.Count > 0)
+                {
+                    
+                    Console.WriteLine("存在下述网络适配器的MAC地址未通过校验");
+                    foreach (System.Management.ManagementObject manageObject in manageObjects)
+                    {
+                        //能执行到这里也是真的绝了
+                        Console.WriteLine("\r\n\t" + manageObject.Properties["Name"]);                    }
+                }
+            }
             manualEvent.Set();
         }
         public void WaitForTaskFinished()

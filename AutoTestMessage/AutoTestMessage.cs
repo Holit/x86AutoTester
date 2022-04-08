@@ -26,7 +26,51 @@ namespace AutoTestMessage
     }
     public class Message:BaseMessage
     {
-        public enum MessageTypes { None, ServerUuid, JoinServer, WMIMessage, TesterMessage, CurrentTask }
+        /// <summary>
+        /// 指定消息的类型
+        /// </summary>
+        public enum MessageTypes {
+            /// <summary>
+            /// 无类型
+            /// </summary>
+            None, 
+            /// <summary>
+            /// 获取/返回服务器UUID
+            /// </summary>
+            ServerUuid, 
+            /// <summary>
+            /// 加入服务器
+            /// </summary>
+            JoinServer,
+            /// <summary>
+            /// 退出服务器
+            /// </summary>
+            QuitServer,
+            /// <summary>
+            /// 获取WMI配置数据，指定path
+            /// </summary>
+            WMIMessage, 
+            /// <summary>
+            /// 指定测试端执行测试器
+            /// </summary>
+            TesterMessage, 
+            /// <summary>
+            /// 获取当前任务
+            /// </summary>
+            CurrentTask,
+            /// <summary>
+            /// 获取/下发配置文件
+            /// </summary>
+            ConfigFile,
+            /// <summary>
+            /// RTC同步
+            /// </summary>
+            TimeSync,
+            /// <summary>
+            /// 校验MAC地址（远端任务）
+            /// </summary>
+            MACVerify
+        }
         public MessageTypes MessageType = MessageTypes.None;
         public string Content="";
     }

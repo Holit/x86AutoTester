@@ -25,10 +25,13 @@ namespace Server
             //在此处添加退出之前的保存、上传操作。
             Close();
         }
-
+        
         private void Form1_Load(object sender, EventArgs e)
         {
             label_uuid.Text = Program.Uuid;
+            tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 服务器端启动...";
+            tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 执行自动检查....";
+            tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 当前版本存在不完整组件，不完整组件信息：未开发";
         }
 
         private void cbCPU_CheckedChanged(object sender, EventArgs e)
@@ -749,6 +752,26 @@ namespace Server
                     ClientTask task = new ClientTask(wmiMessage, "null");
                     task.HandleMessage(wmiMessage, null);
                 }
+            }
+        }
+
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void btnChangeState_Click(object sender, EventArgs e)
+        {
+            if(Program.CurrentState == Program.TestingStates.Stopped || Program.CurrentState == Program.TestingStates.Paused)
+            {
+                Program.CurrentState = Program.TestingStates.Running;
+                btnChangeState.Text = "⏸";
+
+            }
+            else if(Program.CurrentState == Program.TestingStates.Running)
+            {
+                Program.CurrentState = Program.TestingStates.Paused;
+                btnChangeState.Text = "▶";
             }
         }
     }

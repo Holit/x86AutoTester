@@ -47,7 +47,11 @@ namespace Client
             }
             return WMIClass;
         }
-
+        
+        public  void UpdatetbConfigFileDetail(string content)
+        {
+            this.tbConfigFileDetail.Text = content;
+        }
         private async Task ShowDeatils(string path, string groupPropetry = "Name")
         {
             ManagementObjectCollection managementBaseObjects = await WMITest.GetDeatils(path);
@@ -79,6 +83,7 @@ namespace Client
         private void ClientMain_Load(object sender, EventArgs e)
         {
             _ = ShowDeatils("Win32_OperatingSystem", "Caption");
+            System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
         }
 
         private void rbCPU_CheckedChanged(object sender, EventArgs e)
@@ -178,8 +183,10 @@ namespace Client
                 {
                     try
                     {
+                        //从文件读取配置
                         configFile = Newtonsoft.Json.JsonConvert.DeserializeObject(
                             Encoding.UTF8.GetString(
+                                //base64解密
                                 Convert.FromBase64String(
                                     System.IO.File.ReadAllText(path)
                                     ))
@@ -192,31 +199,47 @@ namespace Client
                     }
                 }
             }
-            //格式化JSON
-            JsonSerializer serializer = new JsonSerializer();
-            TextReader tr = new StringReader(Newtonsoft.Json.JsonConvert.SerializeObject(configFile));
-            JsonTextReader jtr = new JsonTextReader(tr);
-            object obj = serializer.Deserialize(jtr);
-            if (obj != null)
-            {
-                StringWriter textWriter = new StringWriter();
-                JsonTextWriter jsonWriter = new JsonTextWriter(textWriter)
-                {
-                    Formatting = Formatting.Indented,
-                    Indentation = 4,
-                    IndentChar = ' '
-                };
-                serializer.Serialize(jsonWriter, obj);
-                tbConfigFileDetail.Text = textWriter.ToString();
-            }
-            else
-            {
-                tbConfigFileDetail.Text = Newtonsoft.Json.JsonConvert.SerializeObject(configFile);
-            }
-
-            //MessageBox.Show(Newtonsoft.Json.JsonConvert.SerializeObject(configFile));
+            UpdatetbConfigFileDetail(ClientMain.JsonFormat(Newtonsoft.Json.JsonConvert.SerializeObject(configFile)));
         }
-
+        
+        /// <summary>
+        /// 对JSON文本进行格式化
+        /// </summary>
+        /// <param name="json">传入的待格式化文本</param>
+        /// <returns>传出的已格式化文本</returns>
+        public static string JsonFormat(string json)
+        {
+            try
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                TextReader tr = new StringReader(json);
+                JsonTextReader jtr = new JsonTextReader(tr);
+                object obj = serializer.Deserialize(jtr);
+                if (obj != null)
+                {
+                    StringWriter textWriter = new StringWriter();
+                    JsonTextWriter jsonWriter = new JsonTextWriter(textWriter)
+                    {
+                        Formatting = Formatting.Indented,
+                        Indentation = 4,
+                        IndentChar = ' '
+                    };
+                    serializer.Serialize(jsonWriter, obj);
+                    return textWriter.ToString();
+                }
+                else
+                {
+                    return json;
+                }
+            }
+            catch (Exception ex)
+            {
+                //debug only:
+                //throw;
+                return json;
+            }
+        }
+       
         private void label18_Click(object sender, EventArgs e)
         {
                                                                                                                                                                                                                     if ((Control.ModifierKeys & Keys.Control) == Keys.Control)

@@ -37,10 +37,10 @@ namespace Client
                 while (true)
                 {
                     IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
-                    byte[] recData = udpClient.Receive(ref endpoint);
+                    byte[] _recv = udpClient.Receive(ref endpoint);
                     try
                     {
-                        string returnData = Encoding.ASCII.GetString(recData);
+                        string returnData = Encoding.ASCII.GetString(_recv);
                         AutoTestMessage.Message serverInfo = JsonConvert.DeserializeObject<AutoTestMessage.Message>(returnData);
                         ClientWebSocket webSocket = new ClientWebSocket();
                         CancellationToken cancellation = new CancellationToken();
@@ -112,7 +112,7 @@ namespace Client
                   }
                   catch (Exception e)
                   {
-                      Console.WriteLine(e);
+                      Console.WriteLine(e.Message);
                   }
                   finally
                   {
@@ -130,7 +130,7 @@ namespace Client
                 return singleInstance;
             }
         }
-        private void HandleMessage(AutoTestMessage.Message message)
+        private async void HandleMessage(AutoTestMessage.Message message)
         {
             if (message.MessageType == AutoTestMessage.Message.MessageTypes.WMIMessage)
             {
@@ -188,9 +188,52 @@ namespace Client
                     });
                 });
             }
+            //接收配置文件并显示
+            else if(message.MessageType == AutoTestMessage.Message.MessageTypes.ConfigFile)
+            {
+                ConfigFile configFile = JsonConvert.DeserializeObject<ConfigFile>(message.Content);
+                Program.ClientMain.UpdatetbConfigFileDetail(ClientMain.JsonFormat(message.Content));
+            }
+            else if(message.MessageType == AutoTestMessage.Message.MessageTypes.TimeSync)
+            {
+                AutoTestMessage.Message sending = new AutoTestMessage.Message();
+                sending.MessageType = AutoTestMessage.Message.MessageTypes.TimeSync;
+                sending.Content = JsonConvert.SerializeObject(DateTimeOffset.Now.ToUnixTimeMilliseconds());
+            }
+            //执行MAC地址校验
+            else if(message.MessageType == AutoTestMessage.Message.MessageTypes.MACVerify)
+            {
+                ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                ManagementObjectCollection moc2 = mc.GetInstances();
+                //回传的消息
+                AutoTestMessage.Message reply = new AutoTestMessage.Message();
+                //指示未通过检查的网卡列表
+                List<ManagementObject> invaildNics = new List<ManagementObject>();
+                
+                foreach (ManagementObject mo in moc2)
+                {
+                    
+                    if (Convert.ToBoolean(mo["IPEnabled"]) == true)
+                    {
+                        string macaddress = mo["MacAddress"].ToString();
+
+                       if(System.Text.RegularExpressions.
+                            Regex.Matches(macaddress, @"([A-Fa-f0-9]{2}[-,:]){5}[A-Fa-f0-9]{2}")
+                             .Count != 1)
+                        {
+                            invaildNics.Add(mo);
+                        };
+                    }
+                    mo.Dispose();
+                }
+                reply.Content = JsonConvert.SerializeObject(invaildNics);
+                reply.MessageType = AutoTestMessage.Message.MessageTypes.MACVerify;
+
+                await SendMessage(reply);
+            }
             else
             {
-                Console.WriteLine(message);
+                Console.WriteLine( message.MessageType.ToString()+message.Content);
             }
         }
         public async Task SendMessage(AutoTestMessage.Message message)

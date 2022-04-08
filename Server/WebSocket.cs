@@ -54,9 +54,9 @@ namespace Server
             foreach (NetworkInterface adapter in nics)
             {
                 bool invaildAdapter = false;
-                string[] macs = { "005056", "001C14" , "000C29" , "000569" , //VMware
-                                    "080027", //VirtualBox
-                                    "00155D" //Hyper-V
+                string[] macs = { "005056", "001C14", "000C29", "000569", //VMware
+                                  "080027", //VirtualBox
+                                  "00155D" //Hyper-V
                 };
                 foreach(string mac in macs)
                 {
