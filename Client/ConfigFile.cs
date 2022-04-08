@@ -32,6 +32,7 @@ public class ConfigFile
 
     public bool global_outlet;
     public bool outlet_com;
+    public int outlet_pnp_count;
     public bool outlet_usb;
     public bool audio_playback;
     public bool audio_adjust_vol;

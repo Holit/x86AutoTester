@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbServerInfo = new System.Windows.Forms.TextBox();
             this.lCurrentConnection = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label_uuid = new System.Windows.Forms.Label();
@@ -130,9 +132,9 @@
             this.pbGlobalProgress = new System.Windows.Forms.ProgressBar();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.tbServerInfo = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.serverMainBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.nudPnPCount = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -154,6 +156,7 @@
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serverMainBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPnPCount)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -185,6 +188,25 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "服务器配置";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Location = new System.Drawing.Point(9, 93);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(610, 4);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            // 
+            // tbServerInfo
+            // 
+            this.tbServerInfo.BackColor = System.Drawing.Color.White;
+            this.tbServerInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbServerInfo.Location = new System.Drawing.Point(9, 107);
+            this.tbServerInfo.Multiline = true;
+            this.tbServerInfo.Name = "tbServerInfo";
+            this.tbServerInfo.ReadOnly = true;
+            this.tbServerInfo.Size = new System.Drawing.Size(610, 305);
+            this.tbServerInfo.TabIndex = 6;
             // 
             // lCurrentConnection
             // 
@@ -664,6 +686,8 @@
             // 
             // tabPage9
             // 
+            this.tabPage9.Controls.Add(this.nudPnPCount);
+            this.tabPage9.Controls.Add(this.label1);
             this.tabPage9.Controls.Add(this.gbOutlet_Audio);
             this.tabPage9.Controls.Add(this.cbOutlet_USB);
             this.tabPage9.Controls.Add(this.cbOutlet_COM);
@@ -1247,28 +1271,31 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // tbServerInfo
+            // label1
             // 
-            this.tbServerInfo.BackColor = System.Drawing.Color.White;
-            this.tbServerInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.tbServerInfo.Location = new System.Drawing.Point(9, 107);
-            this.tbServerInfo.Multiline = true;
-            this.tbServerInfo.Name = "tbServerInfo";
-            this.tbServerInfo.ReadOnly = true;
-            this.tbServerInfo.Size = new System.Drawing.Size(610, 305);
-            this.tbServerInfo.TabIndex = 6;
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(112, 56);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(130, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "即插即用设备校验数量:";
             // 
             // serverMainBindingSource
             // 
             this.serverMainBindingSource.DataSource = typeof(Server.ServerMain);
             // 
-            // groupBox1
+            // nudPnPCount
             // 
-            this.groupBox1.Location = new System.Drawing.Point(9, 93);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(610, 4);
-            this.groupBox1.TabIndex = 7;
-            this.groupBox1.TabStop = false;
+            this.nudPnPCount.Location = new System.Drawing.Point(248, 53);
+            this.nudPnPCount.Name = "nudPnPCount";
+            this.nudPnPCount.Size = new System.Drawing.Size(46, 20);
+            this.nudPnPCount.TabIndex = 12;
+            this.nudPnPCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudPnPCount.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
             // 
             // ServerMain
             // 
@@ -1324,6 +1351,7 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serverMainBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPnPCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1435,6 +1463,8 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TextBox tbServerInfo;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown nudPnPCount;
     }
 }
 

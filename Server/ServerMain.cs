@@ -349,6 +349,7 @@ namespace Server
 
             Program.configFile.outlet_com = cbOutlet_COM.Checked;
             Program.configFile.outlet_usb = cbOutlet_USB.Checked;
+            Program.configFile.outlet_pnp_count =Convert.ToInt32(nudPnPCount.Value);
             Program.configFile.audio_playback = cbOutlet_audioPlay.Checked;
             Program.configFile.audio_adjust_vol = cbOutlet_VolAuto.Checked;
             Program.configFile.audio_max_vol = cbOutlet_VolMax.Checked;
@@ -407,7 +408,8 @@ namespace Server
                 }
                 managementClass.Dispose();
             }            
-            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.NetworkAdapter) == ConfigFile.OVERRIDE_FLAG.NetworkAdapter)
+            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.NetworkAdapter) == 
+                ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_NetworkAdapter");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
@@ -416,8 +418,9 @@ namespace Server
                     ConfigFile.NetworkAdapter dev = new ConfigFile.NetworkAdapter();
                     dev.id = Program.configFile.NetworkAdapters.Count + 1;
                     dev.Description = mo["Description"].ToString();
-                    dev.GUID = mo["GUID"].ToString();
-                    dev.Speed = mo["Speed"].ToString();
+                    //GUID可能会变，因此按照测试结果更改
+                    dev.GUID = mo["GUID"] == null ?  "null" : mo["GUID"].ToString();
+                    dev.Speed = mo["Speed"] == null ? "null" : mo["Speed"].ToString();
                     Program.configFile.NetworkAdapters.Add(dev);
                 }
                 managementClass.Dispose();
@@ -442,7 +445,7 @@ namespace Server
             ///保存到配置文件（jht文件）
             ///这里做了base64编码，为了防止一些文字在传递过程中出现编码错误
             string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(Program.configFile);
-            jsonres = Convert.ToBase64String(Encoding.Default.GetBytes(jsonres));
+            jsonres = Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonres));
             System.IO.File.WriteAllText("configfile.jht", jsonres);
         }
         public void setClientState(string client,string current,int finishedCount)
@@ -774,5 +777,6 @@ namespace Server
                 btnChangeState.Text = "▶";
             }
         }
+        
     }
 }
