@@ -171,7 +171,7 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(11, 26);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(588, 342);
@@ -188,9 +188,9 @@
             this.tabPage1.Controls.Add(this.rbCPU);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage1.Size = new System.Drawing.Size(580, 316);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "系统";
@@ -344,9 +344,9 @@
             this.tabPage2.Controls.Add(this.progressBar1);
             this.tabPage2.Controls.Add(this.label21);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage2.Size = new System.Drawing.Size(580, 316);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "配置文件";
@@ -534,9 +534,9 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(426, 391);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(164, 13);
+            this.label18.Size = new System.Drawing.Size(169, 13);
             this.label18.TabIndex = 2;
-            this.label18.Text = "x86Tester Client Copyright(C) ???";
+            this.label18.Text = "x86Tester Client Copyright(C) HEU\r\n";
             this.label18.Click += new System.EventHandler(this.label18_Click);
             // 
             // label19
@@ -592,7 +592,7 @@
             this.Controls.Add(this.label19);
             this.Controls.Add(this.serverIP);
             this.MainMenuStrip = this.menuStrip1;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(621, 463);
             this.MinimizeBox = false;

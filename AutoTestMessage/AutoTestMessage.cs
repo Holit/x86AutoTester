@@ -69,7 +69,23 @@ namespace AutoTestMessage
             /// <summary>
             /// 校验MAC地址（远端任务）
             /// </summary>
-            MACVerify
+            MACVerify,
+            /// <summary>
+            /// 播放声音
+            /// </summary>
+            PlayAudio,
+            /// <summary>
+            /// 测试串口
+            /// </summary>
+            SerialTest,
+            /// <summary>
+            /// USB写入测试
+            /// </summary>
+            USBWritingTest,
+            /// <summary>
+            /// 硬盘坏道检测
+            /// </summary>
+            ChkdskEvent
         }
         public MessageTypes MessageType = MessageTypes.None;
         public string Content="";

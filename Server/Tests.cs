@@ -13,6 +13,19 @@ namespace Server
     public class ClientTask
     {
         public static List<ClientTask> Tasks = new List<ClientTask> {
+                //new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_OperatingSystem" },"操作系统配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.TimeSync, Content = null},"RTC同步"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" },"CPU配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" },"内存配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" },"显卡配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" },"硬盘配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },"网卡配置校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PnPEntity" },"即插即用设备校验"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.PlayAudio, Content = null},"音频接口测试:输出"), 
+                new ClientTask(new Message { MessageType = Message.MessageTypes.USBWritingTest, Content = null},"USB写入测试"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null},"串口写入测试"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.ChkdskEvent, Content = null},"磁盘测试"),
+
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
@@ -22,12 +35,6 @@ namespace Server
                         }
                     }.ToString()
                     },"CPU压力测试"),
-                //new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_OperatingSystem" },"操作系统配置校验"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" },"CPU配置校验"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" },"内存配置校验"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" },"显卡配置校验"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" },"硬盘配置校验"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },"网卡配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
@@ -39,6 +46,7 @@ namespace Server
                         }
                     }.ToString()
                     },"内存压力测试"),
+
             };
         private Message taskMessage;
         private ManualResetEvent manualEvent;
@@ -85,6 +93,14 @@ namespace Server
                         else
                         {
                             Console.WriteLine("Win32_Processor 校验通过");
+                        }
+                    }
+                    else if(wmiMessage.path == "Win32_PnPEntity")
+                    {
+                        if(wmiMessage.data.Count != verifying.outlet_pnp_count)
+                        {
+                            Console.WriteLine("即插即用设备数量校验失败：预期值:" + verifying.outlet_pnp_count +
+                                "当前值:" + wmiMessage.data.Count);
                         }
                     }
                 }

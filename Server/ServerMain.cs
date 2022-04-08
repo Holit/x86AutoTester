@@ -32,6 +32,12 @@ namespace Server
             tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 服务器端启动...";
             tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 执行自动检查....";
             tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 当前版本存在不完整组件，不完整组件信息：未开发";
+            //获取本机即插即用设备的数量
+            nudPnPCount.Value = 0;
+            ManagementClass managementClass = new ManagementClass("Win32_PnPEntity");
+            ManagementObjectCollection moCollection = managementClass.GetInstances();
+            nudPnPCount.Value = moCollection.Count;
+            managementClass.Dispose();
         }
 
         private void cbCPU_CheckedChanged(object sender, EventArgs e)
@@ -317,7 +323,17 @@ namespace Server
         {
             setDefaultDescription();
         }
-#endregion
+
+        private void label1_MouseEnter(object sender, EventArgs e)
+        {
+            tbDescription.Text = Properties.Resources.Outlet_PnPDevices_Count;
+
+        }
+        private void label1_MouseLeave(object sender, EventArgs e)
+        {
+            setDefaultDescription();
+        }
+        #endregion
         public void setClientCount(int count)
         {
             lCurrentConnection.Invoke((MethodInvoker)delegate
@@ -777,6 +793,6 @@ namespace Server
                 btnChangeState.Text = "▶";
             }
         }
-        
+
     }
 }

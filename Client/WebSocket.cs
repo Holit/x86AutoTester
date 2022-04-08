@@ -167,6 +167,7 @@ namespace Client
             }
             else if (message.MessageType == AutoTestMessage.Message.MessageTypes.TesterMessage)
             {
+                
                 TesterMessage testerMessage = JsonConvert.DeserializeObject<TesterMessage>(message.Content);
                 _ = Task.Run(async () =>
                 {

@@ -232,6 +232,15 @@ namespace Server.Properties {
         }
         
         /// <summary>
+        ///   查找类似 指定计算机上的即插即用设备（包括USB设备）的数量。已经获取当前计算机的已安装的即插即用设备的个数填入。请注意：某些驱动程序的安装、硬件的安装与卸载都会影响此值。 的本地化字符串。
+        /// </summary>
+        internal static string Outlet_PnPDevices_Count {
+            get {
+                return ResourceManager.GetString("Outlet_PnPDevices_Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 将试图向接入计算机的所有USB设备写入一段数据，为保证测试安全性，您可能需要插入USB存储器。插入存储器时，将试图向存储器写入文件并擦除。文件内容为 Harbin Engineering University , 写入到根目录下test.bin中 的本地化字符串。
         /// </summary>
         internal static string Outlet_USB_Description {

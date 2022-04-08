@@ -74,6 +74,8 @@
             this.cbNet_CommCheck = new System.Windows.Forms.CheckBox();
             this.cbNet = new System.Windows.Forms.CheckBox();
             this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.nudPnPCount = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.gbOutlet_Audio = new System.Windows.Forms.GroupBox();
             this.cbOutlet_VolMax = new System.Windows.Forms.CheckBox();
             this.cbOutlet_VolAuto = new System.Windows.Forms.CheckBox();
@@ -132,9 +134,7 @@
             this.pbGlobalProgress = new System.Windows.Forms.ProgressBar();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.label1 = new System.Windows.Forms.Label();
             this.serverMainBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.nudPnPCount = new System.Windows.Forms.NumericUpDown();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -148,6 +148,7 @@
             this.gbChkdsk.SuspendLayout();
             this.tabPage8.SuspendLayout();
             this.tabPage9.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPnPCount)).BeginInit();
             this.gbOutlet_Audio.SuspendLayout();
             this.tabPage11.SuspendLayout();
             this.gbPreset.SuspendLayout();
@@ -156,7 +157,6 @@
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serverMainBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPnPCount)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -699,6 +699,30 @@
             this.tabPage9.Text = "外设组件";
             this.tabPage9.UseVisualStyleBackColor = true;
             // 
+            // nudPnPCount
+            // 
+            this.nudPnPCount.Location = new System.Drawing.Point(241, 53);
+            this.nudPnPCount.Name = "nudPnPCount";
+            this.nudPnPCount.Size = new System.Drawing.Size(46, 20);
+            this.nudPnPCount.TabIndex = 12;
+            this.nudPnPCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.nudPnPCount.Value = new decimal(new int[] {
+            16,
+            0,
+            0,
+            0});
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(105, 56);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(130, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "即插即用设备校验数量:";
+            this.label1.MouseEnter += new System.EventHandler(this.label1_MouseEnter);
+            this.label1.MouseLeave += new System.EventHandler(this.label1_MouseLeave);
+            // 
             // gbOutlet_Audio
             // 
             this.gbOutlet_Audio.Controls.Add(this.cbOutlet_VolMax);
@@ -1151,9 +1175,9 @@
             this.label_backdoor.AutoSize = true;
             this.label_backdoor.Location = new System.Drawing.Point(477, 486);
             this.label_backdoor.Name = "label_backdoor";
-            this.label_backdoor.Size = new System.Drawing.Size(164, 13);
+            this.label_backdoor.Size = new System.Drawing.Size(169, 13);
             this.label_backdoor.TabIndex = 3;
-            this.label_backdoor.Text = "x86Tester Client Copyright(C) ???";
+            this.label_backdoor.Text = "x86Tester Client Copyright(C) HEU\r\n";
             this.label_backdoor.Click += new System.EventHandler(this.label_backdoor_Click);
             // 
             // statusStrip1
@@ -1271,31 +1295,9 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(112, 56);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(130, 13);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "即插即用设备校验数量:";
-            // 
             // serverMainBindingSource
             // 
             this.serverMainBindingSource.DataSource = typeof(Server.ServerMain);
-            // 
-            // nudPnPCount
-            // 
-            this.nudPnPCount.Location = new System.Drawing.Point(248, 53);
-            this.nudPnPCount.Name = "nudPnPCount";
-            this.nudPnPCount.Size = new System.Drawing.Size(46, 20);
-            this.nudPnPCount.TabIndex = 12;
-            this.nudPnPCount.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.nudPnPCount.Value = new decimal(new int[] {
-            16,
-            0,
-            0,
-            0});
             // 
             // ServerMain
             // 
@@ -1337,6 +1339,7 @@
             this.tabPage8.PerformLayout();
             this.tabPage9.ResumeLayout(false);
             this.tabPage9.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPnPCount)).EndInit();
             this.gbOutlet_Audio.ResumeLayout(false);
             this.gbOutlet_Audio.PerformLayout();
             this.tabPage11.ResumeLayout(false);
@@ -1351,7 +1354,6 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.serverMainBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPnPCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

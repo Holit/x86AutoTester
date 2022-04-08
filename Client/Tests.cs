@@ -37,6 +37,7 @@ namespace Client
     {
         public static async Task<TestResult> startTesterAsync(Dictionary<string,string> args)
         {
+            //在此处添加监测温度、风扇转速的代码
             ProcessStartInfo processInfo = new ProcessStartInfo();
             processInfo.FileName = "Tester.exe";
             string argString = "";
