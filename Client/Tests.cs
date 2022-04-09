@@ -35,7 +35,7 @@ namespace Client
     }
     public class TesterTest
     {
-        public static async Task<TestResult> startTesterAsync(Dictionary<string,string> args)
+        public static async Task<int> startTesterAsync(Dictionary<string,string> args)
         {
             //在此处添加监测温度、风扇转速的代码
             ProcessStartInfo processInfo = new ProcessStartInfo();
@@ -55,7 +55,7 @@ namespace Client
             });
             pro.Start();
             await Task.Run(()=>pro.WaitForExit());
-            return (TestResult)pro.ExitCode;
+            return pro.ExitCode;
         }
     }
 }

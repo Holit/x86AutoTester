@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Threading;
 using Newtonsoft.Json;
 using System.IO;
+using static System.Windows.Forms.ListViewItem;
 
 namespace Client
 {
@@ -242,12 +243,50 @@ namespace Client
        
         private void label18_Click(object sender, EventArgs e)
         {
-                                                                                                                                                                                                                    if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
-                                                                                                                                                                                                                    {
-                                                                                                                                                                                                                        MessageBox.Show("笨蛋！客户端开错了！\n(ノ｀Д)ノ\t(′д｀σ)σ\n\n来都来了，大佬别走","版权小人");
-                                                                                                                                                                                                                        MessageBox.Show("不能让开发者看到这段东西\n(;´༎ຶД༎ຶ`)", "版权小人");
-                                                                                                                                                                                                                        MessageBox.Show("别删除我呜呜\n━((*′д｀)爻(′д｀*))━!!!!", "版权小人");
-                                                                                                                                                                                                                    }
+        }
+        public int taskTotal=1;
+        private int finishedTask=0;
+
+        public int FinishedTask { get => finishedTask; set {
+                finishedTask = value;
+                任务百分比.Text = (finishedTask * 100 / taskTotal).ToString() + '%';
+                任务进度条.Value = (finishedTask * 100 / taskTotal);
+                if(finishedTask == taskTotal)
+                {
+                    计时器.Enabled = false;
+                }
+            }
+        }
+        private int runTime;
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            ++runTime;
+            运行时间.Text = new TimeSpan(0,0,runTime).ToString();
+        }
+        public void addTask(string name)
+        {
+            lvTesting.Invoke((MethodInvoker)delegate
+            {
+                ListViewItem item = new ListViewItem(name);
+                item.Text = name;
+                item.SubItems.Add(new ListViewSubItem(item, DateTime.Now.ToString("HH:mm:ss")));
+                item.SubItems.Add(new ListViewSubItem(item, "正在执行"));
+                lvTesting.Items.Add(item);
+            });
+        }
+        public void setTaskResult(string name,string result)
+        {
+            lvTesting.Invoke((MethodInvoker)delegate
+            {
+                foreach(ListViewItem item in lvTesting.Items)
+                {
+                    if (item.Text.Equals(name))
+                    {
+                        item.SubItems[2].Text = result;
+                        return;
+                    }
+                }
+            });
         }
     }
 }

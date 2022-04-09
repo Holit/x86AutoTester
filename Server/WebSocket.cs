@@ -39,6 +39,10 @@ namespace Server
                 Task.RemoveAt(0);
                 return currentTask;
             }
+            public void log(string log)
+            {
+                Program.ServerMain.setClientLog(clientUrl, log);
+            }
         }
         private IDictionary<string, Client> dic_Sockets = new Dictionary<string, Client>();
         private WebSocketServer server;
@@ -137,13 +141,14 @@ namespace Server
                 socket.OnClose = () =>  //连接关闭事件
                 {
                     string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
+                    dic_Sockets[clientUrl].log("客户端断开WebSock连接！");
                     //如果存在这个客户端,那么对这个socket进行移除
                     if (dic_Sockets.ContainsKey(clientUrl))
                     {
                         dic_Sockets.Remove(clientUrl);
                         Program.ServerMain.setClientCount(dic_Sockets.Count());
                     }
-                    Console.WriteLine(DateTime.Now.ToString() + "|服务器:和客户端:" + clientUrl + " 断开WebSock连接！");
+                    //Console.WriteLine(DateTime.Now.ToString() + "|服务器:和客户端:" + clientUrl + " 断开WebSock连接！");
                 };
                 socket.OnMessage = rawMessage =>  //接受客户端网页消息事件
                 {
@@ -177,7 +182,8 @@ namespace Server
                     MessageType = Message.MessageTypes.ServerUuid,
                     Content = Program.Uuid
                 }.ToString());
-            }else if (message.MessageType == Message.MessageTypes.JoinServer)
+            }
+            else if (message.MessageType == Message.MessageTypes.JoinServer)
             {
                 _ = socket.Send(new Message
                 {
@@ -186,11 +192,12 @@ namespace Server
                 }.ToString());
                 if (Program.Uuid == message.Content)
                 {
-                    Console.WriteLine("客户端"+ clientUrl + "登录成功");
                     dic_Sockets.Add(clientUrl, new Client(socket));
+                    dic_Sockets[clientUrl].log("客户端登录成功");
                     Program.ServerMain.setClientCount(dic_Sockets.Count());
                 }
-            }else if (message.MessageType == Message.MessageTypes.CurrentTask)
+            }
+            else if (message.MessageType == Message.MessageTypes.CurrentTask)
             {
                 Console.WriteLine(message);
                 Message task = JsonConvert.DeserializeObject<Message>(message.Content);
@@ -201,14 +208,31 @@ namespace Server
                     await Task.Run(()=>dic_Sockets[clientUrl].currentTask.WaitForTaskFinished());
                     if (dic_Sockets[clientUrl].GetRemainTaskCount() != 0)
                     {
-                        Message msg = dic_Sockets[clientUrl].GetNextTask().TaskMessage;
-                        _ = socket.Send(msg.ToString());
+                        ClientTask clientTask = dic_Sockets[clientUrl].GetNextTask();
+                        _ = socket.Send(
+                            new Message
+                            {
+                                MessageType = Message.MessageTypes.CurrentTask,
+                                Content = new CurrentTask { 
+                                    describe = clientTask.Describe, 
+                                    task = clientTask.TaskMessage.ToString() 
+                                }.ToString()
+                            }.ToString()                            
+                            );
                     }
                 }
                 else
                 {
                     Program.ServerMain.setClientState(dic_Sockets[clientUrl]);
                 }
+            }
+            else if(message.MessageType == Message.MessageTypes.TaskTotal)
+            {
+                _ = socket.Send(new Message
+                {
+                    MessageType = Message.MessageTypes.TaskTotal,
+                    Content = ClientTask.Tasks.Count().ToString()
+                }.ToString());
             }
             else
             {

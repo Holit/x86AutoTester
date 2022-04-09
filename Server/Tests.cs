@@ -25,28 +25,26 @@ namespace Server
                 new ClientTask(new Message { MessageType = Message.MessageTypes.USBWritingTest, Content = null},"USB写入测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null},"串口写入测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.ChkdskEvent, Content = null},"磁盘测试"),
-
+                new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
+                    new TesterMessage{
+                        data = {
+                            { "operator" , "memoryTest" },
+                            { "reservedMemory" , (64L*1024*1024*1024).ToString() },//64G保留空间
+                            { "memoryPerThread" , (1024*1024*512).ToString() },//512M每线程
+                            { "totalTime" , (0).ToString() },//测试时间2分钟
+                            { "sleepTime" , (60*1000).ToString() },//线程睡眠时间1分钟
+                        }
+                    }.ToString()
+                    },"内存压力测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
                             { "operator" , "cpuTest" },
                             { "thread" , "auto" },
-                            { "totalTime" , (2*60*1000).ToString() }
+                            { "totalTime" , (0).ToString() }
                         }
                     }.ToString()
                     },"CPU压力测试"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
-                    new TesterMessage{
-                        data = {
-                            { "operator" , "memoyTest" },
-                            { "reservedMemory" , (1024*1024*1024).ToString() },//1G保留空间
-                            { "memoryPerThread" , (1024*1024*512).ToString() },//512M每线程
-                            { "totalTime" , (2*60*1000).ToString() },//测试时间2分钟
-                            { "sleepTime" , (60*1000).ToString() },//线程睡眠时间1分钟
-                        }
-                    }.ToString()
-                    },"内存压力测试"),
-
             };
         private Message taskMessage;
         private ManualResetEvent manualEvent;
@@ -61,7 +59,7 @@ namespace Server
             describe = Describe;
         }
 
-        public void HandleMessage(Message message, Client socket)
+        public void HandleMessage(Message message, Client client)
         {
             if( message.MessageType == Message.MessageTypes.WMIMessage)
             {
@@ -84,24 +82,75 @@ namespace Server
                                                                         && items.MaxClockSpeed == _data["MaxClockSpeed"]) 
                                  select items).GetEnumerator().Current);
                         }
-                        if(verifying.Processors.Count > 0)
+                        if (verifying.Processors.Count > 0)
                         {
                             //result
-                            Console.WriteLine("Win32_Processor 校验失败。存在一个或多个未期许的硬件");
-                            Console.WriteLine("DEBUGONLY:verifying.Processors.Count = " + verifying.Processors.Count.ToString());
+                            client.log("Win32_Processor 校验失败。存在一个或多个未期许的硬件");
+                            client.log("DEBUGONLY:verifying.Processors.Count = " + verifying.Processors.Count.ToString());
+                            client.Socket.Send(new Message{
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                    {
+                                        taskName = client.currentTask.describe,
+                                        taskResult = "测试失败"
+                                    }.ToString()
+                                }.ToString());
                         }
                         else
                         {
-                            Console.WriteLine("Win32_Processor 校验通过");
+                            client.log("Win32_Processor 校验通过");
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试通过"
+                                }.ToString()
+                            }.ToString());
                         }
                     }
-                    else if(wmiMessage.path == "Win32_PnPEntity")
+                    else if (wmiMessage.path == "Win32_PnPEntity")
                     {
-                        if(wmiMessage.data.Count != verifying.outlet_pnp_count)
+                        if (wmiMessage.data.Count != verifying.outlet_pnp_count)
                         {
-                            Console.WriteLine("即插即用设备数量校验失败：预期值:" + verifying.outlet_pnp_count +
+                            client.log("即插即用设备数量校验失败：预期值:" + verifying.outlet_pnp_count +
                                 "当前值:" + wmiMessage.data.Count);
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试失败"
+                                }.ToString()
+                            }.ToString());
                         }
+                        else
+                        {
+                            client.log("即插即用设备数量校验通过");
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "校验通过"
+                                }.ToString()
+                            }.ToString());
+                        }
+                    }
+                    else
+                    {
+                        client.Socket.Send(new Message
+                        {
+                            MessageType = Message.MessageTypes.TaskResult,
+                            Content = new TaskResult
+                            {
+                                taskName = client.currentTask.describe,
+                                taskResult = "未知的测试"
+                            }.ToString()
+                        }.ToString());
                     }
                 }
             }
@@ -116,8 +165,43 @@ namespace Server
                     long delta = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - recvTimeStamp;
                     if (delta > 2 * 1000)
                     {
-                        Console.WriteLine("RTC 校验失败。时间差为" + delta);
+                        client.log("RTC 校验失败。时间差为" + delta);
+                        client.Socket.Send(new Message
+                        {
+                            MessageType = Message.MessageTypes.TaskResult,
+                            Content = new TaskResult
+                            {
+                                taskName = client.currentTask.describe,
+                                taskResult = "校验失败,时间差为" + delta
+                            }.ToString()
+                        }.ToString());
                     }
+                    else
+                    {
+                        client.log("RTC 校验成功。");
+                        client.Socket.Send(new Message
+                        {
+                            MessageType = Message.MessageTypes.TaskResult,
+                            Content = new TaskResult
+                            {
+                                taskName = client.currentTask.describe,
+                                taskResult = "RTC 校验成功"
+                            }.ToString()
+                        }.ToString());
+                    }
+                }
+                else
+                {
+                    client.log("RTC 校验失败，未知的客户端时间。");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "RTC 校验失败，未知的客户端时间"
+                        }.ToString()
+                    }.ToString());
                 }
             }
             else if (message.MessageType == Message.MessageTypes.MACVerify)
@@ -133,6 +217,49 @@ namespace Server
                     {
                         //能执行到这里也是真的绝了
                         Console.WriteLine("\r\n\t" + manageObject.Properties["Name"]);                    }
+                }
+            }
+            else if(message.MessageType == Message.MessageTypes.TesterMessage)
+            {
+                int resutl = int.Parse(message.Content);
+                if(resutl == ((int)TesterMessage.TestResult.SUCCESS))
+                {
+                    client.log(client.currentTask.describe+"测试通过");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试通过"
+                        }.ToString()
+                    }.ToString());
+                }
+                else if(resutl == (int)TesterMessage.TestResult.ARGS_ERROR)
+                {
+                    client.log(client.currentTask.describe + "参数错误");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "参数错误"
+                        }.ToString()
+                    }.ToString());
+                }
+                else
+                {
+                    client.log(client.currentTask.describe + "测试失败，exitCode:"+resutl);
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试失败，exitCode:" + resutl
+                        }.ToString()
+                    }.ToString());
                 }
             }
             manualEvent.Set();

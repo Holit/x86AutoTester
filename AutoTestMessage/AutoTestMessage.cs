@@ -24,6 +24,16 @@ namespace AutoTestMessage
         public enum TestResult { SUCCESS = 0, ARGS_ERROR = -1, FAIL_PASS_TEST = -2 }
         public Dictionary<string, string> data = new Dictionary<string, string>();
     }
+    public class TaskResult : BaseMessage
+    {
+        public string taskName;
+        public string taskResult;
+    }
+    public class CurrentTask : BaseMessage
+    {
+        public string describe;
+        public string task;
+    }
     public class Message:BaseMessage
     {
         /// <summary>
@@ -85,7 +95,19 @@ namespace AutoTestMessage
             /// <summary>
             /// 硬盘坏道检测
             /// </summary>
-            ChkdskEvent
+            ChkdskEvent,
+            /// <summary>
+            /// 测试结果
+            /// </summary>
+            TestResult,
+            /// <summary>
+            /// 任务总数
+            /// </summary>
+            TaskTotal,
+            /// <summary>
+            /// 任务结果
+            /// </summary>
+            TaskResult,
         }
         public MessageTypes MessageType = MessageTypes.None;
         public string Content="";

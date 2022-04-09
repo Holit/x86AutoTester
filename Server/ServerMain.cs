@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Server.WebSocket;
+using static System.Windows.Forms.ListViewItem;
 
 namespace Server
 {
@@ -36,6 +37,7 @@ namespace Server
             nudPnPCount.Value = 0;
             ManagementClass managementClass = new ManagementClass("Win32_PnPEntity");
             ManagementObjectCollection moCollection = managementClass.GetInstances();
+            Program.configFile.outlet_pnp_count = moCollection.Count;
             nudPnPCount.Value = moCollection.Count;
             managementClass.Dispose();
         }
@@ -488,7 +490,18 @@ namespace Server
         {
             setClientState(client.ClientUrl, client.currentTask.Describe, ClientTask.Tasks.Count - client.GetRemainTaskCount() - 1);
         }
-
+        public void setClientLog(string client, string log)
+        {
+            clientLog.Invoke((MethodInvoker)delegate
+            {
+                ListViewItem item = new ListViewItem();
+                item.Text = DateTime.Now.ToString("HH:mm:ss");
+                item.SubItems.Add(new ListViewSubItem(item, client));
+                item.SubItems.Add(new ListViewSubItem(item, log));
+                clientLog.Items.Add(item);
+            });
+            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss ") + client + " " + log);
+        }
         private void btnAddDev_Click(object sender, EventArgs e)
         {
             if(combPreset_SelDev.SelectedIndex != -1)
