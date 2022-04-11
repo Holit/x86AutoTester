@@ -1,13 +1,7 @@
-﻿using Server.Properties;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System;
 using System.Linq;
 using System.Management;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Server.WebSocket;
 using static System.Windows.Forms.ListViewItem;
@@ -26,7 +20,7 @@ namespace Server
             //在此处添加退出之前的保存、上传操作。
             Close();
         }
-        
+
         private void Form1_Load(object sender, EventArgs e)
         {
             label_uuid.Text = Program.Uuid;
@@ -62,7 +56,7 @@ namespace Server
         private void cbOutlet_CheckedChanged(object sender, EventArgs e)
         {
             cbOutlet_audioPlay.Enabled = cbOutlet.Checked;
-            cbOutlet_COM.Enabled = cbOutlet.Checked; 
+            cbOutlet_COM.Enabled = cbOutlet.Checked;
             cbOutlet_USB.Enabled = cbOutlet.Checked;
             gbOutlet_Audio.Enabled = cbOutlet.Checked;
         }
@@ -367,7 +361,7 @@ namespace Server
 
             Program.configFile.outlet_com = cbOutlet_COM.Checked;
             Program.configFile.outlet_usb = cbOutlet_USB.Checked;
-            Program.configFile.outlet_pnp_count =Convert.ToInt32(nudPnPCount.Value);
+            Program.configFile.outlet_pnp_count = Convert.ToInt32(nudPnPCount.Value);
             Program.configFile.audio_playback = cbOutlet_audioPlay.Checked;
             Program.configFile.audio_adjust_vol = cbOutlet_VolAuto.Checked;
             Program.configFile.audio_max_vol = cbOutlet_VolMax.Checked;
@@ -375,7 +369,7 @@ namespace Server
             //请将此部分写为异步操作
             //阻塞执行可能需要1~3s的卡顿。
 
-            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Processor) == ConfigFile.OVERRIDE_FLAG.None)
+            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Processor) == ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_Processor");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
@@ -391,8 +385,8 @@ namespace Server
                     Program.configFile.Processors.Add(dev);
                 }
                 managementClass.Dispose();
-            }            
-            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.PhysicalMemory) == ConfigFile.OVERRIDE_FLAG.None)
+            }
+            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.PhysicalMemory) == ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_PhysicalMemory");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
@@ -408,8 +402,8 @@ namespace Server
                     Program.configFile.PhysicalMemorys.Add(dev);
                 }
                 managementClass.Dispose();
-            }            
-            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Disk) == ConfigFile.OVERRIDE_FLAG.None)
+            }
+            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Disk) == ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_DiskDrive");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
@@ -420,13 +414,13 @@ namespace Server
                     dev.Manufacturer = mo["Manufacturer"].ToString();
                     dev.MediaType = mo["MediaType"].ToString();
                     dev.Model = mo["Model"].ToString();
-                    dev.SerialNumber = mo["SerialNumber"] == null ? "null"  : mo["SerialNumber"].ToString();
+                    dev.SerialNumber = mo["SerialNumber"] == null ? "null" : mo["SerialNumber"].ToString();
                     dev.Size = mo["Size"].ToString();
                     Program.configFile.Disks.Add(dev);
                 }
                 managementClass.Dispose();
-            }            
-            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.NetworkAdapter) == 
+            }
+            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.NetworkAdapter) ==
                 ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_NetworkAdapter");
@@ -437,13 +431,13 @@ namespace Server
                     dev.id = Program.configFile.NetworkAdapters.Count + 1;
                     dev.Description = mo["Description"].ToString();
                     //GUID可能会变，因此按照测试结果更改
-                    dev.GUID = mo["GUID"] == null ?  "null" : mo["GUID"].ToString();
+                    dev.GUID = mo["GUID"] == null ? "null" : mo["GUID"].ToString();
                     dev.Speed = mo["Speed"] == null ? "null" : mo["Speed"].ToString();
                     Program.configFile.NetworkAdapters.Add(dev);
                 }
                 managementClass.Dispose();
-            }            
-            if((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.VideoController) == ConfigFile.OVERRIDE_FLAG.None)
+            }
+            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.VideoController) == ConfigFile.OVERRIDE_FLAG.None)
             {
                 ManagementClass managementClass = new ManagementClass("Win32_VideoController");
                 ManagementObjectCollection moCollection = managementClass.GetInstances();
@@ -466,7 +460,7 @@ namespace Server
             jsonres = Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonres));
             System.IO.File.WriteAllText("configfile.jht", jsonres);
         }
-        public void setClientState(string client,string current,int finishedCount)
+        public void setClientState(string client, string current, int finishedCount)
         {
             lvClients.Invoke((MethodInvoker)delegate
             {
@@ -504,9 +498,9 @@ namespace Server
         }
         private void btnAddDev_Click(object sender, EventArgs e)
         {
-            if(combPreset_SelDev.SelectedIndex != -1)
+            if (combPreset_SelDev.SelectedIndex != -1)
             {
-                if(combPreset_SelDev.SelectedItem.ToString() == "中央处理器设备")
+                if (combPreset_SelDev.SelectedItem.ToString() == "中央处理器设备")
                 {
                     Program.configFile.override_flag |= ConfigFile.OVERRIDE_FLAG.Processor;
                     ((ConfigFile.Processor)pgPreset.SelectedObject).id = Program.configFile.Processors.Count + 1;
@@ -562,16 +556,16 @@ namespace Server
                     lvPreset_Dev.Items.Add(listViewItem);
                 }
             }
-            
+
         }
 
         private void lvPreset_Dev_SelectedIndexChanged(object sender, EventArgs e)
         {
             combPreset_SelDev.SelectedItem = null;
-            if (lvPreset_Dev.SelectedItems.Count  == 1)
+            if (lvPreset_Dev.SelectedItems.Count == 1)
             {
                 btnDelDev.Enabled = true;
-                if(lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "中央处理器设备")
+                if (lvPreset_Dev.SelectedItems[0].SubItems[1].Text == "中央处理器设备")
                 {
                     pgPreset.SelectedObject = null;
                     pgPreset.SelectedObject = Program.configFile.Processors[int.Parse(lvPreset_Dev.SelectedItems[0].Text) - 1];
@@ -633,7 +627,7 @@ namespace Server
 
         private void combPreset_SelDev_SelectedValueChanged(object sender, EventArgs e)
         {
-            if(combPreset_SelDev.SelectedItem != null)
+            if (combPreset_SelDev.SelectedItem != null)
             {
                 if (combPreset_SelDev.SelectedItem.ToString() == "中央处理器设备")
                 {
@@ -665,18 +659,18 @@ namespace Server
 
         private void btnDelDev_Click(object sender, EventArgs e)
         {
-            DialogResult res= MessageBox.Show(this,"删除设备\n" + lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() + "\n描述："
-                + lvPreset_Dev.SelectedItems[0].SubItems[2].ToString() + " ?","删除指定设备"
-                ,MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2);
+            DialogResult res = MessageBox.Show(this, "删除设备\n" + lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() + "\n描述："
+                + lvPreset_Dev.SelectedItems[0].SubItems[2].ToString() + " ?", "删除指定设备"
+                , MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
             if (res == DialogResult.Yes)
             {
-                if(lvPreset_Dev.SelectedItems.Count == 1)
+                if (lvPreset_Dev.SelectedItems.Count == 1)
                 {
-                    if (lvPreset_Dev.SelectedItems [0].SubItems[1].ToString() == "中央处理器设备")
+                    if (lvPreset_Dev.SelectedItems[0].SubItems[1].ToString() == "中央处理器设备")
                     {
                         foreach (ConfigFile.Processor dev in Program.configFile.Processors)
                         {
-                            if(dev.id ==int.Parse( lvPreset_Dev.SelectedItems [0].SubItems[0].ToString()))
+                            if (dev.id == int.Parse(lvPreset_Dev.SelectedItems[0].SubItems[0].ToString()))
                             {
                                 Program.configFile.Processors.Remove(dev);
                             }
@@ -772,10 +766,10 @@ namespace Server
 
         private void label_backdoor_Click(object sender, EventArgs e)
         {
-            if((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
             {
-                DialogResult dr =  MessageBox.Show("试图执行特殊代码，点击确定以继续\n( *^-^)ρ(*╯^╰)","BACKDOOR",MessageBoxButtons.OKCancel);
-                if(dr == DialogResult.OK)
+                DialogResult dr = MessageBox.Show("试图执行特殊代码，点击确定以继续\n( *^-^)ρ(*╯^╰)", "BACKDOOR", MessageBoxButtons.OKCancel);
+                if (dr == DialogResult.OK)
                 {
                     //AutoTestMessage.Message wmiMessage = new AutoTestMessage.Message();
                     //wmiMessage.MessageType = AutoTestMessage.Message.MessageTypes.WMIMessage;
@@ -818,18 +812,18 @@ namespace Server
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void btnChangeState_Click(object sender, EventArgs e)
         {
-            if(Program.CurrentState == Program.TestingStates.Stopped || Program.CurrentState == Program.TestingStates.Paused)
+            if (Program.CurrentState == Program.TestingStates.Stopped || Program.CurrentState == Program.TestingStates.Paused)
             {
                 Program.CurrentState = Program.TestingStates.Running;
                 btnChangeState.Text = "⏸";
 
             }
-            else if(Program.CurrentState == Program.TestingStates.Running)
+            else if (Program.CurrentState == Program.TestingStates.Running)
             {
                 Program.CurrentState = Program.TestingStates.Paused;
                 btnChangeState.Text = "▶";

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Server
@@ -16,7 +13,7 @@ namespace Server
         public static ConfigFile configFile = new ConfigFile();
         public static ServerMain ServerMain { get => serverMain; }
 
-        public enum TestingStates {Stopped, Running, Paused};
+        public enum TestingStates { Stopped, Running, Paused };
         /// <summary>
         /// 标识当前服务器端下发的指令
         /// </summary>
@@ -28,7 +25,7 @@ namespace Server
         static void Main()
         {
             //Will listen port 6839
-            var webSocket =WebSocket.GetInstance;
+            var webSocket = WebSocket.GetInstance;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             serverMain = new ServerMain();

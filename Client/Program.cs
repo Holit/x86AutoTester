@@ -1,11 +1,7 @@
-﻿using System;
+﻿using OpenHardwareMonitor.Hardware;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using OpenHardwareMonitor;
-using OpenHardwareMonitor.Hardware;
 
 namespace Client
 {
@@ -13,14 +9,14 @@ namespace Client
     {
         private static ClientMain clientMain = null;
 
-        public static ClientMain ClientMain { get => clientMain;}
+        public static ClientMain ClientMain { get => clientMain; }
         public static string serverUUID;
         /// <summary>
         /// 指示CPU的信息结构
         /// </summary>
         public struct CpuInfoOfTempFan
         {
-            
+
             public float? Max;
             public float? Min;
             //当前温度，可以为空
@@ -111,7 +107,7 @@ namespace Client
             var webSocket = WebSocket.GetInstance;
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            clientMain=new ClientMain();
+            clientMain = new ClientMain();
             Application.Run(clientMain);
         }
     }

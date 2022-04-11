@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Management;
-using System.Text;
 using System.Threading.Tasks;
-using static AutoTestMessage.TesterMessage;
 
 namespace Client
 {
@@ -35,13 +32,14 @@ namespace Client
     }
     public class TesterTest
     {
-        public static async Task<int> startTesterAsync(Dictionary<string,string> args)
+        public static async Task<int> startTesterAsync(Dictionary<string, string> args)
         {
             //在此处添加监测温度、风扇转速的代码
             ProcessStartInfo processInfo = new ProcessStartInfo();
             processInfo.FileName = "Tester.exe";
             string argString = "";
-            foreach(var i in args){
+            foreach (var i in args)
+            {
                 argString += " -" + i.Key + " " + i.Value;
             }
             processInfo.Arguments = argString;
@@ -54,17 +52,17 @@ namespace Client
                 Console.WriteLine(pro.ExitCode);
             });
             pro.Start();
-            await Task.Run(()=>pro.WaitForExit());
+            await Task.Run(() => pro.WaitForExit());
             return pro.ExitCode;
         }
     }
     public class DiskTest
     {
-        public static async Task<Dictionary<string,int>> startDiskTestAsync()
+        public static async Task<Dictionary<string, int>> startDiskTestAsync()
         {
             ManagementObjectCollection query = await WMITest.GetDeatils("Win32_LogicalDisk");
             Dictionary<string, int> exitCodes = new Dictionary<string, int>();
-            foreach(var i in query)
+            foreach (var i in query)
             {
                 if (i["DriveType"].ToString().Equals(((int)System.IO.DriveType.Fixed).ToString()))
                 {

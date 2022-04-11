@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoTestMessage
 {
@@ -38,20 +34,21 @@ namespace AutoTestMessage
     {
         public Dictionary<string, int> result;
     }
-    public class Message:BaseMessage
+    public class Message : BaseMessage
     {
         /// <summary>
         /// 指定消息的类型
         /// </summary>
-        public enum MessageTypes {
+        public enum MessageTypes
+        {
             /// <summary>
             /// 无类型
             /// </summary>
-            None, 
+            None,
             /// <summary>
             /// 获取/返回服务器UUID
             /// </summary>
-            ServerUuid, 
+            ServerUuid,
             /// <summary>
             /// 加入服务器
             /// </summary>
@@ -63,11 +60,11 @@ namespace AutoTestMessage
             /// <summary>
             /// 获取WMI配置数据，指定path
             /// </summary>
-            WMIMessage, 
+            WMIMessage,
             /// <summary>
             /// 指定测试端执行测试器
             /// </summary>
-            TesterMessage, 
+            TesterMessage,
             /// <summary>
             /// 获取当前任务
             /// </summary>
@@ -114,6 +111,6 @@ namespace AutoTestMessage
             TaskResult,
         }
         public MessageTypes MessageType = MessageTypes.None;
-        public string Content="";
+        public string Content = "";
     }
 }

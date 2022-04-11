@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 public class ConfigFile
 {
 
@@ -52,7 +49,7 @@ public class ConfigFile
         VideoController = 0b_0000_0100,     // 4
         Disk = 0b_0000_1000,    // 8
         NetworkAdapter = 0b_0001_0000,  // 16
-        All = Processor | PhysicalMemory| VideoController | Disk | NetworkAdapter // 31
+        All = Processor | PhysicalMemory | VideoController | Disk | NetworkAdapter // 31
     }
     public OVERRIDE_FLAG override_flag;
     public bool send_wmi_information;

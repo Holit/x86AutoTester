@@ -1,17 +1,15 @@
-﻿using System;
+﻿using AutoTestMessage;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using System.Management;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using AutoTestMessage;
-using Newtonsoft.Json;
 using System.Net.WebSockets;
+using System.Text;
 using System.Threading;
-using System.Management;
-using static AutoTestMessage.TesterMessage;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Client
 {
@@ -44,13 +42,13 @@ namespace Client
                         AutoTestMessage.Message serverInfo = JsonConvert.DeserializeObject<AutoTestMessage.Message>(returnData);
                         ClientWebSocket webSocket = new ClientWebSocket();
                         CancellationToken cancellation = new CancellationToken();
-                        
-                        await webSocket.ConnectAsync(new Uri("ws://"+ endpoint.Address+ ":6839"), cancellation);
+
+                        await webSocket.ConnectAsync(new Uri("ws://" + endpoint.Address + ":6839"), cancellation);
 
                         AutoTestMessage.Message message = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.ServerUuid };
                         byte[] bytesMessage = Encoding.UTF8.GetBytes(message.ToString());
                         await webSocket.SendAsync(new ArraySegment<byte>(bytesMessage), WebSocketMessageType.Text, true, cancellation);
-                        WebSocketReceiveResult result=await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
+                        WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
                         message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.UTF8.GetString(buffer, 0, result.Count));
                         if (message.Content == serverInfo.Content)
                         {
@@ -93,11 +91,12 @@ namespace Client
                             }
                         }
                     }
-                    catch(JsonReaderException exception) {
+                    catch (JsonReaderException exception)
+                    {
                         Console.WriteLine("接收到不正确的消息");
                         Console.WriteLine(exception);
                     }
-                    catch(WebSocketException exception)
+                    catch (WebSocketException exception)
                     {
                         Console.WriteLine("连接到服务器异常");
                         Console.WriteLine(exception);
@@ -141,7 +140,7 @@ namespace Client
         }
         private void HandleMessage(AutoTestMessage.Message message)
         {
-            if(message.MessageType == AutoTestMessage.Message.MessageTypes.TaskResult)
+            if (message.MessageType == AutoTestMessage.Message.MessageTypes.TaskResult)
             {
                 ++Program.ClientMain.FinishedTask;
                 Task.Run(async () =>
@@ -155,7 +154,7 @@ namespace Client
                     });
                 });
             }
-            else if(message.MessageType == AutoTestMessage.Message.MessageTypes.CurrentTask)
+            else if (message.MessageType == AutoTestMessage.Message.MessageTypes.CurrentTask)
             {
                 Task.Run(async () =>
                 {
@@ -250,7 +249,7 @@ namespace Client
 
                         await SendMessage(reply);
                     }
-                    else if(message.MessageType == AutoTestMessage.Message.MessageTypes.USBWritingTest)
+                    else if (message.MessageType == AutoTestMessage.Message.MessageTypes.USBWritingTest)
                     {
                         string[] dirs = Environment.GetLogicalDrives();
                         string callback = "";
@@ -259,7 +258,7 @@ namespace Client
                             System.IO.DriveInfo Tdriver = new System.IO.DriveInfo(dir);
                             if (Tdriver.DriveType == System.IO.DriveType.Removable)
                             {
-//未测试
+                                //未测试
                                 //未就绪等待，自动循环等待3次，每次30秒。
                                 int WaitingDuration = 2;
 
@@ -269,7 +268,7 @@ namespace Client
                                     await Task.Delay(30 * 1000);
                                     WaitingDuration--;
                                 }
-                                callback  = 
+                                callback =
                                  "磁盘名称：" + Tdriver.Name + "\r\n"
                                 + "磁盘卷标：" + Tdriver.VolumeLabel + "\r\n"
                                 + "文件系统：" + Tdriver.DriveFormat + "\r\n"
@@ -281,23 +280,23 @@ namespace Client
                         }
                         MessageBox.Show(callback);
                     }
-                    else if(message.MessageType  == AutoTestMessage.Message.MessageTypes.SerialTest)
+                    else if (message.MessageType == AutoTestMessage.Message.MessageTypes.SerialTest)
                     {
 
                     }
-                    else if(message.MessageType == AutoTestMessage.Message.MessageTypes.PlayAudio)
+                    else if (message.MessageType == AutoTestMessage.Message.MessageTypes.PlayAudio)
                     {
 
                     }
                     //执行CHKDSK
-                    else if(message.MessageType == AutoTestMessage.Message.MessageTypes.ChkdskEvent)
+                    else if (message.MessageType == AutoTestMessage.Message.MessageTypes.ChkdskEvent)
                     {
                         AutoTestMessage.Message sending = new AutoTestMessage.Message();
                         sending.MessageType = AutoTestMessage.Message.MessageTypes.ChkdskEvent;
                         sending.Content = JsonConvert.SerializeObject(
                             new ChkdskEvent
                             {
-                                result=await DiskTest.startDiskTestAsync()
+                                result = await DiskTest.startDiskTestAsync()
                             });
                         await SendMessage(sending);
                     }

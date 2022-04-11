@@ -1,15 +1,15 @@
-﻿using System;
+﻿using AutoTestMessage;
+using Fleck;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Net.NetworkInformation;
-using AutoTestMessage;
-using Newtonsoft.Json;
 using System.Threading;
-using Fleck;
+using System.Threading.Tasks;
 
 namespace Server
 {
@@ -56,7 +56,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("堆栈描述\r\n"+ex.StackTrace + "\r\n错误详情:\r\n" + ex.Message,"启动WebSocket时遇到未知致命故障");
+                System.Windows.Forms.MessageBox.Show("堆栈描述\r\n" + ex.StackTrace + "\r\n错误详情:\r\n" + ex.Message, "启动WebSocket时遇到未知致命故障");
             }
         }
         private async Task BoardServer()
@@ -166,13 +166,13 @@ namespace Server
                         {
                             string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
                             dic_Sockets[clientUrl].log("客户端断开WebSock连接！");
-                        //如果存在这个客户端,那么对这个socket进行移除
-                        if (dic_Sockets.ContainsKey(clientUrl))
+                            //如果存在这个客户端,那么对这个socket进行移除
+                            if (dic_Sockets.ContainsKey(clientUrl))
                             {
                                 dic_Sockets.Remove(clientUrl);
                                 Program.ServerMain.setClientCount(dic_Sockets.Count());
                             }
-                        //Console.WriteLine(DateTime.Now.ToString() + "|服务器:和客户端:" + clientUrl + " 断开WebSock连接！");
+                            //Console.WriteLine(DateTime.Now.ToString() + "|服务器:和客户端:" + clientUrl + " 断开WebSock连接！");
                         };
                         socket.OnMessage = rawMessage =>  //接受客户端网页消息事件
                         {
@@ -196,7 +196,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("堆栈描述\r\n" + ex.StackTrace 
+                System.Windows.Forms.MessageBox.Show("堆栈描述\r\n" + ex.StackTrace
                     + "\r\n错误详情:\r\n" + ex.Message, "启动侦听时遇到错误");
 
             }

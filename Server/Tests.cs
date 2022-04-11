@@ -1,11 +1,8 @@
 ﻿using AutoTestMessage;
-using Fleck;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using static Server.WebSocket;
 
 namespace Server
@@ -21,7 +18,7 @@ namespace Server
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" },"硬盘配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },"网卡配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PnPEntity" },"即插即用设备校验"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.PlayAudio, Content = null},"音频接口测试:输出"), 
+                new ClientTask(new Message { MessageType = Message.MessageTypes.PlayAudio, Content = null},"音频接口测试:输出"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.USBWritingTest, Content = null},"USB写入测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null},"串口写入测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.ChkdskEvent, Content = null},"磁盘测试"),
@@ -52,7 +49,7 @@ namespace Server
         public Message TaskMessage { get => taskMessage; }
         public string Describe { get => describe; }
 
-        public ClientTask(Message TaskMessage,string Describe,bool finished=false)
+        public ClientTask(Message TaskMessage, string Describe, bool finished = false)
         {
             taskMessage = TaskMessage;
             manualEvent = new ManualResetEvent(finished);
@@ -62,25 +59,26 @@ namespace Server
         public void HandleMessage(Message message, Client client)
         {
             //配置校验
-            if( message.MessageType == Message.MessageTypes.WMIMessage)
+            if (message.MessageType == Message.MessageTypes.WMIMessage)
             {
-                object recv = Newtonsoft.Json.JsonConvert.DeserializeObject(message.Content,typeof(WMIMessage));
+                object recv = Newtonsoft.Json.JsonConvert.DeserializeObject(message.Content, typeof(WMIMessage));
                 WMIMessage wmiMessage = recv as WMIMessage;
                 ConfigFile verifying = Program.configFile;
-                
-                if(wmiMessage != null && wmiMessage.data != null)
+
+                if (wmiMessage != null && wmiMessage.data != null)
                 {
-                    if(wmiMessage.path == "Win32_Processor")
+                    if (wmiMessage.path == "Win32_Processor")
                     {
                         //test code, only for debugging.
-                        foreach (Dictionary<string,string> _data in wmiMessage.data)
+                        foreach (Dictionary<string, string> _data in wmiMessage.data)
                         {
                             verifying.Processors.Remove((ConfigFile.Processor)
-                                (from items in verifying.Processors where (items.ProcessorId == _data["ProcessorId"] 
-                                                                        && items.Name == _data["Name"]
-                                                                        && items.Manufacturer == _data["Manufacturer"]
-                                                                        && items.Family == _data["Family"]
-                                                                        && items.MaxClockSpeed == _data["MaxClockSpeed"]) 
+                                (from items in verifying.Processors
+                                 where (items.ProcessorId == _data["ProcessorId"]
+                                     && items.Name == _data["Name"]
+                                     && items.Manufacturer == _data["Manufacturer"]
+                                     && items.Family == _data["Family"]
+                                     && items.MaxClockSpeed == _data["MaxClockSpeed"])
                                  select items).GetEnumerator().Current);
                         }
                         if (verifying.Processors.Count > 0)
@@ -88,14 +86,15 @@ namespace Server
                             //result
                             client.log("Win32_Processor 校验失败。存在一个或多个未期许的硬件");
                             client.log("DEBUGONLY:verifying.Processors.Count = " + verifying.Processors.Count.ToString());
-                            client.Socket.Send(new Message{
+                            client.Socket.Send(new Message
+                            {
                                 MessageType = Message.MessageTypes.TaskResult,
                                 Content = new TaskResult
-                                    {
-                                        taskName = client.currentTask.describe,
-                                        taskResult = "测试失败"
-                                    }.ToString()
-                                }.ToString());
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试失败"
+                                }.ToString()
+                            }.ToString());
                         }
                         else
                         {
@@ -211,25 +210,25 @@ namespace Server
                 List<System.Management.ManagementObject> manageObjects =
                     (List<System.Management.ManagementObject>)
                     Newtonsoft.Json.JsonConvert.DeserializeObject(message.Content);
-                if(manageObjects.Count > 0)
+                if (manageObjects.Count > 0)
                 {
-                    
+
                     Console.WriteLine("存在下述网络适配器的MAC地址未通过校验");
                     foreach (System.Management.ManagementObject manageObject in manageObjects)
                     {
                         //能执行到这里也是真的绝了
-                        Console.WriteLine("\r\n\t" + manageObject.Properties["Name"]);                    
+                        Console.WriteLine("\r\n\t" + manageObject.Properties["Name"]);
                     }
                 }
             }
             //各类测试信息
             //包括CPU、内存测试
-            else if(message.MessageType == Message.MessageTypes.TesterMessage)
+            else if (message.MessageType == Message.MessageTypes.TesterMessage)
             {
                 int resutl = int.Parse(message.Content);
-                if(resutl == ((int)TesterMessage.TestResult.SUCCESS))
+                if (resutl == ((int)TesterMessage.TestResult.SUCCESS))
                 {
-                    client.log(client.currentTask.describe+"测试通过");
+                    client.log(client.currentTask.describe + "测试通过");
                     client.Socket.Send(new Message
                     {
                         MessageType = Message.MessageTypes.TaskResult,
@@ -240,7 +239,7 @@ namespace Server
                         }.ToString()
                     }.ToString());
                 }
-                else if(resutl == (int)TesterMessage.TestResult.ARGS_ERROR)
+                else if (resutl == (int)TesterMessage.TestResult.ARGS_ERROR)
                 {
                     client.log(client.currentTask.describe + "参数错误");
                     client.Socket.Send(new Message
@@ -255,7 +254,7 @@ namespace Server
                 }
                 else
                 {
-                    client.log(client.currentTask.describe + "测试失败，exitCode:"+resutl);
+                    client.log(client.currentTask.describe + "测试失败，exitCode:" + resutl);
                     client.Socket.Send(new Message
                     {
                         MessageType = Message.MessageTypes.TaskResult,
@@ -268,12 +267,12 @@ namespace Server
                 }
             }
             //硬盘测试
-            else if(message.MessageType == Message.MessageTypes.ChkdskEvent)
+            else if (message.MessageType == Message.MessageTypes.ChkdskEvent)
             {
                 Console.WriteLine(message.Content);
                 ChkdskEvent results = Newtonsoft.Json.JsonConvert.DeserializeObject<ChkdskEvent>(message.Content);
-                var faile = from result in results.result where result.Value!=0 select result;
-                if (faile.Count()==0)
+                var faile = from result in results.result where result.Value != 0 select result;
+                if (faile.Count() == 0)
                 {
                     client.log(client.currentTask.describe + "测试通过");
                     client.Socket.Send(new Message

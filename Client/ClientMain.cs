@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+﻿using Newtonsoft.Json;
+using System;
+using System.IO;
 using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Threading;
-using Newtonsoft.Json;
-using System.IO;
 using static System.Windows.Forms.ListViewItem;
 
 namespace Client
@@ -48,8 +42,8 @@ namespace Client
             }
             return WMIClass;
         }
-        
-        public  void UpdatetbConfigFileDetail(string content)
+
+        public void UpdatetbConfigFileDetail(string content)
         {
             this.tbConfigFileDetail.Text = content;
         }
@@ -173,7 +167,7 @@ namespace Client
         {
             openFileDialog1.Filter = "x86自动测试软件配置文件|*.jht|任意文件|*.*";
             openFileDialog1.Title = "手动读入配置文件";
-            
+
             openFileDialog1.FileName = Environment.CurrentDirectory;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -202,7 +196,7 @@ namespace Client
             }
             UpdatetbConfigFileDetail(ClientMain.JsonFormat(Newtonsoft.Json.JsonConvert.SerializeObject(configFile)));
         }
-        
+
         /// <summary>
         /// 对JSON文本进行格式化
         /// </summary>
@@ -240,19 +234,22 @@ namespace Client
                 return json;
             }
         }
-       
+
         private void label18_Click(object sender, EventArgs e)
         {
 
         }
-        public int taskTotal=1;
-        private int finishedTask=0;
+        public int taskTotal = 1;
+        private int finishedTask = 0;
 
-        public int FinishedTask { get => finishedTask; set {
+        public int FinishedTask
+        {
+            get => finishedTask; set
+            {
                 finishedTask = value;
                 lTaskProgress.Text = (finishedTask * 100 / taskTotal).ToString() + '%';
                 pgbTask.Value = (finishedTask * 100 / taskTotal);
-                if(finishedTask == taskTotal)
+                if (finishedTask == taskTotal)
                 {
                     TaskTimer.Enabled = false;
                 }
@@ -262,7 +259,7 @@ namespace Client
         private void timer1_Tick(object sender, EventArgs e)
         {
             ++runTime;
-            lTaskTime.Text = new TimeSpan(0,0,runTime).ToString();
+            lTaskTime.Text = new TimeSpan(0, 0, runTime).ToString();
         }
         public void addTask(string name)
         {
@@ -275,11 +272,11 @@ namespace Client
                 lvTesting.Items.Add(item);
             });
         }
-        public void setTaskResult(string name,string result)
+        public void setTaskResult(string name, string result)
         {
             lvTesting.Invoke((MethodInvoker)delegate
             {
-                foreach(ListViewItem item in lvTesting.Items)
+                foreach (ListViewItem item in lvTesting.Items)
                 {
                     if (item.Text.Equals(name))
                     {
