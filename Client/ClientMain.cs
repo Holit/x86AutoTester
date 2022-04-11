@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Management;
 using System.Text;
 using System.Threading.Tasks;
@@ -237,7 +239,6 @@ namespace Client
 
         private void label18_Click(object sender, EventArgs e)
         {
-
         }
         public int taskTotal = 1;
         private int finishedTask = 0;

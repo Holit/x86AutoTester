@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Management;
 using System.Net;
 using System.Net.Sockets;
@@ -259,34 +260,108 @@ namespace Client
                             if (Tdriver.DriveType == System.IO.DriveType.Removable)
                             {
                                 //未测试
-                                //未就绪等待，自动循环等待3次，每次30秒。
+                                //未就绪等待，自动循环等待3次，每次5秒。
                                 int WaitingDuration = 2;
 
                                 while (Tdriver.IsReady == false && WaitingDuration >= 0)
                                 {
                                     //等待设备就绪
-                                    await Task.Delay(30 * 1000);
+                                    await Task.Delay(5 * 1000);
                                     WaitingDuration--;
                                 }
-                                callback =
-                                 "磁盘名称：" + Tdriver.Name + "\r\n"
-                                + "磁盘卷标：" + Tdriver.VolumeLabel + "\r\n"
-                                + "文件系统：" + Tdriver.DriveFormat + "\r\n"
-                                + "剩余大小：" + Tdriver.AvailableFreeSpace.ToString() + "\r\n"
-                                + "总体容量：" + Tdriver.TotalSize.ToString() + "\r\n"
-                                + "总体容量：" + Tdriver.RootDirectory.ToString() + "\r\n"
-                                + "------------------------------";
+                                if(WaitingDuration < 0 && Tdriver.IsReady == false)
+                                {
+                                    callback += "设备" + Tdriver.Name + "未就绪：检测失败\r\n";
+                                }
+
                             }
                         }
-                        MessageBox.Show(callback);
+                        if(callback != "")
+                        {
+                            Console.WriteLine(callback);
+                        }
                     }
+                    //执行串口测试
+                    //未测试代码
                     else if (message.MessageType == AutoTestMessage.Message.MessageTypes.SerialTest)
                     {
+                        List<SerialPort> SerialPortsDevices = new List<SerialPort>();
 
+                        string[] AllPorts = System.IO.Ports.SerialPort.GetPortNames();
+                        foreach (string PortName in AllPorts)
+                        {
+                            SerialPort serial = new SerialPort();
+                            serial.PortName = PortName;
+                            serial.BaudRate = 9600;
+                            serial.Parity = Parity.Odd;
+                            serial.StopBits = StopBits.One;
+
+                            SerialPortsDevices.Add(serial);
+                            try
+                            {
+                                serial.Open();
+                                if (serial.IsOpen == true)
+                                {
+                                    byte[] buffer = new byte[64];
+                                    //发送模块
+                                    buffer.SetValue(0, 0, buffer.Length);
+                                    buffer = Program.strToHexByte("0123456789ABCDE");
+                                    try
+                                    {
+                                        serial.WriteBufferSize = 64;
+                                        serial.Write(buffer, 0, buffer.Length);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //此处为串口写入失败的反馈
+                                    }
+                                    finally
+                                    {
+                                        serial.Close();
+                                    }
+
+                                    //侦听模块
+                                    buffer.SetValue(0, 0, buffer.Length);
+                                    try
+                                    {
+                                        serial.ReadBufferSize = 64;
+                                        serial.Read(buffer, 0, buffer.Length);
+
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        //此处为串口读入数据失败的反馈
+                                    }
+                                    finally
+                                    {
+                                        serial.Close();
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show("无法向串口发送消息：启动失败", "测试串口 " + serial.PortName + " 异常");
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message, "测试串口 " + serial.PortName + " 时出现严重错误");
+                            }
+                        }
                     }
                     else if (message.MessageType == AutoTestMessage.Message.MessageTypes.PlayAudio)
                     {
-
+                        System.Media.SystemSounds.Hand.Play();
+                        DialogResult dr = MessageBox.Show("您听到声音了吗？", "提问", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (dr == DialogResult.Yes)
+                        {
+                            Console.WriteLine("成功");
+                            //成功
+                        }
+                        else
+                        {
+                            Console.WriteLine("失败");
+                            //失败
+                        }
                     }
                     //执行CHKDSK
                     else if (message.MessageType == AutoTestMessage.Message.MessageTypes.ChkdskEvent)

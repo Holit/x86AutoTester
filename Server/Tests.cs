@@ -67,7 +67,7 @@ namespace Server
 
                 if (wmiMessage != null && wmiMessage.data != null)
                 {
-                    if (wmiMessage.path == "Win32_Processor")
+                    if      (wmiMessage.path == "Win32_Processor")
                     {
                         //test code, only for debugging.
                         foreach (Dictionary<string, string> _data in wmiMessage.data)
@@ -84,7 +84,7 @@ namespace Server
                         if (verifying.Processors.Count > 0)
                         {
                             //result
-                            client.log("Win32_Processor 校验失败。存在一个或多个未期许的硬件");
+                            client.log("处理器 校验失败。存在一个或多个未期许的硬件");
                             client.log("DEBUGONLY:verifying.Processors.Count = " + verifying.Processors.Count.ToString());
                             client.Socket.Send(new Message
                             {
@@ -98,7 +98,180 @@ namespace Server
                         }
                         else
                         {
-                            client.log("Win32_Processor 校验通过");
+                            client.log("处理器 校验通过");
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试通过"
+                                }.ToString()
+                            }.ToString());
+                        }
+                    }
+                    else if (wmiMessage.path == "Win32_PhysicalMemory")
+                    {
+                        //test code, only for debugging.
+                        foreach (Dictionary<string, string> _data in wmiMessage.data)
+                        {
+                            verifying.PhysicalMemorys.Remove((ConfigFile.PhysicalMemory)
+                                (from items in verifying.PhysicalMemorys
+                                 where
+                                 items.Manufacturer == _data["Manufacturer"] &&
+                                 items.Capacity == _data["Capacity"] &&
+                                 items.PartNumber == _data["PartNumber"] &&
+                                 items.SerialNumber == _data["SerialNumber"] &&
+                                 items.Speed == _data["Speed"]
+                                 select items).GetEnumerator().Current) ;
+                        }
+                        if (verifying.PhysicalMemorys.Count > 0)
+                        {
+                            //result
+                            client.log("物理内存设备 校验失败。存在一个或多个未期许的硬件");
+                            client.log("DEBUGONLY:verifying.PhysicalMemorys.Count = " + verifying.PhysicalMemorys.Count.ToString());
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试失败"
+                                }.ToString()
+                            }.ToString());
+                        }
+                        else
+                        {
+                            client.log("物理内存设备 校验通过");
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试通过"
+                                }.ToString()
+                            }.ToString());
+                        }
+                    }                    
+                    else if (wmiMessage.path == "Win32_VideoController")
+                    {
+                        //test code, only for debugging.
+                        foreach (Dictionary<string, string> _data in wmiMessage.data)
+                        {
+                            verifying.VideoControllers.Remove((ConfigFile.VideoController)
+                                (from items in verifying.VideoControllers
+                                 where
+                                 items.AdapterCompatibility == _data["AdapterCompatibility"] &&
+                                 items.AdapterRAM == _data["AdapterRAM"] &&
+                                 items.Name == _data["Name"] && 
+                                 items.VideoProcessor ==_data["VideoProcessor"]
+                                 select items).GetEnumerator().Current) ;
+                        }
+                        if (verifying.VideoControllers.Count > 0)
+                        {
+                            //result
+                            client.log("显示适配器 校验失败。存在一个或多个未期许的硬件");
+                            client.log("DEBUGONLY:verifying.VideoControllers.Count = " + verifying.VideoControllers.Count.ToString());
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试失败"
+                                }.ToString()
+                            }.ToString());
+                        }
+                        else
+                        {
+                            client.log("显示适配器 校验通过");
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试通过"
+                                }.ToString()
+                            }.ToString());
+                        }
+                    }
+                    else if (wmiMessage.path == "Win32_DiskDrive")
+                    {
+                        //test code, only for debugging.
+                        foreach (Dictionary<string, string> _data in wmiMessage.data)
+                        {
+                            verifying.Disks.Remove((ConfigFile.Disk)
+                                (from items in verifying.Disks
+                                 where
+                                 items.Manufacturer == _data["Manufacturer"] &&
+                                 items.Model == _data["Model"] &&
+                                 items.MediaType == _data["MediaType"] &&
+                                 items.SerialNumber == _data["SerialNumber"] &&
+                                 items.Size == _data["Size"]
+                                 select items).GetEnumerator().Current) ;
+                        }
+                        if (verifying.Disks.Count > 0)
+                        {
+                            //result
+                            client.log("磁盘驱动器 校验失败。存在一个或多个未期许的硬件");
+                            client.log("DEBUGONLY:verifying.Disks.Count = " + verifying.Disks.Count.ToString());
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试失败"
+                                }.ToString()
+                            }.ToString());
+                        }
+                        else
+                        {
+                            client.log("磁盘驱动器 校验通过");
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试通过"
+                                }.ToString()
+                            }.ToString());
+                        }
+                    }
+                    else if (wmiMessage.path == "Win32_NetworkAdapter")
+                    {
+                        //test code, only for debugging.
+                        foreach (Dictionary<string, string> _data in wmiMessage.data)
+                        {
+                            verifying.NetworkAdapters.Remove((ConfigFile.NetworkAdapter)
+                                (from items in verifying.NetworkAdapters
+                                 where
+                                 items.Description == _data["Description"] &&
+                                 items.GUID == _data["GUID"] && 
+                                 items.Speed == _data["Speed"]
+                                 select items).GetEnumerator().Current) ;
+                        }
+                        if (verifying.VideoControllers.Count > 0)
+                        {
+                            //result
+                            client.log("网络适配器 校验失败。存在一个或多个未期许的硬件");
+                            client.log("DEBUGONLY:verifying.NetworkAdapters.Count = " + verifying.NetworkAdapters.Count.ToString());
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试失败"
+                                }.ToString()
+                            }.ToString());
+                        }
+                        else
+                        {
+                            client.log("网络适配器 校验通过");
                             client.Socket.Send(new Message
                             {
                                 MessageType = Message.MessageTypes.TaskResult,

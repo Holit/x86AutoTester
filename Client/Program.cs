@@ -98,6 +98,21 @@ namespace Client
             computer.Close();
             return result;
         }
+
+        /// <summary>
+        /// 16进制编码
+        /// </summary>
+        /// <param name="hexString"></param>
+        /// <returns></returns>
+        public static byte[] strToHexByte(string hexString)
+        {
+            hexString = hexString.Replace(" ", "");
+            if ((hexString.Length % 2) != 0) hexString += " ";
+            byte[] returnBytes = new byte[hexString.Length / 2];
+            for (int i = 0; i < returnBytes.Length; i++)
+                returnBytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2).Replace(" ", ""), 16);
+            return returnBytes;
+        }
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
