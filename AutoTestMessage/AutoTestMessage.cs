@@ -34,6 +34,10 @@ namespace AutoTestMessage
         public string describe;
         public string task;
     }
+    public class ChkdskEvent : BaseMessage
+    {
+        public Dictionary<string, int> result;
+    }
     public class Message:BaseMessage
     {
         /// <summary>

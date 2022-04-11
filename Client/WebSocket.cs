@@ -247,6 +247,17 @@ namespace Client
 
                         await SendMessage(reply);
                     }
+                    else if(message.MessageType == AutoTestMessage.Message.MessageTypes.ChkdskEvent)
+                    {
+                        AutoTestMessage.Message sending = new AutoTestMessage.Message();
+                        sending.MessageType = AutoTestMessage.Message.MessageTypes.ChkdskEvent;
+                        sending.Content = JsonConvert.SerializeObject(
+                            new ChkdskEvent
+                            {
+                                result=await DiskTest.startDiskTestAsync()
+                            });
+                        await SendMessage(sending);
+                    }
                     else
                     {
                         Console.WriteLine(message.MessageType.ToString() + message.Content);

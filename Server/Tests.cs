@@ -262,6 +262,38 @@ namespace Server
                     }.ToString());
                 }
             }
+            else if(message.MessageType == Message.MessageTypes.ChkdskEvent)
+            {
+                Console.WriteLine(message.Content);
+                ChkdskEvent results = Newtonsoft.Json.JsonConvert.DeserializeObject<ChkdskEvent>(message.Content);
+                var faile = from result in results.result where result.Value!=0 select result;
+                if (faile.Count()==0)
+                {
+                    client.log(client.currentTask.describe + "测试通过");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试通过"
+                        }.ToString()
+                    }.ToString());
+                }
+                else
+                {
+                    client.log(client.currentTask.describe + "测试失败:" + Newtonsoft.Json.JsonConvert.SerializeObject(faile));
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试失败:" + Newtonsoft.Json.JsonConvert.SerializeObject(faile)
+                        }.ToString()
+                    }.ToString());
+                }
+            }
             manualEvent.Set();
         }
         public void WaitForTaskFinished()

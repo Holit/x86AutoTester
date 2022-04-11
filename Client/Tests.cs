@@ -58,4 +58,33 @@ namespace Client
             return pro.ExitCode;
         }
     }
+    public class DiskTest
+    {
+        public static async Task<Dictionary<string,int>> startDiskTestAsync()
+        {
+            ManagementObjectCollection query = await WMITest.GetDeatils("Win32_LogicalDisk");
+            Dictionary<string, int> exitCodes = new Dictionary<string, int>();
+            foreach(var i in query)
+            {
+                if (i["DriveType"].ToString().Equals(((int)System.IO.DriveType.Fixed).ToString()))
+                {
+                    ProcessStartInfo processInfo = new ProcessStartInfo();
+                    processInfo.FileName = "chkdsk";
+                    processInfo.Arguments = i["DeviceID"].ToString();
+                    Process pro = new Process();
+                    pro.EnableRaisingEvents = true;
+                    pro.StartInfo = processInfo;
+                    pro.Exited += new EventHandler((obj, arg) =>
+                    {
+                        Console.WriteLine("exit");
+                        Console.WriteLine(pro.ExitCode);
+                    });
+                    pro.Start();
+                    await Task.Run(() => pro.WaitForExit());
+                    exitCodes.Add(i["DeviceID"].ToString(), pro.ExitCode);
+                }
+            }
+            return exitCodes;
+        }
+    }
 }
