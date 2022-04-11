@@ -243,17 +243,18 @@ namespace Client
        
         private void label18_Click(object sender, EventArgs e)
         {
+
         }
         public int taskTotal=1;
         private int finishedTask=0;
 
         public int FinishedTask { get => finishedTask; set {
                 finishedTask = value;
-                任务百分比.Text = (finishedTask * 100 / taskTotal).ToString() + '%';
-                任务进度条.Value = (finishedTask * 100 / taskTotal);
+                lTaskProgress.Text = (finishedTask * 100 / taskTotal).ToString() + '%';
+                pgbTask.Value = (finishedTask * 100 / taskTotal);
                 if(finishedTask == taskTotal)
                 {
-                    计时器.Enabled = false;
+                    TaskTimer.Enabled = false;
                 }
             }
         }
@@ -261,7 +262,7 @@ namespace Client
         private void timer1_Tick(object sender, EventArgs e)
         {
             ++runTime;
-            运行时间.Text = new TimeSpan(0,0,runTime).ToString();
+            lTaskTime.Text = new TimeSpan(0,0,runTime).ToString();
         }
         public void addTask(string name)
         {

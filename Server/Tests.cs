@@ -61,6 +61,7 @@ namespace Server
 
         public void HandleMessage(Message message, Client client)
         {
+            //配置校验
             if( message.MessageType == Message.MessageTypes.WMIMessage)
             {
                 object recv = Newtonsoft.Json.JsonConvert.DeserializeObject(message.Content,typeof(WMIMessage));
@@ -204,6 +205,7 @@ namespace Server
                     }.ToString());
                 }
             }
+            //MAC地址校验
             else if (message.MessageType == Message.MessageTypes.MACVerify)
             {
                 List<System.Management.ManagementObject> manageObjects =
@@ -216,9 +218,12 @@ namespace Server
                     foreach (System.Management.ManagementObject manageObject in manageObjects)
                     {
                         //能执行到这里也是真的绝了
-                        Console.WriteLine("\r\n\t" + manageObject.Properties["Name"]);                    }
+                        Console.WriteLine("\r\n\t" + manageObject.Properties["Name"]);                    
+                    }
                 }
             }
+            //各类测试信息
+            //包括CPU、内存测试
             else if(message.MessageType == Message.MessageTypes.TesterMessage)
             {
                 int resutl = int.Parse(message.Content);
@@ -262,6 +267,7 @@ namespace Server
                     }.ToString());
                 }
             }
+            //硬盘测试
             else if(message.MessageType == Message.MessageTypes.ChkdskEvent)
             {
                 Console.WriteLine(message.Content);

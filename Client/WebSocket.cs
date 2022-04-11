@@ -160,6 +160,7 @@ namespace Client
                 Task.Run(async () =>
                 {
                     CurrentTask currentTask = JsonConvert.DeserializeObject<CurrentTask>(message.Content);
+                    //解包
                     message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(currentTask.task);
                     await SendMessage(new AutoTestMessage.Message
                     {
@@ -190,6 +191,7 @@ namespace Client
                             });
                         });
                     }
+                    //执行测试
                     else if (message.MessageType == AutoTestMessage.Message.MessageTypes.TesterMessage)
                     {
                         TesterMessage testerMessage = JsonConvert.DeserializeObject<TesterMessage>(message.Content);
@@ -209,6 +211,7 @@ namespace Client
                         ConfigFile configFile = JsonConvert.DeserializeObject<ConfigFile>(message.Content);
                         Program.ClientMain.UpdatetbConfigFileDetail(ClientMain.JsonFormat(message.Content));
                     }
+                    //RTC校验
                     else if (message.MessageType == AutoTestMessage.Message.MessageTypes.TimeSync)
                     {
                         AutoTestMessage.Message sending = new AutoTestMessage.Message();
@@ -247,6 +250,46 @@ namespace Client
 
                         await SendMessage(reply);
                     }
+                    else if(message.MessageType == AutoTestMessage.Message.MessageTypes.USBWritingTest)
+                    {
+                        string[] dirs = Environment.GetLogicalDrives();
+                        string callback = "";
+                        foreach (string dir in dirs)
+                        {
+                            System.IO.DriveInfo Tdriver = new System.IO.DriveInfo(dir);
+                            if (Tdriver.DriveType == System.IO.DriveType.Removable)
+                            {
+//未测试
+                                //未就绪等待，自动循环等待3次，每次30秒。
+                                int WaitingDuration = 2;
+
+                                while (Tdriver.IsReady == false && WaitingDuration >= 0)
+                                {
+                                    //等待设备就绪
+                                    await Task.Delay(30 * 1000);
+                                    WaitingDuration--;
+                                }
+                                callback  = 
+                                 "磁盘名称：" + Tdriver.Name + "\r\n"
+                                + "磁盘卷标：" + Tdriver.VolumeLabel + "\r\n"
+                                + "文件系统：" + Tdriver.DriveFormat + "\r\n"
+                                + "剩余大小：" + Tdriver.AvailableFreeSpace.ToString() + "\r\n"
+                                + "总体容量：" + Tdriver.TotalSize.ToString() + "\r\n"
+                                + "总体容量：" + Tdriver.RootDirectory.ToString() + "\r\n"
+                                + "------------------------------";
+                            }
+                        }
+                        MessageBox.Show(callback);
+                    }
+                    else if(message.MessageType  == AutoTestMessage.Message.MessageTypes.SerialTest)
+                    {
+
+                    }
+                    else if(message.MessageType == AutoTestMessage.Message.MessageTypes.PlayAudio)
+                    {
+
+                    }
+                    //执行CHKDSK
                     else if(message.MessageType == AutoTestMessage.Message.MessageTypes.ChkdskEvent)
                     {
                         AutoTestMessage.Message sending = new AutoTestMessage.Message();
