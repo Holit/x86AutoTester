@@ -78,10 +78,6 @@ namespace AutoTestMessage
             /// </summary>
             TimeSync,
             /// <summary>
-            /// 校验MAC地址（远端任务）
-            /// </summary>
-            MACVerify,
-            /// <summary>
             /// 播放声音
             /// </summary>
             PlayAudio,

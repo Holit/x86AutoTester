@@ -219,37 +219,6 @@ namespace Client
                         sending.Content = JsonConvert.SerializeObject(DateTimeOffset.Now.ToUnixTimeMilliseconds());
                         await SendMessage(sending);
                     }
-                    //执行MAC地址校验
-                    else if (message.MessageType == AutoTestMessage.Message.MessageTypes.MACVerify)
-                    {
-                        ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
-                        ManagementObjectCollection moc2 = mc.GetInstances();
-                        //回传的消息
-                        AutoTestMessage.Message reply = new AutoTestMessage.Message();
-                        //指示未通过检查的网卡列表
-                        List<ManagementObject> invaildNics = new List<ManagementObject>();
-
-                        foreach (ManagementObject mo in moc2)
-                        {
-
-                            if (Convert.ToBoolean(mo["IPEnabled"]) == true)
-                            {
-                                string macaddress = mo["MacAddress"].ToString();
-
-                                if (System.Text.RegularExpressions.
-                                     Regex.Matches(macaddress, @"([A-Fa-f0-9]{2}[-,:]){5}[A-Fa-f0-9]{2}")
-                                      .Count != 1)
-                                {
-                                    invaildNics.Add(mo);
-                                };
-                            }
-                            mo.Dispose();
-                        }
-                        reply.Content = JsonConvert.SerializeObject(invaildNics);
-                        reply.MessageType = AutoTestMessage.Message.MessageTypes.MACVerify;
-
-                        await SendMessage(reply);
-                    }
                     else if (message.MessageType == AutoTestMessage.Message.MessageTypes.USBWritingTest)
                     {
                         string[] dirs = Environment.GetLogicalDrives();

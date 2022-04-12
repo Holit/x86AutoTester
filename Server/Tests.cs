@@ -11,18 +11,28 @@ namespace Server
     {
         public static List<ClientTask> Tasks = new List<ClientTask> {
                 //new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_OperatingSystem" },"操作系统配置校验"),
+                //new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },"网卡配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TimeSync, Content = null},"RTC同步"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" },"CPU配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" },"内存配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" },"显卡配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" },"硬盘配置校验"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },"网卡配置校验"),
+                //new ClientTask(new Message { MessageType = Message.MessageTypes.ChkdskEvent, Content = null},"磁盘测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.PlayAudio, Content = null},"音频接口测试:输出"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PnPEntity" },"即插即用设备校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.USBWritingTest, Content = null},"USB写入测试"),
                 //new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null},"串口写入测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.NetworkTest, Content = null},"网口数据测试"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.ChkdskEvent, Content = null},"磁盘测试"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapterConfiguration"},"MAC地址测试"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
+                    new TesterMessage{
+                        data = {
+                            { "operator" , "cpuTest" },
+                            { "thread" , "auto" },
+                            { "totalTime" , (0).ToString() }
+                        }
+                    }.ToString()
+                    },"CPU压力测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
@@ -34,15 +44,6 @@ namespace Server
                         }
                     }.ToString()
                     },"内存压力测试"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
-                    new TesterMessage{
-                        data = {
-                            { "operator" , "cpuTest" },
-                            { "thread" , "auto" },
-                            { "totalTime" , (0).ToString() }
-                        }
-                    }.ToString()
-                    },"CPU压力测试"),
             };
         private Message taskMessage;
         private ManualResetEvent manualEvent;
@@ -314,6 +315,51 @@ namespace Server
                             }.ToString());
                         }
                     }
+                    else if (wmiMessage.path == "Win32_NetworkAdapterConfiguration")
+                    {
+                        List<string> invaildNics = new List<string>();
+                        foreach (Dictionary<string,string> mo in wmiMessage.data)
+                        {
+
+                            if (Convert.ToBoolean(mo["IPEnabled"]) == true)
+                            {
+                                string macaddress = mo["MACAddress"].ToString();
+
+                                if (System.Text.RegularExpressions.
+                                     Regex.Matches(macaddress, @"([A-Fa-f0-9]{2}[-,:]){5}[A-Fa-f0-9]{2}")
+                                      .Count != 1)
+                                {
+                                    invaildNics.Add(mo["name"]);
+                                };
+                            }
+                        }
+                        if (invaildNics.Count() > 0)
+                        {
+                            client.log(client.currentTask.describe + "测试失败:"+Newtonsoft.Json.JsonConvert.SerializeObject(invaildNics));
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试失败:" + Newtonsoft.Json.JsonConvert.SerializeObject(invaildNics)
+                                }.ToString()
+                            }.ToString());
+                        }
+                        else
+                        {
+                            client.log(client.currentTask.describe + "测试通过");
+                            client.Socket.Send(new Message
+                            {
+                                MessageType = Message.MessageTypes.TaskResult,
+                                Content = new TaskResult
+                                {
+                                    taskName = client.currentTask.describe,
+                                    taskResult = "测试通过"
+                                }.ToString()
+                            }.ToString());
+                        }
+                    }
                     else
                     {
                         client.Socket.Send(new Message
@@ -376,23 +422,6 @@ namespace Server
                             taskResult = "RTC 校验失败，未知的客户端时间"
                         }.ToString()
                     }.ToString());
-                }
-            }
-            //MAC地址校验
-            else if (message.MessageType == Message.MessageTypes.MACVerify)
-            {
-                List<System.Management.ManagementObject> manageObjects =
-                    (List<System.Management.ManagementObject>)
-                    Newtonsoft.Json.JsonConvert.DeserializeObject(message.Content);
-                if (manageObjects.Count > 0)
-                {
-
-                    Console.WriteLine("存在下述网络适配器的MAC地址未通过校验");
-                    foreach (System.Management.ManagementObject manageObject in manageObjects)
-                    {
-                        //能执行到这里也是真的绝了
-                        Console.WriteLine("\r\n\t" + manageObject.Properties["Name"]);
-                    }
                 }
             }
             //各类测试信息
