@@ -472,6 +472,68 @@ namespace Server
                     }.ToString());
                 }
             }
+            else if (message.MessageType == Message.MessageTypes.PlayAudio)
+            {
+                if (message.Content.Equals("Success"))
+                {
+                    client.log(client.currentTask.describe + "测试通过");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试通过"
+                        }.ToString()
+                    }.ToString());
+                }
+                else if (message.Content.Equals("Fail"))
+                {
+                    client.log(client.currentTask.describe + "测试失败");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试失败"
+                        }.ToString()
+                    }.ToString());
+                }
+                else
+                {
+                    Console.WriteLine("未知的回复:" + message.Content);
+                }
+            }
+            else if (message.MessageType == Message.MessageTypes.USBWritingTest)
+            {
+                if (message.Content.Equals("Success"))
+                {
+                    client.log(client.currentTask.describe + "测试通过");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试通过"
+                        }.ToString()
+                    }.ToString());
+                }
+                else
+                {
+                    client.log(client.currentTask.describe + "测试失败:"+message.Content);
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试失败:" + message.Content
+                        }.ToString()
+                    }.ToString());
+                }
+            }
             manualEvent.Set();
         }
         public void WaitForTaskFinished()

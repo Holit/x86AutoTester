@@ -44,7 +44,7 @@ namespace Client
                         ClientWebSocket webSocket = new ClientWebSocket();
                         CancellationToken cancellation = new CancellationToken();
 
-                        await webSocket.ConnectAsync(new Uri("ws://" + endpoint.Address + ":6839"), cancellation);
+                        await webSocket.ConnectAsync(new Uri("ws://" + endpoint.Address + ":2333"), cancellation);
 
                         AutoTestMessage.Message message = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.ServerUuid };
                         byte[] bytesMessage = Encoding.UTF8.GetBytes(message.ToString());
@@ -278,7 +278,19 @@ namespace Client
                         }
                         if(callback != "")
                         {
-                            Console.WriteLine(callback);
+                            await SendMessage(new AutoTestMessage.Message
+                            {
+                                MessageType = AutoTestMessage.Message.MessageTypes.USBWritingTest,
+                                Content = callback
+                            });
+                        }
+                        else
+                        {
+                            await SendMessage(new AutoTestMessage.Message
+                            {
+                                MessageType = AutoTestMessage.Message.MessageTypes.USBWritingTest,
+                                Content = "Success"
+                            });
                         }
                     }
                     //执行串口测试
@@ -355,12 +367,20 @@ namespace Client
                         if (dr == DialogResult.Yes)
                         {
                             Console.WriteLine("成功");
-                            //成功
+                            await SendMessage(new AutoTestMessage.Message
+                            {
+                                MessageType = AutoTestMessage.Message.MessageTypes.PlayAudio,
+                                Content = "Success"
+                            });
                         }
                         else
                         {
                             Console.WriteLine("失败");
-                            //失败
+                            await SendMessage(new AutoTestMessage.Message
+                            {
+                                MessageType = AutoTestMessage.Message.MessageTypes.PlayAudio,
+                                Content = "Fail"
+                            });
                         }
                     }
                     //执行CHKDSK
