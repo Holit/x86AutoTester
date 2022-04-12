@@ -109,6 +109,10 @@ namespace AutoTestMessage
             /// 任务结果
             /// </summary>
             TaskResult,
+            /// <summary>
+            /// 网口测试
+            /// </summary>
+            NetworkTest,
         }
         public MessageTypes MessageType = MessageTypes.None;
         public string Content = "";

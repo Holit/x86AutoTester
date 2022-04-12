@@ -17,10 +17,11 @@ namespace Server
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" },"显卡配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" },"硬盘配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },"网卡配置校验"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PnPEntity" },"即插即用设备校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.PlayAudio, Content = null},"音频接口测试:输出"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PnPEntity" },"即插即用设备校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.USBWritingTest, Content = null},"USB写入测试"),
-                new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null},"串口写入测试"),
+                //new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null},"串口写入测试"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.NetworkTest, Content = null},"网口数据测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.ChkdskEvent, Content = null},"磁盘测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
@@ -67,7 +68,7 @@ namespace Server
 
                 if (wmiMessage != null && wmiMessage.data != null)
                 {
-                    if      (wmiMessage.path == "Win32_Processor")
+                    if(wmiMessage.path == "Win32_Processor")
                     {
                         //test code, only for debugging.
                         foreach (Dictionary<string, string> _data in wmiMessage.data)
@@ -533,6 +534,19 @@ namespace Server
                         }.ToString()
                     }.ToString());
                 }
+            }
+            else if (message.MessageType == Message.MessageTypes.NetworkTest)
+            {
+                client.log(client.currentTask.describe + "测试通过");
+                client.Socket.Send(new Message
+                {
+                    MessageType = Message.MessageTypes.TaskResult,
+                    Content = new TaskResult
+                    {
+                        taskName = client.currentTask.describe,
+                        taskResult = "测试通过"
+                    }.ToString()
+                }.ToString());
             }
             manualEvent.Set();
         }

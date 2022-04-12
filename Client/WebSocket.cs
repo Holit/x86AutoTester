@@ -395,6 +395,10 @@ namespace Client
                             });
                         await SendMessage(sending);
                     }
+                    else if (message.MessageType == AutoTestMessage.Message.MessageTypes.NetworkTest)
+                    {
+                        await SendMessage(new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.NetworkTest });
+                    }
                     else
                     {
                         Console.WriteLine(message.MessageType.ToString() + message.Content);
