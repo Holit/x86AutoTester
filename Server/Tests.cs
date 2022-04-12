@@ -24,6 +24,7 @@ namespace Server
                 //new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null},"串口写入测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.NetworkTest, Content = null},"网口数据测试"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapterConfiguration"},"MAC地址测试"),
+                new ClientTask(new Message { MessageType = Message.MessageTypes.DiskPressure, Content = "-b4K -F8 -r -o32 -W60 -d60"},"硬盘压力测试"),//4k块面积 8线程 32并发 预热60秒 测试60秒
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
@@ -576,6 +577,35 @@ namespace Server
                         taskResult = "测试通过"
                     }.ToString()
                 }.ToString());
+            }
+            else if (message.MessageType == Message.MessageTypes.DiskPressure)
+            {
+                if (int.Parse(message.Content) == 0)
+                {
+                    client.log(client.currentTask.describe + "测试通过");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试通过"
+                        }.ToString()
+                    }.ToString());
+                }
+                else
+                {
+                    client.log(client.currentTask.describe + "测试失败");
+                    client.Socket.Send(new Message
+                    {
+                        MessageType = Message.MessageTypes.TaskResult,
+                        Content = new TaskResult
+                        {
+                            taskName = client.currentTask.describe,
+                            taskResult = "测试失败"
+                        }.ToString()
+                    }.ToString());
+                }
             }
             manualEvent.Set();
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Management;
 using System.Threading.Tasks;
 
@@ -62,7 +63,7 @@ namespace Client
         {
             ManagementObjectCollection query = await WMITest.GetDeatils("Win32_LogicalDisk");
             Dictionary<string, int> exitCodes = new Dictionary<string, int>();
-            foreach (var i in query)
+            foreach (ManagementObject i in query)
             {
                 if (i["DriveType"].ToString().Equals(((int)System.IO.DriveType.Fixed).ToString()))
                 {
@@ -83,6 +84,32 @@ namespace Client
                 }
             }
             return exitCodes;
+        }
+        public static async Task<int> startDiskPressureTestAsync(string args)
+        {
+            ManagementObjectCollection query = await WMITest.GetDeatils("Win32_LogicalDisk");
+            Dictionary<string, int> exitCodes = new Dictionary<string, int>();
+            ProcessStartInfo processInfo = new ProcessStartInfo();
+            processInfo.FileName = "diskspd";
+            processInfo.Arguments = args;
+            foreach (ManagementObject i in query)
+            {
+                if (i["DriveType"].ToString().Equals(((int)System.IO.DriveType.Fixed).ToString()))
+                {
+                    processInfo.Arguments += " " + i["DeviceID"].ToString();//diskspd将会以Generic Read，share read/write方式通过creatfile打开卷句柄
+                }
+            }
+            Process pro = new Process();
+            pro.EnableRaisingEvents = true;
+            pro.StartInfo = processInfo;
+            pro.Exited += new EventHandler((obj, arg) =>
+            {
+                Console.WriteLine("exit");
+                Console.WriteLine(pro.ExitCode);
+            });
+            pro.Start();
+            await Task.Run(() => pro.WaitForExit());
+            return pro.ExitCode;
         }
     }
 }

@@ -109,6 +109,10 @@ namespace AutoTestMessage
             /// 网口测试
             /// </summary>
             NetworkTest,
+            /// <summary>
+            /// 硬盘压力测试
+            /// </summary>
+            DiskPressure,
         }
         public MessageTypes MessageType = MessageTypes.None;
         public string Content = "";

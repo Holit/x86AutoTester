@@ -368,6 +368,15 @@ namespace Client
                     {
                         await SendMessage(new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.NetworkTest });
                     }
+                    else if (message.MessageType == AutoTestMessage.Message.MessageTypes.DiskPressure)
+                    {
+                        int exitCode = await DiskTest.startDiskPressureTestAsync(message.Content);
+                        await SendMessage(new AutoTestMessage.Message
+                        {
+                            MessageType = AutoTestMessage.Message.MessageTypes.DiskPressure,
+                            Content = exitCode.ToString()
+                        });
+                    }
                     else
                     {
                         Console.WriteLine(message.MessageType.ToString() + message.Content);
