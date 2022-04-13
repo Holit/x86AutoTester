@@ -377,6 +377,30 @@ namespace Client
                             Content = exitCode.ToString()
                         });
                     }
+                    else if (message.MessageType == AutoTestMessage.Message.MessageTypes.StartGetClientCpuInfo)
+                    {
+                        _ = Task.Run(async () =>
+                        {
+                            while (serverWebSocket.State != WebSocketState.Closed)
+                            {
+                                await SendMessage(new AutoTestMessage.Message
+                                {
+                                    MessageType = AutoTestMessage.Message.MessageTypes.CPUTemperyture,
+                                    Content = JsonConvert.SerializeObject(Program.GetCurrentCPUTemperature())
+                                });
+                                await SendMessage(new AutoTestMessage.Message
+                                {
+                                    MessageType = AutoTestMessage.Message.MessageTypes.CPUFan,
+                                    Content = JsonConvert.SerializeObject(Program.GetCurrentCPUFanSpeed())
+                                }) ;
+                                Thread.Sleep(60 * 1000);
+                            }
+                        });
+                        await SendMessage(new AutoTestMessage.Message
+                        {
+                            MessageType = AutoTestMessage.Message.MessageTypes.StartGetClientCpuInfo
+                        });
+                    }
                     else
                     {
                         Console.WriteLine(message.MessageType.ToString() + message.Content);

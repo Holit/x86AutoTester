@@ -10,6 +10,7 @@ namespace Server
     public class ClientTask
     {
         public static List<ClientTask> Tasks = new List<ClientTask> {
+                new ClientTask(new Message { MessageType = Message.MessageTypes.StartGetClientCpuInfo , Content = null},"开始获取客户端温度和风扇信息"),
                 //new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_OperatingSystem" },"操作系统配置校验"),
                 //new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapter" },"网卡配置校验"),
                 new ClientTask(new Message { MessageType = Message.MessageTypes.TimeSync, Content = null},"RTC同步"),
@@ -30,7 +31,7 @@ namespace Server
                         data = {
                             { "operator" , "cpuTest" },
                             { "thread" , "auto" },
-                            { "totalTime" , (0).ToString() }
+                            { "totalTime" , (2*60*1000).ToString() }
                         }
                     }.ToString()
                     },"CPU压力测试"),
@@ -606,6 +607,19 @@ namespace Server
                         }.ToString()
                     }.ToString());
                 }
+            }
+            else if (message.MessageType == Message.MessageTypes.StartGetClientCpuInfo)
+            {
+                client.log(client.currentTask.describe);
+                client.Socket.Send(new Message
+                {
+                    MessageType = Message.MessageTypes.TaskResult,
+                    Content = new TaskResult
+                    {
+                        taskName = client.currentTask.describe,
+                        taskResult = "开始获取"
+                    }.ToString()
+                }.ToString());
             }
             manualEvent.Set();
         }

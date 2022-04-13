@@ -34,6 +34,21 @@ namespace AutoTestMessage
     {
         public Dictionary<string, int> result;
     }
+    /// <summary>
+    /// 指示CPU的信息结构
+    /// </summary>
+    public class CpuInfoOfTempFan : BaseMessage
+    {
+
+        public float? Max;
+        public float? Min;
+        //当前温度，可以为空
+        public float? Value;
+        //当前CPU的名称，例如i9 12500K
+        public string HardwareIdentifier;
+        //当前CPU的索引名称，例如CPU#1，其中编号为die的序号。其中CPU Package代表整块CPU的温度
+        public string Name;
+    };
     public class Message : BaseMessage
     {
         /// <summary>
@@ -113,6 +128,18 @@ namespace AutoTestMessage
             /// 硬盘压力测试
             /// </summary>
             DiskPressure,
+            /// <summary>
+            /// CPU温度
+            /// </summary>
+            CPUTemperyture,
+            /// <summary>
+            /// CPU风扇
+            /// </summary>
+            CPUFan,
+            /// <summary>
+            /// 开始获取温度和风扇信息
+            /// </summary>
+            StartGetClientCpuInfo,
         }
         public MessageTypes MessageType = MessageTypes.None;
         public string Content = "";

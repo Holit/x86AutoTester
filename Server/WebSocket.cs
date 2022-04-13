@@ -273,6 +273,44 @@ namespace Server
                     Content = ClientTask.Tasks.Count().ToString()
                 }.ToString());
             }
+            else if (message.MessageType == Message.MessageTypes.CPUTemperyture)
+            {
+                List<CpuInfoOfTempFan> cpuInfoOfTempFans = JsonConvert.DeserializeObject<List<CpuInfoOfTempFan>>(message.Content);
+                if (cpuInfoOfTempFans.Count() == 0 && cpuInfoOfTempFans.Any(cpuInfoOfTempFan => cpuInfoOfTempFan.Value != null))
+                {
+                    dic_Sockets[clientUrl].log("客户端无温度信息");
+                }
+                else
+                {
+                    List<CpuInfoOfTempFan> temperture=cpuInfoOfTempFans.FindAll(cpuInfoOfTempFan => cpuInfoOfTempFan.Value != null && cpuInfoOfTempFan.Value > 90);
+                    if (temperture.Count() == 0)
+                    {
+                        dic_Sockets[clientUrl].log("客户端CPU温度正常");
+                    }
+                    else
+                    {
+                        foreach(CpuInfoOfTempFan i in temperture)
+                        {
+                            dic_Sockets[clientUrl].log(i.HardwareIdentifier+"温度超标:"+(int)i.Value);
+                        }
+                    }
+                }
+            }
+            else if (message.MessageType == Message.MessageTypes.CPUFan)
+            {
+                List<CpuInfoOfTempFan> cpuInfoOfTempFans = JsonConvert.DeserializeObject<List<CpuInfoOfTempFan>>(message.Content);
+                if (cpuInfoOfTempFans.Count() == 0 || cpuInfoOfTempFans.Any(cpuInfoOfTempFan => cpuInfoOfTempFan.Value != null))
+                {
+                    dic_Sockets[clientUrl].log("客户端无风扇信息");
+                }
+                else
+                {
+                    foreach (CpuInfoOfTempFan i in cpuInfoOfTempFans)
+                    {
+                        dic_Sockets[clientUrl].log(i.HardwareIdentifier + "风扇转速:" + (int)i.Value);
+                    }
+                }
+            }
             else
             {
                 dic_Sockets[clientUrl].currentTask.HandleMessage(message, dic_Sockets[clientUrl]);
