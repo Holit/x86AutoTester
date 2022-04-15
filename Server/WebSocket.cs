@@ -323,6 +323,11 @@ namespace Server
                             }.ToString()
                             );
                     }
+                    else
+                    {
+                        dic_Sockets[clientUrl].currentTask = new ClientTask(new Message { MessageType = Message.MessageTypes.None }, "");
+                        Program.ServerMain.UpdateGlobalProgress();
+                    }
                 }
                 else
                 {

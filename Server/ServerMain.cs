@@ -833,7 +833,7 @@ namespace Server
                 else
                 {
                     int remainTask = dic_Sockets.Sum((kv) => {
-                        int count = ClientTask.Tasks.Count - kv.Value.GetRemainTaskCount() - 1;
+                        int count = ClientTask.Tasks.Count - kv.Value.GetRemainTaskCount() - (kv.Value.currentTask.TaskMessage.MessageType != AutoTestMessage.Message.MessageTypes.None?1:0);
                         if (count < 0) count = 0;
                         return count;
                         });
