@@ -814,14 +814,33 @@ namespace Server
             {
                 Program.CurrentState = Program.TestingStates.Running;
                 btnChangeState.Text = "⏸";
-
+                WebSocket.Client.GlobalStartTask();
             }
             else if (Program.CurrentState == Program.TestingStates.Running)
             {
                 Program.CurrentState = Program.TestingStates.Paused;
                 btnChangeState.Text = "▶";
+                WebSocket.Client.GlobalPauseTask();
             }
         }
-
+        public void UpdateGlobalProgress()
+        {
+            pbGlobalProgress.Invoke((MethodInvoker)delegate {
+                if (dic_Sockets.Count() == 0)
+                {
+                    pbGlobalProgress.Value = 0;
+                }
+                else
+                {
+                    int remainTask = dic_Sockets.Sum((kv) => {
+                        int count = ClientTask.Tasks.Count - kv.Value.GetRemainTaskCount() - 1;
+                        if (count < 0) count = 0;
+                        return count;
+                        });
+                    int taskTotal = dic_Sockets.Count() * ClientTask.Tasks.Count;
+                    pbGlobalProgress.Value = remainTask *100 / taskTotal;
+                }
+            });
+        }
     }
 }

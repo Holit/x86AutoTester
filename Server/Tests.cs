@@ -10,40 +10,22 @@ namespace Server
     public class ClientTask
     {
         public static List<ClientTask> Tasks = new List<ClientTask> {
-
-                Program.configFile.rtc_test ?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.TimeSync, Content = null} ,"RTC同步") : null,
-               (Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Processor) == ConfigFile.OVERRIDE_FLAG.None ?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" } ,"CPU配置校验") : null,
-
-               (Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.PhysicalMemory) == ConfigFile.OVERRIDE_FLAG.None ?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" },"内存配置校验") : null,
-
-               (Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.VideoController) == ConfigFile.OVERRIDE_FLAG.None ?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" } ,"显卡配置校验") : null,
-
-               (Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Disk) == ConfigFile.OVERRIDE_FLAG.None ?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" } ,"硬盘配置校验") : null,
-                Program.configFile.audio_playback ?    
-            new ClientTask(new Message { MessageType = Message.MessageTypes.PlayAudio, Content = null},"音频接口测试:输出") : null,
-               true ?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PnPEntity" } ,"即插即用设备校验") : null,
-                Program.configFile.outlet_usb?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.USBWritingTest, Content = null} ,"USB写入测试") : null,
-                Program.configFile.net_test ?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.NetworkTest, Content = null},"网口数据测试") : null,
-                Program.configFile.net_mac ?
-            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapterConfiguration"},"MAC地址测试") : null,
-                Program.configFile.outlet_com ?    
-            new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null} ,"串口写入测试") : null,
-                
+            new ClientTask(new Message { MessageType = Message.MessageTypes.TimeSync, Content = null} ,"RTC同步"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_Processor" } ,"CPU配置校验"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PhysicalMemory" },"内存配置校验"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_VideoController" } ,"显卡配置校验"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_DiskDrive" } ,"硬盘配置校验"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.PlayAudio, Content = null},"音频接口测试:输出"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_PnPEntity" } ,"即插即用设备校验"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.USBWritingTest, Content = null} ,"USB写入测试"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.NetworkTest, Content = null},"网口数据测试"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapterConfiguration"},"MAC地址测试"),
+            new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null} ,"串口写入测试"),
             new ClientTask(new Message { MessageType = Message.MessageTypes.StartGetClientCpuInfo , Content = null} ,"获取客户端温度和风扇信息"),
-                Program.configFile.disk_write_test ?    
             new ClientTask(new Message { MessageType = Message.MessageTypes.DiskPressure, 
-                    Content = "-b4K -F8 -r -o32 -W60 -d60"} ,"硬盘压力测试") : null,//4k块面积 8线程 32并发 预热60秒 测试60秒
+                    Content = "-b4K -F8 -r -o32 -W60 -d60"} ,"硬盘压力测试"),//4k块面积 8线程 32并发 预热60秒 测试60秒
                 //发布版本：
                 //  Content = "-b4K -F8 -r -o32 -W60 -d21600"},"硬盘压力测试") : null,
-                Program.configFile.global_cpu ?
             new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
@@ -53,8 +35,7 @@ namespace Server
                             //发布
                         }
                     }.ToString()
-                    },"CPU压力测试") : null,
-                Program.configFile.global_mem ?  
+                    },"CPU压力测试"),
             new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
@@ -65,7 +46,7 @@ namespace Server
                             { "sleepTime" , (60*1000).ToString() },//线程睡眠时间1分钟
                         }
                     }.ToString()
-                    },"内存压力测试") : null,
+                    },"内存压力测试"),
             };
         private Message taskMessage;
         private ManualResetEvent manualEvent;

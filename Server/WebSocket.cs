@@ -20,7 +20,8 @@ namespace Server
         {
             public IWebSocketConnection Socket;
             private string clientUrl;
-            private ManualResetEvent isTaskStart=new ManualResetEvent(true);
+            private static ManualResetEvent GlobalTaskStatus = new ManualResetEvent(false);
+            private ManualResetEvent isTaskStart = new ManualResetEvent(true);
             public string ClientUrl { get => clientUrl; }
             public ClientTask currentTask = new ClientTask(new Message { MessageType = Message.MessageTypes.None }, "", true);
             private List<ClientTask> Task = new List<ClientTask>(ClientTask.Tasks);
@@ -40,6 +41,7 @@ namespace Server
             {
                 currentTask = Task[0];
                 Task.RemoveAt(0);
+                Program.ServerMain.UpdateGlobalProgress();
                 return currentTask;
             }
             public void log(string log)
@@ -72,8 +74,20 @@ namespace Server
             {
                 isTaskStart.Set();
             }
+            public static void GlobalStartTask()
+            {
+                GlobalTaskStatus.Set();
+            }
+            public static void GlobalPauseTask()
+            {
+                GlobalTaskStatus.Reset();
+            }
+            public static void GlobalWaitForStart()
+            {
+                GlobalTaskStatus.WaitOne();
+            }
         }
-        private IDictionary<string, Client> dic_Sockets = new Dictionary<string, Client>();
+        public readonly static IDictionary<string, Client> dic_Sockets = new Dictionary<string, Client>();
         private WebSocketServer server;
         private static readonly string logsDir= @"./" + DateTime.Now.ToString("yyyy-MM-dd HH-mm");
         private WebSocket()
@@ -219,6 +233,7 @@ namespace Server
                                 dic_Sockets.Remove(clientUrl);
                                 Program.ServerMain.setClientCount(dic_Sockets.Count());
                             }
+                            Program.ServerMain.UpdateGlobalProgress();
                             //Console.WriteLine(DateTime.Now.ToString() + "|服务器:和客户端:" + clientUrl + " 断开WebSock连接！");
                         };
                         socket.OnMessage = rawMessage =>  //接受客户端网页消息事件
@@ -278,6 +293,7 @@ namespace Server
                     dic_Sockets.Add(clientUrl, new Client(socket));
                     dic_Sockets[clientUrl].log("客户端登录成功");
                     Program.ServerMain.setClientCount(dic_Sockets.Count());
+                    Program.ServerMain.UpdateGlobalProgress();
                 }
             }
             else if (message.MessageType == Message.MessageTypes.CurrentTask)
@@ -288,6 +304,7 @@ namespace Server
                 {
                     Program.ServerMain.setClientState(clientUrl, "等待任务下发", ClientTask.Tasks.Count() - dic_Sockets[clientUrl].GetRemainTaskCount());
                     Console.WriteLine("客户端" + clientUrl + "完成任务" + dic_Sockets[clientUrl].currentTask.TaskMessage.ToString() + "完成");
+                    await Task.Run(() => Client.GlobalWaitForStart());
                     await Task.Run(() => dic_Sockets[clientUrl].WaitForStart());
                     await Task.Run(() => dic_Sockets[clientUrl].currentTask.WaitForTaskFinished());
                     if (dic_Sockets[clientUrl].GetRemainTaskCount() != 0)
@@ -361,6 +378,14 @@ namespace Server
             {
                 dic_Sockets[clientUrl].currentTask.HandleMessage(message, dic_Sockets[clientUrl]);
             }
+        }
+        public static void StartAll()
+        {
+            dic_Sockets.ToList().ForEach((kv) => kv.Value.StartTask());
+        }
+        public static void PauseAll()
+        {
+            dic_Sockets.ToList().ForEach((kv) => kv.Value.PauseTask());
         }
     }
 }
