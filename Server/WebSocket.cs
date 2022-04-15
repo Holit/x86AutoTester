@@ -20,6 +20,7 @@ namespace Server
         {
             public IWebSocketConnection Socket;
             private string clientUrl;
+            private ManualResetEvent isTaskStart=new ManualResetEvent(true);
             public string ClientUrl { get => clientUrl; }
             public ClientTask currentTask = new ClientTask(new Message { MessageType = Message.MessageTypes.None }, "", true);
             private List<ClientTask> Task = new List<ClientTask>(ClientTask.Tasks);
@@ -58,6 +59,18 @@ namespace Server
                         }
                     }
                 }
+            }
+            public void WaitForStart()
+            {
+                isTaskStart.WaitOne();
+            }
+            public void PauseTask()
+            {
+                isTaskStart.Reset();
+            }
+            public void StartTask()
+            {
+                isTaskStart.Set();
             }
         }
         private IDictionary<string, Client> dic_Sockets = new Dictionary<string, Client>();
@@ -275,6 +288,7 @@ namespace Server
                 {
                     Program.ServerMain.setClientState(clientUrl, "等待任务下发", ClientTask.Tasks.Count() - dic_Sockets[clientUrl].GetRemainTaskCount());
                     Console.WriteLine("客户端" + clientUrl + "完成任务" + dic_Sockets[clientUrl].currentTask.TaskMessage.ToString() + "完成");
+                    await Task.Run(() => dic_Sockets[clientUrl].WaitForStart());
                     await Task.Run(() => dic_Sockets[clientUrl].currentTask.WaitForTaskFinished());
                     if (dic_Sockets[clientUrl].GetRemainTaskCount() != 0)
                     {
