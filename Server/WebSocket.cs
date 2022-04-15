@@ -3,6 +3,7 @@ using Fleck;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -23,6 +24,7 @@ namespace Server
             public ClientTask currentTask = new ClientTask(new Message { MessageType = Message.MessageTypes.None }, "", true);
             private List<ClientTask> Task = new List<ClientTask>(ClientTask.Tasks);
 
+            private List<KeyValuePair<DateTime, string>> logs = new List<KeyValuePair<DateTime, string>>();
 
             public Client(IWebSocketConnection Socket)
             {
@@ -42,14 +44,30 @@ namespace Server
             public void log(string log)
             {
                 Program.ServerMain.setClientLog(clientUrl, log);
+                logs.Add(new KeyValuePair<DateTime, string>(DateTime.Now, log));
+            }
+            public void saveLogsAsTxt()
+            {
+                using (FileStream fileStream = File.Create(logsDir + "/" + ClientUrl.Replace(':', '_') + ".txt"))
+                {
+                    using (StreamWriter streamWriter = new StreamWriter(fileStream))
+                    {
+                        foreach(KeyValuePair<DateTime,string> log in logs)
+                        {
+                            streamWriter.WriteLine(log.Key.ToString("HH:mm:ss ") + log.Value);
+                        }
+                    }
+                }
             }
         }
         private IDictionary<string, Client> dic_Sockets = new Dictionary<string, Client>();
         private WebSocketServer server;
+        private static readonly string logsDir= @"./" + DateTime.Now.ToString("yyyy-MM-dd HH-mm");
         private WebSocket()
         {
             _ = BoardServer();
             ListenClient();
+            Directory.CreateDirectory(logsDir);
         }
         private async Task BoardServer()
         {
@@ -181,6 +199,7 @@ namespace Server
                         {
                             string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
                             dic_Sockets[clientUrl].log("客户端断开WebSock连接！");
+                            dic_Sockets[clientUrl].saveLogsAsTxt();
                             //如果存在这个客户端,那么对这个socket进行移除
                             if (dic_Sockets.ContainsKey(clientUrl))
                             {
