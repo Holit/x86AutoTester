@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Server
@@ -51,8 +52,14 @@ namespace Server
         /// 应用程序的主入口点。
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            if (
+                args.Length == 1 && args[0] == "INSTALLER") { 
+
+                Process.Start(Application.ExecutablePath); 
+                return; 
+            }
             try
             {
                 if (
