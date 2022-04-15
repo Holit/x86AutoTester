@@ -46,7 +46,7 @@ namespace Server
                 Program.ServerMain.setClientLog(clientUrl, log);
                 logs.Add(new KeyValuePair<DateTime, string>(DateTime.Now, log));
             }
-            public void saveLogsAsTxt()
+            public void SaveLogsAsTxt()
             {
                 using (FileStream fileStream = File.Create(logsDir + "/" + ClientUrl.Replace(':', '_') + ".txt"))
                 {
@@ -54,7 +54,7 @@ namespace Server
                     {
                         foreach(KeyValuePair<DateTime,string> log in logs)
                         {
-                            streamWriter.WriteLine(log.Key.ToString("HH:mm:ss ") + log.Value);
+                            streamWriter.WriteLine(log.Key.ToString("[HH:mm:ss.fffff] ") + log.Value);
                         }
                     }
                 }
@@ -199,7 +199,7 @@ namespace Server
                         {
                             string clientUrl = socket.ConnectionInfo.ClientIpAddress + ":" + socket.ConnectionInfo.ClientPort;
                             dic_Sockets[clientUrl].log("客户端断开WebSock连接！");
-                            dic_Sockets[clientUrl].saveLogsAsTxt();
+                            dic_Sockets[clientUrl].SaveLogsAsTxt();
                             //如果存在这个客户端,那么对这个socket进行移除
                             if (dic_Sockets.ContainsKey(clientUrl))
                             {

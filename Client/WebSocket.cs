@@ -253,6 +253,7 @@ namespace Client
                     //RTC校验
                     else if (message.MessageType == AutoTestMessage.Message.MessageTypes.TimeSync)
                     {
+                        
                         AutoTestMessage.Message sending = new AutoTestMessage.Message();
                         sending.MessageType = AutoTestMessage.Message.MessageTypes.TimeSync;
                         sending.Content = JsonConvert.SerializeObject(DateTimeOffset.Now.ToUnixTimeMilliseconds());

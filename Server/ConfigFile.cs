@@ -35,7 +35,7 @@ public class ConfigFile
     public bool audio_adjust_vol;
     public bool audio_max_vol;
 
-    public bool rtc_set_local;
+    public bool rtc_test;
     /// <summary>
     /// 设定覆盖测试（自定义测试）
     /// 按照索引顺序
