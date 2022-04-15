@@ -20,10 +20,22 @@ public class ConfigFile
     public bool global_disk;
     public bool disk_chkdsk;
     public bool disk_write_test;
+    /// <summary>
+    /// 指定写入数据类型
+    /// 0 : 碎片文件
+    /// 1 : <4GB FAT文件系统
+    /// 2 : >4GB NTFS文件系统
+    /// 备注：暂不支持1，2选项
+    /// </summary>
     public int disk_write_type;
+    
 
     public bool global_net;
     public bool net_test;
+    /// <summary>
+    /// 指定是否执行外网测试
+    /// 暂不支持外网访问测试（安全限制）
+    /// </summary>
     public bool net_web_test;
     public bool net_mac;
 
@@ -134,5 +146,41 @@ public class ConfigFile
         public string Speed { get; set; }
     }
     public List<NetworkAdapter> NetworkAdapters = new List<NetworkAdapter>();
+
+    ConfigFile()
+    {
+        global_cpu = true;
+        cpu_error_stop = false;
+        cpu_all_fan_speed = false;
+        cpu_all_temp = false;
+        cpu_detailed_info = false;
+
+        global_mem = true;
+        mem_error_address = false;
+        mem_error_stop = false;
+
+        global_disk = true;
+        disk_chkdsk = true;
+        disk_write_test = true;
+
+        disk_write_type = 0;
+
+        global_net = true;
+        net_mac = true;
+        net_test = true;
+        net_web_test = false;
+
+        global_outlet = true;
+        outlet_com = true;
+        outlet_usb = true;
+        outlet_pnp_count = 4;
+
+        audio_playback = true;
+        audio_adjust_vol = false;
+        audio_max_vol = false;
+
+        rtc_test = true;
+        override_flag = OVERRIDE_FLAG.None;
+    }
     #endregion
 }
