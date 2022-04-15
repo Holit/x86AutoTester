@@ -452,6 +452,7 @@
             this.cbCPU.AutoSize = true;
             this.cbCPU.Checked = true;
             this.cbCPU.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbCPU.Enabled = false;
             this.cbCPU.Location = new System.Drawing.Point(20, 20);
             this.cbCPU.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.cbCPU.Name = "cbCPU";
@@ -533,6 +534,7 @@
             this.cbMem.AutoSize = true;
             this.cbMem.Checked = true;
             this.cbMem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbMem.Enabled = false;
             this.cbMem.Location = new System.Drawing.Point(20, 20);
             this.cbMem.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.cbMem.Name = "cbMem";
@@ -646,6 +648,7 @@
             this.cbDisk.AutoSize = true;
             this.cbDisk.Checked = true;
             this.cbDisk.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbDisk.Enabled = false;
             this.cbDisk.Location = new System.Drawing.Point(20, 20);
             this.cbDisk.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.cbDisk.Name = "cbDisk";
@@ -872,6 +875,7 @@
             this.cbOutlet.AutoSize = true;
             this.cbOutlet.Checked = true;
             this.cbOutlet.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbOutlet.Enabled = false;
             this.cbOutlet.Location = new System.Drawing.Point(20, 20);
             this.cbOutlet.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.cbOutlet.Name = "cbOutlet";

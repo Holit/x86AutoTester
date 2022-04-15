@@ -147,7 +147,7 @@ public class ConfigFile
     }
     public List<NetworkAdapter> NetworkAdapters = new List<NetworkAdapter>();
 
-    ConfigFile()
+    public ConfigFile()
     {
         global_cpu = true;
         cpu_error_stop = false;
