@@ -295,6 +295,12 @@ namespace Client
                                     catch (Exception ex)
                                     {
                                         //此处为串口写入失败的反馈
+                                        await SendMessage(new AutoTestMessage.Message
+                                        {
+                                            MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
+                                            Content = "FAIL"
+                                        });
+                                        return;
                                     }
                                     finally
                                     {
@@ -312,6 +318,12 @@ namespace Client
                                     catch (Exception ex)
                                     {
                                         //此处为串口读入数据失败的反馈
+                                        await SendMessage(new AutoTestMessage.Message
+                                        {
+                                            MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
+                                            Content = "FAIL"
+                                        });
+                                        return;
                                     }
                                     finally
                                     {
@@ -321,13 +333,31 @@ namespace Client
                                 else
                                 {
                                     MessageBox.Show("无法向串口发送消息：启动失败", "测试串口 " + serial.PortName + " 异常");
+                                    await SendMessage(new AutoTestMessage.Message
+                                    {
+                                        MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
+                                        Content = "FAIL"
+                                    });
+                                    return;
                                 }
                             }
                             catch (Exception ex)
                             {
                                 MessageBox.Show(ex.Message, "测试串口 " + serial.PortName + " 时出现严重错误");
+                                await SendMessage(new AutoTestMessage.Message
+                                {
+                                    MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
+                                    Content = "FAIL"
+                                });
+                                return;
                             }
                         }
+                        await SendMessage(new AutoTestMessage.Message
+                        {
+                            MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
+                            Content = "OK"
+                        });
+                        return;
                     }
                     else if (message.MessageType == AutoTestMessage.Message.MessageTypes.PlayAudio)
                     {
