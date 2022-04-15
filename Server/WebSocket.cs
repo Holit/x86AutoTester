@@ -89,7 +89,7 @@ namespace Server
         }
         public readonly static IDictionary<string, Client> dic_Sockets = new Dictionary<string, Client>();
         private WebSocketServer server;
-        private static readonly string logsDir= @"./" + DateTime.Now.ToString("yyyy-MM-dd HH-mm");
+        private static readonly string logsDir= @"./logs/" + DateTime.Now.ToString("yyyy-MM-dd HH-mm");
         private WebSocket()
         {
             _ = BoardServer();
@@ -302,6 +302,7 @@ namespace Server
                 Message task = JsonConvert.DeserializeObject<Message>(message.Content);
                 if (task.MessageType == Message.MessageTypes.None)
                 {
+                    Program.ServerMain.UpdateGlobalProgress();
                     Program.ServerMain.setClientState(clientUrl, "等待任务下发", ClientTask.Tasks.Count() - dic_Sockets[clientUrl].GetRemainTaskCount());
                     Console.WriteLine("客户端" + clientUrl + "完成任务" + dic_Sockets[clientUrl].currentTask.TaskMessage.ToString() + "完成");
                     await Task.Run(() => Client.GlobalWaitForStart());
