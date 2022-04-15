@@ -184,7 +184,7 @@
             this.tabPage1.Controls.Add(this.labelCurrentConnCount);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(625, 418);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "服务器配置";
@@ -277,7 +277,7 @@
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(625, 418);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "配置文件详情";
@@ -286,7 +286,7 @@
             // pgPreset
             // 
             this.pgPreset.Location = new System.Drawing.Point(318, 48);
-            this.pgPreset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pgPreset.Margin = new System.Windows.Forms.Padding(2);
             this.pgPreset.Name = "pgPreset";
             this.pgPreset.Size = new System.Drawing.Size(298, 256);
             this.pgPreset.TabIndex = 12;
@@ -346,7 +346,7 @@
             this.tabPage5.Controls.Add(this.cbCPU);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage5.Size = new System.Drawing.Size(300, 289);
             this.tabPage5.TabIndex = 0;
             this.tabPage5.Text = "处理器";
@@ -448,7 +448,7 @@
             this.tabPage6.Controls.Add(this.cbMem);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
             this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage6.Size = new System.Drawing.Size(300, 289);
             this.tabPage6.TabIndex = 1;
             this.tabPage6.Text = "内存";
@@ -706,7 +706,7 @@
             // 
             // nudPnPCount
             // 
-            this.nudPnPCount.Location = new System.Drawing.Point(181, 46);
+            this.nudPnPCount.Location = new System.Drawing.Point(245, 53);
             this.nudPnPCount.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.nudPnPCount.Maximum = new decimal(new int[] {
             1000,
@@ -726,7 +726,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(79, 49);
+            this.label1.Location = new System.Drawing.Point(111, 57);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(130, 13);
@@ -1333,7 +1333,7 @@
             this.Controls.Add(this.btnChangeState);
             this.Controls.Add(this.label_backdoor);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "ServerMain";
             this.Text = "x86自动测试系统 - 服务器端";
             this.Load += new System.EventHandler(this.Form1_Load);

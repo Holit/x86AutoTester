@@ -96,7 +96,8 @@ namespace Client
             {
                 if (i["DriveType"].ToString().Equals(((int)System.IO.DriveType.Fixed).ToString()))
                 {
-                    processInfo.Arguments += " " + i["DeviceID"].ToString();//diskspd将会以Generic Read，share read/write方式通过creatfile打开卷句柄
+                    processInfo.Arguments += " " + i["DeviceID"].ToString();
+                    //diskspd将会以Generic Read，share read/write方式通过creatfile打开卷句柄
                 }
             }
             Process pro = new Process();

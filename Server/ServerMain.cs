@@ -26,14 +26,21 @@ namespace Server
             label_uuid.Text = Program.Uuid;
             tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 服务器端启动...";
             tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 执行自动检查....";
-            tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 当前版本存在不完整组件，不完整组件信息：未开发";
+            tbServerInfo.Text += "\r\n[" + DateTime.Now.ToString("HH:mm:ss.ffff") + "] 无插件...";
             //获取本机即插即用设备的数量
             nudPnPCount.Value = 0;
-            ManagementClass managementClass = new ManagementClass("Win32_PnPEntity");
-            ManagementObjectCollection moCollection = managementClass.GetInstances();
-            Program.configFile.outlet_pnp_count = moCollection.Count;
-            nudPnPCount.Value = moCollection.Count;
-            managementClass.Dispose();
+            try
+            {
+                ManagementClass managementClass = new ManagementClass("Win32_PnPEntity");
+                ManagementObjectCollection moCollection = managementClass.GetInstances();
+                Program.configFile.outlet_pnp_count = moCollection.Count;
+                nudPnPCount.Value = moCollection.Count;
+                managementClass.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Program.ReportError(ex, false, 0x8001EF01);
+            }
         }
 
         private void cbCPU_CheckedChanged(object sender, EventArgs e)
@@ -340,125 +347,134 @@ namespace Server
 
         private void ConcludeConfig()
         {
-            Program.configFile.senderUUID = label_uuid.Text;
-            Program.configFile.CreationTime = DateTime.Now;
-            Program.configFile.global_cpu = cbCPU.Checked;
-            Program.configFile.global_mem = cbMem.Checked;
-            Program.configFile.global_disk = cbDisk.Checked;
-            Program.configFile.global_net = cbNet.Checked;
-
-            Program.configFile.cpu_error_stop = cbCPU_ErrorStop.Checked;
-            Program.configFile.cpu_all_temp = cbCPU_AllTemp.Checked;
-            Program.configFile.cpu_all_fan_speed = cbCPU_allFanSpeed.Checked;
-            Program.configFile.cpu_detailed_info = cbCPU_details.Checked;
-
-            Program.configFile.mem_error_stop = cbMem_ErrorStop.Checked;
-            Program.configFile.mem_error_address = cbMem_ErrorLocation.Checked;
-
-            Program.configFile.net_test = cbNet_CommCheck.Checked;
-            Program.configFile.net_mac = cbNet_MAC.Checked;
-            Program.configFile.net_web_test = cbNet_web.Checked;
-
-            Program.configFile.outlet_com = cbOutlet_COM.Checked;
-            Program.configFile.outlet_usb = cbOutlet_USB.Checked;
-            Program.configFile.outlet_pnp_count = Convert.ToInt32(nudPnPCount.Value);
-            Program.configFile.audio_playback = cbOutlet_audioPlay.Checked;
-            Program.configFile.audio_adjust_vol = cbOutlet_VolAuto.Checked;
-            Program.configFile.audio_max_vol = cbOutlet_VolMax.Checked;
-            //add default device.
-            //请将此部分写为异步操作
-            //阻塞执行可能需要1~3s的卡顿。
-
-            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Processor) == ConfigFile.OVERRIDE_FLAG.None)
+            try
             {
-                ManagementClass managementClass = new ManagementClass("Win32_Processor");
-                ManagementObjectCollection moCollection = managementClass.GetInstances();
-                foreach (ManagementObject mo in moCollection)
+
+                Program.configFile.senderUUID = label_uuid.Text;
+                Program.configFile.CreationTime = DateTime.Now;
+                Program.configFile.global_cpu = cbCPU.Checked;
+                Program.configFile.global_mem = cbMem.Checked;
+                Program.configFile.global_disk = cbDisk.Checked;
+                Program.configFile.global_net = cbNet.Checked;
+
+                Program.configFile.cpu_error_stop = cbCPU_ErrorStop.Checked;
+                Program.configFile.cpu_all_temp = cbCPU_AllTemp.Checked;
+                Program.configFile.cpu_all_fan_speed = cbCPU_allFanSpeed.Checked;
+                Program.configFile.cpu_detailed_info = cbCPU_details.Checked;
+
+                Program.configFile.mem_error_stop = cbMem_ErrorStop.Checked;
+                Program.configFile.mem_error_address = cbMem_ErrorLocation.Checked;
+
+                Program.configFile.net_test = cbNet_CommCheck.Checked;
+                Program.configFile.net_mac = cbNet_MAC.Checked;
+                Program.configFile.net_web_test = cbNet_web.Checked;
+
+                Program.configFile.outlet_com = cbOutlet_COM.Checked;
+                Program.configFile.outlet_usb = cbOutlet_USB.Checked;
+                Program.configFile.outlet_pnp_count = Convert.ToInt32(nudPnPCount.Value);
+                Program.configFile.audio_playback = cbOutlet_audioPlay.Checked;
+                Program.configFile.audio_adjust_vol = cbOutlet_VolAuto.Checked;
+                Program.configFile.audio_max_vol = cbOutlet_VolMax.Checked;
+                //add default device.
+                //请将此部分写为异步操作
+                //阻塞执行可能需要1~3s的卡顿。
+
+                if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Processor) == ConfigFile.OVERRIDE_FLAG.None)
                 {
-                    ConfigFile.Processor dev = new ConfigFile.Processor();
-                    dev.Family = mo["Family"].ToString();
-                    dev.Name = mo["Name"].ToString();
-                    dev.Manufacturer = mo["Manufacturer"].ToString();
-                    dev.id = Program.configFile.Processors.Count + 1;
-                    dev.MaxClockSpeed = mo["MaxClockSpeed"].ToString();
-                    dev.ProcessorId = mo["ProcessorId"].ToString();
-                    Program.configFile.Processors.Add(dev);
+                    ManagementClass managementClass = new ManagementClass("Win32_Processor");
+                    ManagementObjectCollection moCollection = managementClass.GetInstances();
+                    foreach (ManagementObject mo in moCollection)
+                    {
+                        ConfigFile.Processor dev = new ConfigFile.Processor();
+                        dev.Family = mo["Family"].ToString();
+                        dev.Name = mo["Name"].ToString();
+                        dev.Manufacturer = mo["Manufacturer"].ToString();
+                        dev.id = Program.configFile.Processors.Count + 1;
+                        dev.MaxClockSpeed = mo["MaxClockSpeed"].ToString();
+                        dev.ProcessorId = mo["ProcessorId"].ToString();
+                        Program.configFile.Processors.Add(dev);
+                    }
+                    managementClass.Dispose();
                 }
-                managementClass.Dispose();
+                if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.PhysicalMemory) == ConfigFile.OVERRIDE_FLAG.None)
+                {
+                    ManagementClass managementClass = new ManagementClass("Win32_PhysicalMemory");
+                    ManagementObjectCollection moCollection = managementClass.GetInstances();
+                    foreach (ManagementObject mo in moCollection)
+                    {
+                        ConfigFile.PhysicalMemory dev = new ConfigFile.PhysicalMemory();
+                        dev.PartNumber = mo["PartNumber"].ToString();
+                        dev.SerialNumber = mo["SerialNumber"].ToString();
+                        dev.Manufacturer = mo["Manufacturer"].ToString();
+                        dev.Capacity = mo["Capacity"].ToString();
+                        dev.Speed = mo["Speed"].ToString();
+                        dev.id = Program.configFile.PhysicalMemorys.Count + 1;
+                        Program.configFile.PhysicalMemorys.Add(dev);
+                    }
+                    managementClass.Dispose();
+                }
+                if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Disk) == ConfigFile.OVERRIDE_FLAG.None)
+                {
+                    ManagementClass managementClass = new ManagementClass("Win32_DiskDrive");
+                    ManagementObjectCollection moCollection = managementClass.GetInstances();
+                    foreach (ManagementObject mo in moCollection)
+                    {
+                        ConfigFile.Disk dev = new ConfigFile.Disk();
+                        dev.id = Program.configFile.Disks.Count + 1;
+                        dev.Manufacturer = mo["Manufacturer"].ToString();
+                        dev.MediaType = mo["MediaType"].ToString();
+                        dev.Model = mo["Model"].ToString();
+                        dev.SerialNumber = mo["SerialNumber"] == null ? "null" : mo["SerialNumber"].ToString();
+                        dev.Size = mo["Size"].ToString();
+                        Program.configFile.Disks.Add(dev);
+                    }
+                    managementClass.Dispose();
+                }
+                if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.NetworkAdapter) ==
+                    ConfigFile.OVERRIDE_FLAG.None)
+                {
+                    ManagementClass managementClass = new ManagementClass("Win32_NetworkAdapter");
+                    ManagementObjectCollection moCollection = managementClass.GetInstances();
+                    foreach (ManagementObject mo in moCollection)
+                    {
+                        ConfigFile.NetworkAdapter dev = new ConfigFile.NetworkAdapter();
+                        dev.id = Program.configFile.NetworkAdapters.Count + 1;
+                        dev.Description = mo["Description"].ToString();
+                        //GUID可能会变，因此按照测试结果更改
+                        dev.GUID = mo["GUID"] == null ? "null" : mo["GUID"].ToString();
+                        dev.Speed = mo["Speed"] == null ? "null" : mo["Speed"].ToString();
+                        Program.configFile.NetworkAdapters.Add(dev);
+                    }
+                    managementClass.Dispose();
+                }
+                if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.VideoController) == ConfigFile.OVERRIDE_FLAG.None)
+                {
+                    ManagementClass managementClass = new ManagementClass("Win32_VideoController");
+                    ManagementObjectCollection moCollection = managementClass.GetInstances();
+                    foreach (ManagementObject mo in moCollection)
+                    {
+                        ConfigFile.VideoController dev = new ConfigFile.VideoController();
+                        dev.id = Program.configFile.VideoControllers.Count + 1;
+                        dev.AdapterCompatibility = mo["AdapterCompatibility"].ToString();
+                        dev.AdapterRAM = mo["AdapterRAM"].ToString();
+                        dev.Name = mo["Name"].ToString();
+                        dev.VideoProcessor = mo["VideoProcessor"].ToString();
+                        Program.configFile.VideoControllers.Add(dev);
+                    }
+                    managementClass.Dispose();
+                }
+
+                //////////////////////////////////////////////////////////////////////////
+                ///保存到配置文件（jht文件）
+                ///这里做了base64编码，为了防止一些文字在传递过程中出现编码错误
+                string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(Program.configFile);
+                jsonres = Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonres));
+                System.IO.File.WriteAllText("configfile.jht", jsonres);
             }
-            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.PhysicalMemory) == ConfigFile.OVERRIDE_FLAG.None)
+            catch (Exception ex)
             {
-                ManagementClass managementClass = new ManagementClass("Win32_PhysicalMemory");
-                ManagementObjectCollection moCollection = managementClass.GetInstances();
-                foreach (ManagementObject mo in moCollection)
-                {
-                    ConfigFile.PhysicalMemory dev = new ConfigFile.PhysicalMemory();
-                    dev.PartNumber = mo["PartNumber"].ToString();
-                    dev.SerialNumber = mo["SerialNumber"].ToString();
-                    dev.Manufacturer = mo["Manufacturer"].ToString();
-                    dev.Capacity = mo["Capacity"].ToString();
-                    dev.Speed = mo["Speed"].ToString();
-                    dev.id = Program.configFile.PhysicalMemorys.Count + 1;
-                    Program.configFile.PhysicalMemorys.Add(dev);
-                }
-                managementClass.Dispose();
+                Program.ReportError(ex, false,0x8002AE00);
             }
-            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.Disk) == ConfigFile.OVERRIDE_FLAG.None)
-            {
-                ManagementClass managementClass = new ManagementClass("Win32_DiskDrive");
-                ManagementObjectCollection moCollection = managementClass.GetInstances();
-                foreach (ManagementObject mo in moCollection)
-                {
-                    ConfigFile.Disk dev = new ConfigFile.Disk();
-                    dev.id = Program.configFile.Disks.Count + 1;
-                    dev.Manufacturer = mo["Manufacturer"].ToString();
-                    dev.MediaType = mo["MediaType"].ToString();
-                    dev.Model = mo["Model"].ToString();
-                    dev.SerialNumber = mo["SerialNumber"] == null ? "null" : mo["SerialNumber"].ToString();
-                    dev.Size = mo["Size"].ToString();
-                    Program.configFile.Disks.Add(dev);
-                }
-                managementClass.Dispose();
-            }
-            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.NetworkAdapter) ==
-                ConfigFile.OVERRIDE_FLAG.None)
-            {
-                ManagementClass managementClass = new ManagementClass("Win32_NetworkAdapter");
-                ManagementObjectCollection moCollection = managementClass.GetInstances();
-                foreach (ManagementObject mo in moCollection)
-                {
-                    ConfigFile.NetworkAdapter dev = new ConfigFile.NetworkAdapter();
-                    dev.id = Program.configFile.NetworkAdapters.Count + 1;
-                    dev.Description = mo["Description"].ToString();
-                    //GUID可能会变，因此按照测试结果更改
-                    dev.GUID = mo["GUID"] == null ? "null" : mo["GUID"].ToString();
-                    dev.Speed = mo["Speed"] == null ? "null" : mo["Speed"].ToString();
-                    Program.configFile.NetworkAdapters.Add(dev);
-                }
-                managementClass.Dispose();
-            }
-            if ((Program.configFile.override_flag & ConfigFile.OVERRIDE_FLAG.VideoController) == ConfigFile.OVERRIDE_FLAG.None)
-            {
-                ManagementClass managementClass = new ManagementClass("Win32_VideoController");
-                ManagementObjectCollection moCollection = managementClass.GetInstances();
-                foreach (ManagementObject mo in moCollection)
-                {
-                    ConfigFile.VideoController dev = new ConfigFile.VideoController();
-                    dev.id = Program.configFile.VideoControllers.Count + 1;
-                    dev.AdapterCompatibility = mo["AdapterCompatibility"].ToString();
-                    dev.AdapterRAM = mo["AdapterRAM"].ToString();
-                    dev.Name = mo["Name"].ToString();
-                    dev.VideoProcessor = mo["VideoProcessor"].ToString();
-                    Program.configFile.VideoControllers.Add(dev);
-                }
-                managementClass.Dispose();
-            }
-            //////////////////////////////////////////////////////////////////////////
-            ///保存到配置文件（jht文件）
-            ///这里做了base64编码，为了防止一些文字在传递过程中出现编码错误
-            string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(Program.configFile);
-            jsonres = Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonres));
-            System.IO.File.WriteAllText("configfile.jht", jsonres);
         }
         public void setClientState(string client, string current, int finishedCount)
         {
@@ -734,7 +750,7 @@ namespace Server
                     try
                     {
                         Program.configFile = Newtonsoft.Json.JsonConvert.DeserializeObject(
-                            Encoding.Default.GetString(
+                            Encoding.UTF8.GetString(
                                 Convert.FromBase64String(
                                     System.IO.File.ReadAllText(path)
                                     ))
@@ -742,7 +758,7 @@ namespace Server
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("解释文件时出现异常：" + ex.Message);
+                        Program.ReportError(ex, false, 0x8003001E, Title: "解释文件失败");
                         path = null;
                     }
                 }
@@ -757,55 +773,32 @@ namespace Server
             saveFileDialog1.ShowDialog(this);
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(Program.configFile);
-                jsonres = Convert.ToBase64String(Encoding.Default.GetBytes(jsonres));
-                System.IO.File.WriteAllText(saveFileDialog1.FileName, jsonres);
+                try
+                {
+                    string jsonres = Newtonsoft.Json.JsonConvert.SerializeObject(Program.configFile);
+                    jsonres = Convert.ToBase64String(Encoding.Default.GetBytes(jsonres));
+                    System.IO.File.WriteAllText(saveFileDialog1.FileName, jsonres);
+                }
+                catch(Exception ex)
+                {
+                    Program.ReportError(ex, false, 0x8003001F, Title: "存取配置文件时失败");
+                }
             }
 
         }
 
         private void label_backdoor_Click(object sender, EventArgs e)
         {
-            if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            if(false)
             {
-                DialogResult dr = MessageBox.Show("试图执行特殊代码，点击确定以继续\n( *^-^)ρ(*╯^╰)", "BACKDOOR", MessageBoxButtons.OKCancel);
-                if (dr == DialogResult.OK)
+                //此处由后门测试代码段自定义
+                try
                 {
-                    //AutoTestMessage.Message wmiMessage = new AutoTestMessage.Message();
-                    //wmiMessage.MessageType = AutoTestMessage.Message.MessageTypes.WMIMessage;
-                    //wmiMessage.Content = "{\"path\":\"Win32_OperatingSystem\",\"data\":[{\"BootDevice\":\"\\\\Device\\\\HarddiskVolume5\",\"BuildNumber\":\"19044\",\"BuildType\":\"Multiprocessor Free\",\"Caption\":\"Microsoft Windows 10 专业版\",\"CodeSet\":\"936\",\"CountryCode\":\"86\",\"CreationClassName\":\"Win32_OperatingSystem\",\"CSCreationClassName\":\"Win32_ComputerSystem\",\"CSDVersion\":\"null\",\"CSName\":\"DESKTOP-R4HE07I\",\"CurrentTimeZone\":\"480\",\"DataExecutionPrevention_32BitApplications\":\"True\",\"DataExecutionPrevention_Available\":\"True\",\"DataExecutionPrevention_Drivers\":\"True\",\"DataExecutionPrevention_SupportPolicy\":\"2\",\"Debug\":\"False\",\"Description\":\"\",\"Distributed\":\"False\",\"EncryptionLevel\":\"256\",\"ForegroundApplicationBoost\":\"2\",\"FreePhysicalMemory\":\"3632372\",\"FreeSpaceInPagingFiles\":\"14064884\",\"FreeVirtualMemory\":\"13209544\",\"InstallDate\":\"20220103221354.000000+480\",\"LargeSystemCache\":\"null\",\"LastBootUpTime\":\"20220407175232.500492+480\",\"LocalDateTime\":\"20220407185320.084000+480\",\"Locale\":\"0804\",\"Manufacturer\":\"Microsoft Corporation\",\"MaxNumberOfProcesses\":\"4294967295\",\"MaxProcessMemorySize\":\"137438953344\",\"MUILanguages\":\"System.String[]\",\"Name\":\"Microsoft Windows 10 专业版|C:\\\\WINDOWS|\\\\Device\\\\Harddisk0\\\\Partition3\",\"NumberOfLicensedUsers\":\"0\",\"NumberOfProcesses\":\"278\",\"NumberOfUsers\":\"3\",\"OperatingSystemSKU\":\"48\",\"Organization\":\"null\",\"OSArchitecture\":\"64 位\",\"OSLanguage\":\"2052\",\"OSProductSuite\":\"256\",\"OSType\":\"18\",\"OtherTypeDescription\":\"null\",\"PAEEnabled\":\"null\",\"PlusProductID\":\"null\",\"PlusVersionNumber\":\"null\",\"PortableOperatingSystem\":\"False\",\"Primary\":\"True\",\"ProductType\":\"1\",\"RegisteredUser\":\"海阔天空jht3\",\"SerialNumber\":\"00331-20020-00000-AA555\",\"ServicePackMajorVersion\":\"0\",\"ServicePackMinorVersion\":\"0\",\"SizeStoredInPagingFiles\":\"14155776\",\"Status\":\"OK\",\"SuiteMask\":\"272\",\"SystemDevice\":\"\\\\Device\\\\HarddiskVolume7\",\"SystemDirectory\":\"C:\\\\WINDOWS\\\\system32\",\"SystemDrive\":\"C:\",\"TotalSwapSpaceSize\":\"null\",\"TotalVirtualMemorySize\":\"30804276\",\"TotalVisibleMemorySize\":\"16648500\",\"Version\":\"10.0.19044\",\"WindowsDirectory\":\"C:\\\\WINDOWS\"}]}";
-                    //
-                    //ClientTask task = new ClientTask(wmiMessage, "null");
-                    //task.HandleMessage(wmiMessage, null);
-
-                    string[] dirs = Environment.GetLogicalDrives();
-                    string callback = "";
-                    foreach (string dir in dirs)
-                    {
-                        System.IO.DriveInfo Tdriver = new System.IO.DriveInfo(dir);
-                        if (Tdriver.DriveType == System.IO.DriveType.Removable)
-                        {
-                            //未测试
-                            //未就绪等待，自动循环等待3次，每次30秒。
-                            int WaitingDuration = 2;
-
-                            // while (Tdriver.IsReady == false && WaitingDuration >= 0)
-                            // {
-                            //     //等待设备就绪
-                            //     await Task.Delay(30 * 1000);
-                            //     WaitingDuration--;
-                            // }
-                            callback =
-                             "磁盘名称：" + Tdriver.Name + "\r\n"
-                            + "磁盘卷标：" + Tdriver.VolumeLabel + "\r\n"
-                            + "文件系统：" + Tdriver.DriveFormat + "\r\n"
-                            + "剩余大小：" + Tdriver.AvailableFreeSpace.ToString() + "\r\n"
-                            + "总体容量：" + Tdriver.TotalSize.ToString() + "\r\n"
-                            + "总体容量：" + Tdriver.RootDirectory.ToString() + "\r\n"
-                            + "------------------------------";
-                        }
-                    }
-                    MessageBox.Show(callback);
+                    throw new System.NotSupportedException("此代码不应该被执行");
+                }
+                catch(Exception ex)
+                {
+                    Program.ReportError(ex, true, 0xFFFFFFFF, Title: "检测到执行错误");
                 }
             }
         }

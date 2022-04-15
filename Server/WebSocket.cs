@@ -48,16 +48,8 @@ namespace Server
         private WebSocketServer server;
         private WebSocket()
         {
-            try
-            {
-
-                _ = BoardServer();
-                ListenClient();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show("堆栈描述\r\n" + ex.StackTrace + "\r\n错误详情:\r\n" + ex.Message, "启动WebSocket时遇到未知致命故障");
-            }
+            _ = BoardServer();
+            ListenClient();
         }
         private async Task BoardServer()
         {
@@ -88,7 +80,24 @@ namespace Server
                         if (isVirtualDevice) continue;
                         if (adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet ||
                             adapter.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 ||
-                            adapter.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.GigabitEthernet ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.AsymmetricDsl ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.BasicIsdn ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.Ethernet3Megabit ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.FastEthernetFx ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.FastEthernetT ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.Fddi ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.Isdn ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.MultiRateSymmetricDsl ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.PrimaryIsdn ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.RateAdaptDsl ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.SymmetricDsl ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.Tunnel ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.VeryHighSpeedDsl ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.Wman ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.Wwanpp ||
+                            adapter.NetworkInterfaceType == NetworkInterfaceType.Wwanpp2
+
                             )
                         {
                             bool isLocal = false;
@@ -133,7 +142,14 @@ namespace Server
                 {
                     while (true)
                     {
-                        IPEndPoints.ForEach(t => udpClient.Send(sendBytes, sendBytes.Length, t));
+                        try
+                        {
+                            IPEndPoints.ForEach(t => udpClient.Send(sendBytes, sendBytes.Length, t));
+                        }
+                        catch (Exception ex)
+                        {
+                            Program.ReportError(ex, true, 0x8000AE02);
+                        }
                         Thread.Sleep(1000);
                     }
                 });
@@ -142,14 +158,13 @@ namespace Server
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(ex.Message, "启动服务器失败");
+                Program.ReportError(ex, true, 0x8000AE01);
             }
         }
         private void ListenClient()
         {
             try
             {
-                //修正此处
                 server = new WebSocketServer("ws://0.0.0.0:2333");
                 server.Start(socket =>
                 {
@@ -196,9 +211,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("堆栈描述\r\n" + ex.StackTrace
-                    + "\r\n错误详情:\r\n" + ex.Message, "启动侦听时遇到错误");
-
+                Program.ReportError(ex, true, 0x8000AE03);
             }
         }
         private static readonly WebSocket singleInstance = new WebSocket();

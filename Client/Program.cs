@@ -12,6 +12,40 @@ namespace Client
 
         public static ClientMain ClientMain { get => clientMain; }
         public static string serverUUID;
+
+        /// <summary>
+        /// 产生错误提示框
+        /// </summary>
+        /// <param name="exception">发生的具体错误</param>
+        /// <param name="isQuit">是否退出程序</param>
+        /// <param name="ErrorCode">错误的错误码</param>
+        public static void ReportError(Exception exception, 
+            bool isQuit, 
+            uint ErrorCode, 
+            string Title = "发生异常", 
+            bool ShowStackTrace = true,
+            string AdditionalInformation = "")
+        {
+            DialogResult res = MessageBox.Show(ClientMain,
+                exception.Message + "\n-------\n" +
+                (ShowStackTrace == true ? exception.StackTrace : "") + "\n-------\n错误代码：0x" +
+                ErrorCode.ToString("X8") + "\n" + AdditionalInformation,
+                Title,
+                MessageBoxButtons.AbortRetryIgnore,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button2);
+
+            if (res == DialogResult.Abort)
+            {
+                Environment.Exit((int)ErrorCode);
+            }
+            if (isQuit)
+            {
+                //在此处添加错误恢复代码
+                Environment.Exit((int)ErrorCode);
+            }
+        }
+
         /// <summary>
         /// 获取当前计算机CPU的温度
         /// </summary>
@@ -105,11 +139,35 @@ namespace Client
         [STAThread]
         static void Main()
         {
-            var webSocket = WebSocket.GetInstance;
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            clientMain = new ClientMain();
-            Application.Run(clientMain);
+            try
+            {
+                if (
+                    !System.IO.File.Exists(Environment.CurrentDirectory + @"\AutoTestMessage.dll") ||
+                    !System.IO.File.Exists(Environment.CurrentDirectory + @"\Tester.exe") ||
+                    !System.IO.File.Exists(Environment.CurrentDirectory + @"\Fleck.dll") ||
+                    !System.IO.File.Exists(Environment.CurrentDirectory + @"\diskspd.exe") ||
+                    !System.IO.File.Exists(Environment.CurrentDirectory + @"\OpenHardwareMonitorLib.dll") ||
+                    !System.IO.File.Exists(Environment.CurrentDirectory + @"\Newtonsoft.Json.dll")
+                   )
+                {
+                    throw new System.DllNotFoundException("未发现合法的依赖文件");
+                }
+                if (!System.IO.File.Exists(Environment.CurrentDirectory + @"\Newtonsoft.Json.xml"))
+                {
+                    throw new System.IO.FileNotFoundException("配置支持文件“Newtonsoft.Json.xml”未找到");
+                }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+
+                var webSocket = WebSocket.GetInstance;
+
+                clientMain = new ClientMain();
+                Application.Run(clientMain);
+            }
+            catch (Exception ex)
+            {
+                ReportError(ex, true, 0x00000000, ShowStackTrace: true, Title: "初始化失败");
+            }
         }
     }
 }

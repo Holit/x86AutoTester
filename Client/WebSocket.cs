@@ -16,7 +16,9 @@ namespace Client
 {
     public class WebSocket
     {
-        private AutoTestMessage.Message task = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.None };
+        private AutoTestMessage.Message task = new AutoTestMessage.Message { 
+            MessageType = AutoTestMessage.Message.MessageTypes.None 
+        };
         private ClientWebSocket serverWebSocket = null;
         private Task getServerTask;
         private WebSocket()
@@ -46,11 +48,23 @@ namespace Client
 
                         await webSocket.ConnectAsync(new Uri("ws://" + endpoint.Address + ":2333"), cancellation);
 
-                        AutoTestMessage.Message message = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.ServerUuid };
+                        AutoTestMessage.Message message = new AutoTestMessage.Message {
+                            MessageType = AutoTestMessage.Message.MessageTypes.ServerUuid 
+                        };
                         byte[] bytesMessage = Encoding.UTF8.GetBytes(message.ToString());
-                        await webSocket.SendAsync(new ArraySegment<byte>(bytesMessage), WebSocketMessageType.Text, true, cancellation);
-                        WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
-                        message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.UTF8.GetString(buffer, 0, result.Count));
+                        await webSocket.SendAsync(
+                            new ArraySegment<byte>(bytesMessage), 
+                            WebSocketMessageType.Text, 
+                            true, 
+                            cancellation);
+                        WebSocketReceiveResult result = await webSocket.ReceiveAsync(
+                            new ArraySegment<byte>(buffer), 
+                            cancellation);
+                        message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(
+                            Encoding.UTF8.GetString(
+                                buffer, 
+                                0, 
+                                result.Count));
                         if (message.Content == serverInfo.Content)
                         {
                             await webSocket.SendAsync(new ArraySegment<byte>(
@@ -60,9 +74,16 @@ namespace Client
                                         MessageType = AutoTestMessage.Message.MessageTypes.JoinServer,
                                         Content = serverInfo.Content
                                     }.ToString())), WebSocketMessageType.Text, true, cancellation);
-                            result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
-                            message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.UTF8.GetString(buffer, 0, result.Count));
-                            if (message.MessageType == AutoTestMessage.Message.MessageTypes.JoinServer && message.Content == "OK")
+                            result = await webSocket.ReceiveAsync(
+                                new ArraySegment<byte>(buffer), 
+                                cancellation);
+                            message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(
+                                Encoding.UTF8.GetString(
+                                    buffer, 
+                                    0, 
+                                    result.Count));
+                            if (message.MessageType == AutoTestMessage.Message.MessageTypes.JoinServer && 
+                            message.Content == "OK")
                             {
                                 serverWebSocket = webSocket;
                                 Program.ClientMain.setServerIP(endpoint.Address.ToString());
@@ -74,8 +95,14 @@ namespace Client
                                         {
                                             MessageType = AutoTestMessage.Message.MessageTypes.TaskTotal
                                         }.ToString())), WebSocketMessageType.Text, true, cancellation);
-                                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
-                                message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.UTF8.GetString(buffer, 0, result.Count));
+                                result = await webSocket.ReceiveAsync(
+                                    new ArraySegment<byte>(buffer), 
+                                    cancellation);
+                                message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(
+                                    Encoding.UTF8.GetString(
+                                        buffer, 
+                                        0, 
+                                        result.Count));
                                 Program.ClientMain.taskTotal = int.Parse(message.Content);
                                 _ = webSocket.SendAsync(new ArraySegment<byte>(
                                     Encoding.UTF8.GetBytes(
@@ -94,13 +121,11 @@ namespace Client
                     }
                     catch (JsonReaderException exception)
                     {
-                        Console.WriteLine("接收到不正确的消息");
-                        Console.WriteLine(exception);
+                        Program.ReportError(exception, false, 0x8000AE01);
                     }
                     catch (WebSocketException exception)
                     {
-                        Console.WriteLine("连接到服务器异常");
-                        Console.WriteLine(exception);
+                        Program.ReportError(exception, false, 0x80000E00);
                     }
                 }
                 udpClient.Dispose();
@@ -114,18 +139,23 @@ namespace Client
                       CancellationToken cancellation = new CancellationToken();
                       while (true)
                       {
-                          WebSocketReceiveResult result = await serverWebSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellation);
-                          AutoTestMessage.Message message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(Encoding.UTF8.GetString(buffer, 0, result.Count));
+                          WebSocketReceiveResult result = await serverWebSocket.ReceiveAsync(
+                              new ArraySegment<byte>(buffer), 
+                              cancellation);
+                          AutoTestMessage.Message message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(
+                              Encoding.UTF8.GetString(
+                              buffer, 
+                              0, 
+                              result.Count));
                           HandleMessage(message);
                       }
                   }
                   catch (Exception e)
                   {
-                      Console.WriteLine(e.Message);
+                      Program.ReportError(e, false, 0x80020000);
                   }
                   finally
                   {
-                      Console.WriteLine("finally");
                       serverWebSocket.Dispose();
                   }
               });
@@ -151,7 +181,9 @@ namespace Client
                     await SendMessage(new AutoTestMessage.Message
                     {
                         MessageType = AutoTestMessage.Message.MessageTypes.CurrentTask,
-                        Content = (task = new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.None }).ToString()
+                        Content = (task = new AutoTestMessage.Message { 
+                            MessageType = AutoTestMessage.Message.MessageTypes.None 
+                        }).ToString()
                     });
                 });
             }
@@ -175,14 +207,21 @@ namespace Client
                             ManagementObjectCollection managementBaseObjects = await WMITest.GetDeatils(message.Content);
                             WMIMessage wmiMessage = new WMIMessage();
                             wmiMessage.path = message.Content;
-                            foreach (ManagementObject mo in managementBaseObjects)
+                            try
                             {
-                                Dictionary<string, string> data = new Dictionary<string, string>();
-                                foreach (PropertyData pd in mo.Properties)
+                                foreach (ManagementObject mo in managementBaseObjects)
                                 {
-                                    data.Add(pd.Name, pd.Value == null ? "null" : pd.Value.ToString());
+                                    Dictionary<string, string> data = new Dictionary<string, string>();
+                                    foreach (PropertyData pd in mo.Properties)
+                                    {
+                                        data.Add(pd.Name, pd.Value == null ? "null" : pd.Value.ToString());
+                                    }
+                                    wmiMessage.data.Add(data);
                                 }
-                                wmiMessage.data.Add(data);
+                            }
+                            catch (Exception ex)
+                            {
+                                Program.ReportError(ex, false, 0x8001EF00);
                             }
                             await SendMessage(new AutoTestMessage.Message
                             {
@@ -365,7 +404,7 @@ namespace Client
                         DialogResult dr = MessageBox.Show("您听到声音了吗？", "提问", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                         if (dr == DialogResult.Yes)
                         {
-                            Console.WriteLine("成功");
+                            //Console.WriteLine("成功");
                             await SendMessage(new AutoTestMessage.Message
                             {
                                 MessageType = AutoTestMessage.Message.MessageTypes.PlayAudio,
@@ -374,7 +413,7 @@ namespace Client
                         }
                         else
                         {
-                            Console.WriteLine("失败");
+                            //Console.WriteLine("失败");
                             await SendMessage(new AutoTestMessage.Message
                             {
                                 MessageType = AutoTestMessage.Message.MessageTypes.PlayAudio,
