@@ -152,8 +152,9 @@ namespace Client
                           HandleMessage(message);
                       }
                   }
-                  catch (Exception e)
+                  catch
                   {
+                      //幽灵异常，无法搞定。无法复现
                       throw;
                       //Program.ReportError(e, false, 0x80020000);
                   }
@@ -339,7 +340,7 @@ namespace Client
                                             serial.WriteBufferSize = 64;
                                             serial.Write(buffer, 0, buffer.Length);
                                         }
-                                        catch (Exception ex)
+                                        catch
                                         {
                                             //此处为串口写入失败的反馈
                                             await SendMessage(new AutoTestMessage.Message
@@ -362,7 +363,7 @@ namespace Client
                                             serial.Read(buffer, 0, buffer.Length);
 
                                         }
-                                        catch (Exception ex)
+                                        catch
                                         {
                                             //此处为串口读入数据失败的反馈
                                             await SendMessage(new AutoTestMessage.Message
@@ -388,7 +389,7 @@ namespace Client
                                         return;
                                     }
                                 }
-                                catch (Exception ex)
+                                catch
                                 {
                                     //MessageBox.Show(ex.Message, "测试串口 " + serial.PortName + " 时出现严重错误");
                                     await SendMessage(new AutoTestMessage.Message

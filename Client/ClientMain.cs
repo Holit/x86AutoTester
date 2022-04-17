@@ -227,7 +227,7 @@ namespace Client
                     return json;
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 //debug only:
                 //throw;

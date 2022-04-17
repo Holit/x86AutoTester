@@ -1,3 +1,13 @@
+/*
+* Tester
+* 用于执行CPU压力测试、内存压力测试。
+* 
+* Author:jht3QAQ:https://github.com/jht3QAQ
+* Comment: Jerry:https://github.com/Holit
+* Date:2022/4
+*/
+
+
 #include<map>
 #include<string>
 #include<iostream>
@@ -8,18 +18,44 @@
 #include<list>
 #include<sstream>
 
+//关闭无用警告
+#pragma warning(disable:4244)
+#pragma warning(disable:4834)
+#pragma warning(disable:4018)
+
 using namespace std;
 
+//限定返回值
 const int SUCCESS=0;
 const int ARGS_ERROR=-1;
 const int FAIL_PASS_TEST = -2;
-void Usage();
-void memoryTest();
-void cpuTest();
 
+/// <summary>
+/// 标明传入参数
+/// </summary>
 map<string, string> args;
 
+/// <summary>
+/// 标明是否回显
+/// </summary>
 bool isPrintf = false;
+
+/// <summary>
+/// 指示使用方法
+/// </summary>
+void Usage();
+
+/// <summary>
+/// 执行内存压力测试
+/// </summary>
+void memoryTest();
+
+/// <summary>
+/// 执行CPU压力测试
+/// </summary>
+void cpuTest();
+
+
 int main(int num,char* arg[]) {
 	for (int i = 1; i < num; i += 2) {
 		if (arg[i][0] == '-' && i + 1 < num) {
@@ -73,6 +109,7 @@ void Usage()
 		"\t -totalTime\t指定执行测试的总时长\n"
 	);
 }
+
 void memoryTest() {
 	DWORDLONG reservedMemory = _atoi64(args["reservedMemory"].c_str());
 	long long memoryPerThread = _atoi64(args["memoryPerThread"].c_str());
@@ -94,6 +131,7 @@ void memoryTest() {
 		threads.push_back(thread([&memoryPerThread, &sleepTime,&runing]() {
 			stringstream ss;
 			while (true) {
+				//从“__int64”转换到“size_t”，可能丢失数据
 				char* p = (char*)malloc(memoryPerThread);
 				if (p == nullptr) { 
 					if (isPrintf) 
@@ -165,6 +203,7 @@ void cpuTest() {
 	bool isExit = false;
 	auto cpuTestThread = [](void* args) ->DWORD{
 		while (!*(bool*)args) {
+			//放弃具有 "nodiscard" 属性的函数的返回值
 			sqrt(rand());
 		}
 		return 0;
@@ -184,6 +223,7 @@ void cpuTest() {
 		threadCount= atoi(args["thread"].c_str());
 		if (threadCount == 0)exit(ARGS_ERROR);
 		threads = new HANDLE[threadCount];
+		//“<”: 有符号/无符号不匹配
 		for (DWORD i = 0; i < threadCount; ++i) {
 			HANDLE handle = CreateThread(nullptr, 0, cpuTestThread, &isExit, 0, nullptr);
 			if (handle == 0)exit(FAIL_PASS_TEST);

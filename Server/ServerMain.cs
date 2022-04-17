@@ -789,18 +789,7 @@ namespace Server
 
         private void label_backdoor_Click(object sender, EventArgs e)
         {
-            if (false)
-            {
-                //此处由后门测试代码段自定义
-                try
-                {
-                    throw new System.NotSupportedException("此代码不应该被执行");
-                }
-                catch (Exception ex)
-                {
-                    Program.ReportError(ex, true, 0xFFFFFFFF, Title: "检测到执行错误");
-                }
-            }
+
         }
 
         private void btnSend_Click(object sender, EventArgs e)
