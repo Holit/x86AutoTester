@@ -97,14 +97,7 @@
             this.cbOther_RTCLocal = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.btnResult = new System.Windows.Forms.Button();
-            this.btnPauseSelectedItem = new System.Windows.Forms.Button();
-            this.label25 = new System.Windows.Forms.Label();
             this.label24 = new System.Windows.Forms.Label();
-            this.btnUploadNow = new System.Windows.Forms.Button();
-            this.btnStopSelectedItem = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.button3 = new System.Windows.Forms.Button();
             this.clientLog = new System.Windows.Forms.ListView();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -1049,14 +1042,7 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.btnResult);
-            this.tabPage3.Controls.Add(this.btnPauseSelectedItem);
-            this.tabPage3.Controls.Add(this.label25);
             this.tabPage3.Controls.Add(this.label24);
-            this.tabPage3.Controls.Add(this.btnUploadNow);
-            this.tabPage3.Controls.Add(this.btnStopSelectedItem);
-            this.tabPage3.Controls.Add(this.listBox1);
-            this.tabPage3.Controls.Add(this.button3);
             this.tabPage3.Controls.Add(this.clientLog);
             this.tabPage3.Controls.Add(this.lvClients);
             this.tabPage3.Controls.Add(this.label8);
@@ -1068,90 +1054,15 @@
             this.tabPage3.Text = "各终端测试情况";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
-            // btnResult
-            // 
-            this.btnResult.Location = new System.Drawing.Point(164, 723);
-            this.btnResult.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.btnResult.Name = "btnResult";
-            this.btnResult.Size = new System.Drawing.Size(88, 75);
-            this.btnResult.TabIndex = 16;
-            this.btnResult.Text = "结果";
-            this.btnResult.UseVisualStyleBackColor = true;
-            // 
-            // btnPauseSelectedItem
-            // 
-            this.btnPauseSelectedItem.Location = new System.Drawing.Point(12, 550);
-            this.btnPauseSelectedItem.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.btnPauseSelectedItem.Name = "btnPauseSelectedItem";
-            this.btnPauseSelectedItem.Size = new System.Drawing.Size(92, 75);
-            this.btnPauseSelectedItem.TabIndex = 15;
-            this.btnPauseSelectedItem.Text = "暂停";
-            this.btnPauseSelectedItem.UseVisualStyleBackColor = true;
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(6, 375);
-            this.label25.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(117, 25);
-            this.label25.TabIndex = 14;
-            this.label25.Text = "可操作项目";
-            // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(258, 375);
+            this.label24.Location = new System.Drawing.Point(7, 375);
             this.label24.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(96, 25);
             this.label24.TabIndex = 13;
             this.label24.Text = "终端日志";
-            // 
-            // btnUploadNow
-            // 
-            this.btnUploadNow.Location = new System.Drawing.Point(12, 723);
-            this.btnUploadNow.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.btnUploadNow.Name = "btnUploadNow";
-            this.btnUploadNow.Size = new System.Drawing.Size(140, 75);
-            this.btnUploadNow.TabIndex = 12;
-            this.btnUploadNow.Text = "立即上传";
-            this.btnUploadNow.UseVisualStyleBackColor = true;
-            // 
-            // btnStopSelectedItem
-            // 
-            this.btnStopSelectedItem.Location = new System.Drawing.Point(108, 550);
-            this.btnStopSelectedItem.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.btnStopSelectedItem.Name = "btnStopSelectedItem";
-            this.btnStopSelectedItem.Size = new System.Drawing.Size(144, 75);
-            this.btnStopSelectedItem.TabIndex = 10;
-            this.btnStopSelectedItem.Text = "强制终止";
-            this.btnStopSelectedItem.UseVisualStyleBackColor = true;
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 25;
-            this.listBox1.Items.AddRange(new object[] {
-            "处理器测试",
-            "内存测试",
-            "硬盘测试",
-            "外设组件测试"});
-            this.listBox1.Location = new System.Drawing.Point(12, 405);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(236, 129);
-            this.listBox1.TabIndex = 9;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(12, 637);
-            this.button3.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(240, 75);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "强制终止所有";
-            this.button3.UseVisualStyleBackColor = true;
             // 
             // clientLog
             // 
@@ -1160,10 +1071,10 @@
             this.columnHeader7,
             this.columnHeader5});
             this.clientLog.HideSelection = false;
-            this.clientLog.Location = new System.Drawing.Point(264, 405);
+            this.clientLog.Location = new System.Drawing.Point(12, 405);
             this.clientLog.Margin = new System.Windows.Forms.Padding(6, 5, 6, 5);
             this.clientLog.Name = "clientLog";
-            this.clientLog.Size = new System.Drawing.Size(974, 389);
+            this.clientLog.Size = new System.Drawing.Size(1226, 389);
             this.clientLog.TabIndex = 7;
             this.clientLog.UseCompatibleStateImageBehavior = false;
             this.clientLog.View = System.Windows.Forms.View.Details;
@@ -1306,8 +1217,7 @@
             this.服务器SToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Padding = new System.Windows.Forms.Padding(6, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(1298, 39);
+            this.menuStrip1.Size = new System.Drawing.Size(1298, 42);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -1317,7 +1227,7 @@
             this.载入已有的配置文件LToolStripMenuItem,
             this.保存当前配置文件为服务器配置SToolStripMenuItem});
             this.文件FToolStripMenuItem.Name = "文件FToolStripMenuItem";
-            this.文件FToolStripMenuItem.Size = new System.Drawing.Size(111, 35);
+            this.文件FToolStripMenuItem.Size = new System.Drawing.Size(111, 38);
             this.文件FToolStripMenuItem.Text = "文件(&F)";
             // 
             // 载入已有的配置文件LToolStripMenuItem
@@ -1343,7 +1253,7 @@
             this.刷新UUIDUToolStripMenuItem,
             this.退出EToolStripMenuItem});
             this.服务器SToolStripMenuItem.Name = "服务器SToolStripMenuItem";
-            this.服务器SToolStripMenuItem.Size = new System.Drawing.Size(138, 35);
+            this.服务器SToolStripMenuItem.Size = new System.Drawing.Size(138, 38);
             this.服务器SToolStripMenuItem.Text = "服务器(&V)";
             // 
             // 启动测试BToolStripMenuItem
@@ -1351,12 +1261,15 @@
             this.启动测试BToolStripMenuItem.Name = "启动测试BToolStripMenuItem";
             this.启动测试BToolStripMenuItem.Size = new System.Drawing.Size(365, 44);
             this.启动测试BToolStripMenuItem.Text = "启动测试(B)";
+            this.启动测试BToolStripMenuItem.Click += new System.EventHandler(this.启动测试BToolStripMenuItem_Click);
             // 
             // 暂停所有测试PToolStripMenuItem
             // 
+            this.暂停所有测试PToolStripMenuItem.Enabled = false;
             this.暂停所有测试PToolStripMenuItem.Name = "暂停所有测试PToolStripMenuItem";
             this.暂停所有测试PToolStripMenuItem.Size = new System.Drawing.Size(365, 44);
             this.暂停所有测试PToolStripMenuItem.Text = "暂停所有测试(&P)";
+            this.暂停所有测试PToolStripMenuItem.Click += new System.EventHandler(this.暂停所有测试PToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -1415,6 +1328,10 @@
             this.Controls.Add(this.label_backdoor);
             this.Controls.Add(this.tabControl1);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(1324, 1096);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(1324, 1096);
             this.Name = "ServerMain";
             this.Text = "x86自动测试系统 - 服务器端";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -1520,13 +1437,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 文件FToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 服务器SToolStripMenuItem;
-        private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label24;
-        private System.Windows.Forms.Button btnUploadNow;
         private System.Windows.Forms.Button btnChangeState;
-        private System.Windows.Forms.Button btnStopSelectedItem;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.ListView clientLog;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
@@ -1538,8 +1450,6 @@
         private System.Windows.Forms.ProgressBar pbGlobalProgress;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.Button btnPauseSelectedItem;
-        private System.Windows.Forms.Button btnResult;
         private System.Windows.Forms.CheckBox cbNet_web;
         private System.Windows.Forms.ToolStripMenuItem 载入已有的配置文件LToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 保存当前配置文件为服务器配置SToolStripMenuItem;

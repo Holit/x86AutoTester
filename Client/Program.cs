@@ -3,6 +3,7 @@ using OpenHardwareMonitor.Hardware;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Client
@@ -13,6 +14,7 @@ namespace Client
 
         public static ClientMain ClientMain { get => clientMain; }
         public static string serverUUID;
+        public static WebSocket webSocket;
 
         /// <summary>
         /// 产生错误提示框
@@ -20,9 +22,11 @@ namespace Client
         /// <param name="exception">发生的具体错误</param>
         /// <param name="isQuit">是否退出程序</param>
         /// <param name="ErrorCode">错误的错误码</param>
-        public static void ReportError(Exception exception, 
+        public static void ReportError(
+            Exception exception, 
             bool isQuit, 
-            uint ErrorCode, 
+            uint ErrorCode,
+            bool isShown = false,
             string Title = "发生异常", 
             bool ShowStackTrace = true,
             string AdditionalInformation = "")
@@ -44,6 +48,18 @@ namespace Client
             {
                 //在此处添加错误恢复代码
                 Environment.Exit((int)ErrorCode);
+            }
+            //执行通信异常报告
+            if(webSocket != null)
+            {
+                _ = Task.Run(async () =>
+                {
+                    await webSocket.SendMessage(new AutoTestMessage.Message
+                    {
+                        MessageType = AutoTestMessage.Message.MessageTypes.ReportError,
+                        Content = Newtonsoft.Json.JsonConvert.SerializeObject(exception)
+                    });
+                });
             }
         }
 
@@ -167,14 +183,14 @@ namespace Client
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
 
-                var webSocket = WebSocket.GetInstance;
+                webSocket = WebSocket.GetInstance;
 
                 clientMain = new ClientMain();
                 Application.Run(clientMain);
             }
             catch (Exception ex)
             {
-                ReportError(ex, true, 0x00000000, ShowStackTrace: true, Title: "初始化失败");
+                ReportError(ex, true, 0x00000000, ShowStackTrace: true, Title: "初始化失败",isShown:true);
             }
         }
     }

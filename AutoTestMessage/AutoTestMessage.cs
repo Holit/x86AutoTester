@@ -140,6 +140,10 @@ namespace AutoTestMessage
             /// 开始获取温度和风扇信息
             /// </summary>
             StartGetClientCpuInfo,
+            /// <summary>
+            /// 报告错误
+            /// </summary>
+            ReportError
         }
         public MessageTypes MessageType = MessageTypes.None;
         public string Content = "";

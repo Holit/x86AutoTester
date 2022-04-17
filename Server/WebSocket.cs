@@ -109,10 +109,11 @@ namespace Server
                         && adapter.Speed >= 1)
                     {
                         bool isVirtualDevice = false;
-                        string[] macs = {   "005056", "001C14", "000C29", "000569", //VMware
-                                        "080027", //VirtualBox
-                                        "00155D" //Hyper-V
-                                        };
+                        //string[] macs = {   "005056", "001C14", "000C29", "000569", //VMware
+                        //                "080027", //VirtualBox
+                        //                "00155D" //Hyper-V
+                        //                };
+                        string[] macs = { };
                         foreach (string mac in macs)
                         {
                             //Contains可能不安全，建议改为substr方法
@@ -379,6 +380,11 @@ namespace Server
                         dic_Sockets[clientUrl].log(i.HardwareIdentifier + "风扇转速:" + (int)i.Value);
                     }
                 }
+            }
+            else if(message.MessageType == Message.MessageTypes.ReportError)
+            {
+                Exception exception = Newtonsoft.Json.JsonConvert.DeserializeObject<Exception>(message.Content);
+                dic_Sockets[clientUrl].log("发生异常: " +exception.InnerException.ToString() + " - " + exception.Message + "###" + exception.StackTrace.ToString());
             }
             else
             {

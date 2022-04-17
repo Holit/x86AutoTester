@@ -738,7 +738,7 @@ namespace Server
 
         private void 载入已有的配置文件LToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialog1.Filter = "JSON配置文件|*.jht|所有文件|*.*";
+            openFileDialog1.Filter = "配置文件|*.jht|所有文件|*.*";
             openFileDialog1.Title = "选择配置文件";
             openFileDialog1.FileName = Environment.CurrentDirectory;
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -767,7 +767,7 @@ namespace Server
 
         private void 保存当前配置文件为服务器配置SToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.Filter = "JSON配置文件|*.jht|任意文件|*.*";
+            saveFileDialog1.Filter = "配置文件|*.jht|任意文件|*.*";
             saveFileDialog1.Title = "保存配置文件";
             saveFileDialog1.FileName = Environment.CurrentDirectory;
             saveFileDialog1.ShowDialog(this);
@@ -841,6 +841,25 @@ namespace Server
                     pbGlobalProgress.Value = remainTask *100 / taskTotal;
                 }
             });
+        }
+
+        private void 启动测试BToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.CurrentState == Program.TestingStates.Stopped || Program.CurrentState == Program.TestingStates.Paused)
+            {
+                WebSocket.Client.GlobalStartTask();
+                暂停所有测试PToolStripMenuItem.Enabled = true;
+            }
+        }
+
+        private void 暂停所有测试PToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.CurrentState == Program.TestingStates.Running)
+            {
+                Program.CurrentState = Program.TestingStates.Paused;
+                btnChangeState.Text = "▶";
+                WebSocket.Client.GlobalPauseTask();
+            }
         }
     }
 }
