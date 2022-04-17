@@ -55,7 +55,7 @@ namespace Server
                 {
                     using (StreamWriter streamWriter = new StreamWriter(fileStream))
                     {
-                        foreach(KeyValuePair<DateTime,string> log in logs)
+                        foreach (KeyValuePair<DateTime, string> log in logs)
                         {
                             streamWriter.WriteLine(log.Key.ToString("[HH:mm:ss.fffff] ") + log.Value);
                         }
@@ -89,7 +89,7 @@ namespace Server
         }
         public readonly static IDictionary<string, Client> dic_Sockets = new Dictionary<string, Client>();
         private WebSocketServer server;
-        private static readonly string logsDir= @"./logs/" + DateTime.Now.ToString("yyyy-MM-dd HH-mm");
+        private static readonly string logsDir = @"./logs/" + DateTime.Now.ToString("yyyy-MM-dd HH-mm");
         private WebSocket()
         {
             _ = BoardServer();
@@ -109,11 +109,10 @@ namespace Server
                         && adapter.Speed >= 1)
                     {
                         bool isVirtualDevice = false;
-                        //string[] macs = {   "005056", "001C14", "000C29", "000569", //VMware
-                        //                "080027", //VirtualBox
-                        //                "00155D" //Hyper-V
-                        //                };
-                        string[] macs = { };
+                        string[] macs = {   "005056", "001C14", "000C29", "000569", //VMware
+                                        "080027", //VirtualBox
+                                        "00155D" //Hyper-V
+                                        };
                         foreach (string mac in macs)
                         {
                             //Contains可能不安全，建议改为substr方法
@@ -352,16 +351,16 @@ namespace Server
                 }
                 else
                 {
-                    List<CpuInfoOfTempFan> temperture=cpuInfoOfTempFans.FindAll(cpuInfoOfTempFan => cpuInfoOfTempFan.Value != null && cpuInfoOfTempFan.Value > 90);
+                    List<CpuInfoOfTempFan> temperture = cpuInfoOfTempFans.FindAll(cpuInfoOfTempFan => cpuInfoOfTempFan.Value != null && cpuInfoOfTempFan.Value > 90);
                     if (temperture.Count() == 0)
                     {
                         dic_Sockets[clientUrl].log("客户端CPU温度正常");
                     }
                     else
                     {
-                        foreach(CpuInfoOfTempFan i in temperture)
+                        foreach (CpuInfoOfTempFan i in temperture)
                         {
-                            dic_Sockets[clientUrl].log(i.HardwareIdentifier+"温度超标:"+(int)i.Value);
+                            dic_Sockets[clientUrl].log(i.HardwareIdentifier + "温度超标:" + (int)i.Value);
                         }
                     }
                 }
@@ -381,10 +380,10 @@ namespace Server
                     }
                 }
             }
-            else if(message.MessageType == Message.MessageTypes.ReportError)
+            else if (message.MessageType == Message.MessageTypes.ReportError)
             {
                 Exception exception = Newtonsoft.Json.JsonConvert.DeserializeObject<Exception>(message.Content);
-                dic_Sockets[clientUrl].log("发生异常: " +exception.InnerException.ToString() + " - " + exception.Message + "###" + exception.StackTrace.ToString());
+                dic_Sockets[clientUrl].log("发生异常: " + exception.InnerException.ToString() + " - " + exception.Message + "###" + exception.StackTrace.ToString());
             }
             else
             {

@@ -26,11 +26,11 @@ namespace Server
         /// <param name="exception">发生的具体错误</param>
         /// <param name="isQuit">是否退出程序</param>
         /// <param name="ErrorCode">错误的错误码</param>
-        public static void ReportError(Exception exception, bool isQuit, uint ErrorCode,string Title = "发生异常",bool ShowStackTrace = true)
+        public static void ReportError(Exception exception, bool isQuit, uint ErrorCode, string Title = "发生异常", bool ShowStackTrace = true)
         {
-            DialogResult res =  MessageBox.Show(ServerMain,
+            DialogResult res = MessageBox.Show(ServerMain,
                 exception.Message + "\n-------\n" +
-                (ShowStackTrace == true ?  exception.StackTrace : "") + "\n-------\n错误代码：0x"  +
+                (ShowStackTrace == true ? exception.StackTrace : "") + "\n-------\n错误代码：0x" +
                 ErrorCode.ToString("X8"),
                 Title,
                 MessageBoxButtons.AbortRetryIgnore,
@@ -55,10 +55,11 @@ namespace Server
         static void Main(string[] args)
         {
             if (
-                args.Length == 1 && args[0] == "INSTALLER") { 
+                args.Length == 1 && args[0] == "INSTALLER")
+            {
 
-                Process.Start(Application.ExecutablePath); 
-                return; 
+                Process.Start(Application.ExecutablePath);
+                return;
             }
             try
             {
@@ -70,13 +71,13 @@ namespace Server
                 {
                     throw new System.DllNotFoundException("未发现合法的依赖文件");
                 }
-                if(!System.IO.File.Exists(Environment.CurrentDirectory + @"\Newtonsoft.Json.xml"))
+                if (!System.IO.File.Exists(Environment.CurrentDirectory + @"\Newtonsoft.Json.xml"))
                 {
                     throw new System.IO.FileNotFoundException("配置支持文件“Newtonsoft.Json.xml”未找到");
                 }
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                
+
                 var webSocket = WebSocket.GetInstance;
 
                 serverMain = new ServerMain();
@@ -84,7 +85,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                ReportError(ex, true, 0x00000000,ShowStackTrace:true,Title:"初始化失败");
+                ReportError(ex, true, 0x00000000, ShowStackTrace: true, Title: "初始化失败");
             }
         }
     }

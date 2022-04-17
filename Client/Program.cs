@@ -23,11 +23,11 @@ namespace Client
         /// <param name="isQuit">是否退出程序</param>
         /// <param name="ErrorCode">错误的错误码</param>
         public static void ReportError(
-            Exception exception, 
-            bool isQuit, 
+            Exception exception,
+            bool isQuit,
             uint ErrorCode,
             bool isShown = false,
-            string Title = "发生异常", 
+            string Title = "发生异常",
             bool ShowStackTrace = true,
             string AdditionalInformation = "")
         {
@@ -50,7 +50,7 @@ namespace Client
                 Environment.Exit((int)ErrorCode);
             }
             //执行通信异常报告
-            if(webSocket != null)
+            if (webSocket != null)
             {
                 _ = Task.Run(async () =>
                 {
@@ -190,7 +190,7 @@ namespace Client
             }
             catch (Exception ex)
             {
-                ReportError(ex, true, 0x00000000, ShowStackTrace: true, Title: "初始化失败",isShown:true);
+                ReportError(ex, true, 0x00000000, ShowStackTrace: true, Title: "初始化失败", isShown: true);
             }
         }
     }

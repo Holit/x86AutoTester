@@ -16,8 +16,9 @@ namespace Client
 {
     public class WebSocket
     {
-        private AutoTestMessage.Message task = new AutoTestMessage.Message { 
-            MessageType = AutoTestMessage.Message.MessageTypes.None 
+        private AutoTestMessage.Message task = new AutoTestMessage.Message
+        {
+            MessageType = AutoTestMessage.Message.MessageTypes.None
         };
         private ClientWebSocket serverWebSocket = null;
         private Task getServerTask;
@@ -48,22 +49,23 @@ namespace Client
 
                         await webSocket.ConnectAsync(new Uri("ws://" + endpoint.Address + ":2333"), cancellation);
 
-                        AutoTestMessage.Message message = new AutoTestMessage.Message {
-                            MessageType = AutoTestMessage.Message.MessageTypes.ServerUuid 
+                        AutoTestMessage.Message message = new AutoTestMessage.Message
+                        {
+                            MessageType = AutoTestMessage.Message.MessageTypes.ServerUuid
                         };
                         byte[] bytesMessage = Encoding.UTF8.GetBytes(message.ToString());
                         await webSocket.SendAsync(
-                            new ArraySegment<byte>(bytesMessage), 
-                            WebSocketMessageType.Text, 
-                            true, 
+                            new ArraySegment<byte>(bytesMessage),
+                            WebSocketMessageType.Text,
+                            true,
                             cancellation);
                         WebSocketReceiveResult result = await webSocket.ReceiveAsync(
-                            new ArraySegment<byte>(buffer), 
+                            new ArraySegment<byte>(buffer),
                             cancellation);
                         message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(
                             Encoding.UTF8.GetString(
-                                buffer, 
-                                0, 
+                                buffer,
+                                0,
                                 result.Count));
                         if (message.Content == serverInfo.Content)
                         {
@@ -75,14 +77,14 @@ namespace Client
                                         Content = serverInfo.Content
                                     }.ToString())), WebSocketMessageType.Text, true, cancellation);
                             result = await webSocket.ReceiveAsync(
-                                new ArraySegment<byte>(buffer), 
+                                new ArraySegment<byte>(buffer),
                                 cancellation);
                             message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(
                                 Encoding.UTF8.GetString(
-                                    buffer, 
-                                    0, 
+                                    buffer,
+                                    0,
                                     result.Count));
-                            if (message.MessageType == AutoTestMessage.Message.MessageTypes.JoinServer && 
+                            if (message.MessageType == AutoTestMessage.Message.MessageTypes.JoinServer &&
                             message.Content == "OK")
                             {
                                 serverWebSocket = webSocket;
@@ -96,12 +98,12 @@ namespace Client
                                             MessageType = AutoTestMessage.Message.MessageTypes.TaskTotal
                                         }.ToString())), WebSocketMessageType.Text, true, cancellation);
                                 result = await webSocket.ReceiveAsync(
-                                    new ArraySegment<byte>(buffer), 
+                                    new ArraySegment<byte>(buffer),
                                     cancellation);
                                 message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(
                                     Encoding.UTF8.GetString(
-                                        buffer, 
-                                        0, 
+                                        buffer,
+                                        0,
                                         result.Count));
                                 Program.ClientMain.taskTotal = int.Parse(message.Content);
                                 _ = webSocket.SendAsync(new ArraySegment<byte>(
@@ -140,19 +142,20 @@ namespace Client
                       while (true)
                       {
                           WebSocketReceiveResult result = await serverWebSocket.ReceiveAsync(
-                              new ArraySegment<byte>(buffer), 
+                              new ArraySegment<byte>(buffer),
                               cancellation);
                           AutoTestMessage.Message message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(
                               Encoding.UTF8.GetString(
-                              buffer, 
-                              0, 
+                              buffer,
+                              0,
                               result.Count));
                           HandleMessage(message);
                       }
                   }
                   catch (Exception e)
                   {
-                      Program.ReportError(e, false, 0x80020000);
+                      throw;
+                      //Program.ReportError(e, false, 0x80020000);
                   }
                   finally
                   {
@@ -196,7 +199,7 @@ namespace Client
                     Task.Run(async () =>
                     {
                         CurrentTask currentTask = JsonConvert.DeserializeObject<CurrentTask>(message.Content);
-                    //解包
+                        //解包
                         message = JsonConvert.DeserializeObject<AutoTestMessage.Message>(currentTask.task);
                         await SendMessage(new AutoTestMessage.Message
                         {
@@ -236,24 +239,24 @@ namespace Client
                         }
                         //执行测试
                         else if (message.MessageType == AutoTestMessage.Message.MessageTypes.TesterMessage)
+                        {
+                            TesterMessage testerMessage = JsonConvert.DeserializeObject<TesterMessage>(message.Content);
+                            await Task.Run(async () =>
                             {
-                                TesterMessage testerMessage = JsonConvert.DeserializeObject<TesterMessage>(message.Content);
-                                await Task.Run(async () =>
+                                int exitcode = await TesterTest.startTesterAsync(testerMessage.data);
+                                await SendMessage(new AutoTestMessage.Message
                                 {
-                                    int exitcode = await TesterTest.startTesterAsync(testerMessage.data);
-                                    await SendMessage(new AutoTestMessage.Message
-                                    {
-                                        MessageType = AutoTestMessage.Message.MessageTypes.TesterMessage,
-                                        Content = exitcode.ToString()
-                                    });
+                                    MessageType = AutoTestMessage.Message.MessageTypes.TesterMessage,
+                                    Content = exitcode.ToString()
                                 });
-                            }
+                            });
+                        }
                         //接收配置文件并显示
                         else if (message.MessageType == AutoTestMessage.Message.MessageTypes.ConfigFile)
-                            {
-                                ConfigFile configFile = JsonConvert.DeserializeObject<ConfigFile>(message.Content);
-                                Program.ClientMain.UpdatetbConfigFileDetail(ClientMain.JsonFormat(message.Content));
-                            }
+                        {
+                            ConfigFile configFile = JsonConvert.DeserializeObject<ConfigFile>(message.Content);
+                            Program.ClientMain.UpdatetbConfigFileDetail(ClientMain.JsonFormat(message.Content));
+                        }
                         //RTC校验
                         else if (message.MessageType == AutoTestMessage.Message.MessageTypes.TimeSync)
                         {
@@ -264,119 +267,81 @@ namespace Client
                             await SendMessage(sending);
                         }
                         else if (message.MessageType == AutoTestMessage.Message.MessageTypes.USBWritingTest)
+                        {
+                            string[] dirs = Environment.GetLogicalDrives();
+                            string callback = "";
+                            foreach (string dir in dirs)
                             {
-                                string[] dirs = Environment.GetLogicalDrives();
-                                string callback = "";
-                                foreach (string dir in dirs)
+                                System.IO.DriveInfo Tdriver = new System.IO.DriveInfo(dir);
+                                if (Tdriver.DriveType == System.IO.DriveType.Removable)
                                 {
-                                    System.IO.DriveInfo Tdriver = new System.IO.DriveInfo(dir);
-                                    if (Tdriver.DriveType == System.IO.DriveType.Removable)
-                                    {
                                     //未测试
                                     //未就绪等待，自动循环等待3次，每次5秒。
                                     int WaitingDuration = 2;
 
-                                        while (Tdriver.IsReady == false && WaitingDuration >= 0)
-                                        {
+                                    while (Tdriver.IsReady == false && WaitingDuration >= 0)
+                                    {
                                         //等待设备就绪
                                         await Task.Delay(5 * 1000);
-                                            WaitingDuration--;
-                                        }
-                                        if (WaitingDuration < 0 && Tdriver.IsReady == false)
-                                        {
-                                            callback += "设备" + Tdriver.Name + "未就绪：检测失败\r\n";
-                                        }
-
+                                        WaitingDuration--;
                                     }
-                                }
-                                if (callback != "")
-                                {
-                                    await SendMessage(new AutoTestMessage.Message
+                                    if (WaitingDuration < 0 && Tdriver.IsReady == false)
                                     {
-                                        MessageType = AutoTestMessage.Message.MessageTypes.USBWritingTest,
-                                        Content = callback
-                                    });
-                                }
-                                else
-                                {
-                                    await SendMessage(new AutoTestMessage.Message
-                                    {
-                                        MessageType = AutoTestMessage.Message.MessageTypes.USBWritingTest,
-                                        Content = "Success"
-                                    });
+                                        callback += "设备" + Tdriver.Name + "未就绪：检测失败\r\n";
+                                    }
+
                                 }
                             }
+                            if (callback != "")
+                            {
+                                await SendMessage(new AutoTestMessage.Message
+                                {
+                                    MessageType = AutoTestMessage.Message.MessageTypes.USBWritingTest,
+                                    Content = callback
+                                });
+                            }
+                            else
+                            {
+                                await SendMessage(new AutoTestMessage.Message
+                                {
+                                    MessageType = AutoTestMessage.Message.MessageTypes.USBWritingTest,
+                                    Content = "Success"
+                                });
+                            }
+                        }
                         //执行串口测试
                         //未测试代码
                         else if (message.MessageType == AutoTestMessage.Message.MessageTypes.SerialTest)
+                        {
+                            List<SerialPort> SerialPortsDevices = new List<SerialPort>();
+
+                            string[] AllPorts = System.IO.Ports.SerialPort.GetPortNames();
+                            foreach (string PortName in AllPorts)
                             {
-                                List<SerialPort> SerialPortsDevices = new List<SerialPort>();
+                                SerialPort serial = new SerialPort();
+                                serial.PortName = PortName;
+                                serial.BaudRate = 9600;
+                                serial.Parity = Parity.Odd;
+                                serial.StopBits = StopBits.One;
 
-                                string[] AllPorts = System.IO.Ports.SerialPort.GetPortNames();
-                                foreach (string PortName in AllPorts)
+                                SerialPortsDevices.Add(serial);
+                                try
                                 {
-                                    SerialPort serial = new SerialPort();
-                                    serial.PortName = PortName;
-                                    serial.BaudRate = 9600;
-                                    serial.Parity = Parity.Odd;
-                                    serial.StopBits = StopBits.One;
-
-                                    SerialPortsDevices.Add(serial);
-                                    try
+                                    serial.Open();
+                                    if (serial.IsOpen == true)
                                     {
-                                        serial.Open();
-                                        if (serial.IsOpen == true)
-                                        {
-                                            byte[] buffer = new byte[64];
+                                        byte[] buffer = new byte[64];
                                         //发送模块
                                         buffer.SetValue(0, 0, buffer.Length);
-                                            buffer = Program.strToHexByte("0123456789ABCDE");
-                                            try
-                                            {
-                                                serial.WriteBufferSize = 64;
-                                                serial.Write(buffer, 0, buffer.Length);
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                            //此处为串口写入失败的反馈
-                                            await SendMessage(new AutoTestMessage.Message
-                                                {
-                                                    MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
-                                                    Content = "FAIL"
-                                                });
-                                                return;
-                                            }
-                                            finally
-                                            {
-                                                serial.Close();
-                                            }
-
-                                        //侦听模块
-                                        buffer.SetValue(0, 0, buffer.Length);
-                                            try
-                                            {
-                                                serial.ReadBufferSize = 64;
-                                                serial.Read(buffer, 0, buffer.Length);
-
-                                            }
-                                            catch (Exception ex)
-                                            {
-                                            //此处为串口读入数据失败的反馈
-                                            await SendMessage(new AutoTestMessage.Message
-                                                {
-                                                    MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
-                                                    Content = "FAIL"
-                                                });
-                                                return;
-                                            }
-                                            finally
-                                            {
-                                                serial.Close();
-                                            }
-                                        }
-                                        else
+                                        buffer = Program.strToHexByte("0123456789ABCDE");
+                                        try
                                         {
-                                            MessageBox.Show("无法向串口发送消息：启动失败", "测试串口 " + serial.PortName + " 异常");
+                                            serial.WriteBufferSize = 64;
+                                            serial.Write(buffer, 0, buffer.Length);
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            //此处为串口写入失败的反馈
                                             await SendMessage(new AutoTestMessage.Message
                                             {
                                                 MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
@@ -384,10 +349,37 @@ namespace Client
                                             });
                                             return;
                                         }
+                                        finally
+                                        {
+                                            serial.Close();
+                                        }
+
+                                        //侦听模块
+                                        buffer.SetValue(0, 0, buffer.Length);
+                                        try
+                                        {
+                                            serial.ReadBufferSize = 64;
+                                            serial.Read(buffer, 0, buffer.Length);
+
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            //此处为串口读入数据失败的反馈
+                                            await SendMessage(new AutoTestMessage.Message
+                                            {
+                                                MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
+                                                Content = "FAIL"
+                                            });
+                                            return;
+                                        }
+                                        finally
+                                        {
+                                            serial.Close();
+                                        }
                                     }
-                                    catch (Exception ex)
+                                    else
                                     {
-                                        MessageBox.Show(ex.Message, "测试串口 " + serial.PortName + " 时出现严重错误");
+                                        //MessageBox.Show("无法向串口发送消息：启动失败", "测试串口 " + serial.PortName + " 异常");
                                         await SendMessage(new AutoTestMessage.Message
                                         {
                                             MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
@@ -396,48 +388,59 @@ namespace Client
                                         return;
                                     }
                                 }
-                                await SendMessage(new AutoTestMessage.Message
+                                catch (Exception ex)
                                 {
-                                    MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
-                                    Content = "OK"
-                                });
-                                return;
+                                    //MessageBox.Show(ex.Message, "测试串口 " + serial.PortName + " 时出现严重错误");
+                                    await SendMessage(new AutoTestMessage.Message
+                                    {
+                                        MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
+                                        Content = "FAIL"
+                                    });
+                                    return;
+                                }
                             }
-                        else if (message.MessageType == AutoTestMessage.Message.MessageTypes.PlayAudio)
+                            await SendMessage(new AutoTestMessage.Message
                             {
-                                System.Media.SystemSounds.Hand.Play();
-                                DialogResult dr = MessageBox.Show("您听到声音了吗？", "提问", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                                if (dr == DialogResult.Yes)
-                                {
+                                MessageType = AutoTestMessage.Message.MessageTypes.SerialTest,
+                                Content = "OK"
+                            });
+                            return;
+                        }
+                        else if (message.MessageType == AutoTestMessage.Message.MessageTypes.PlayAudio)
+                        {
+                            System.Media.SystemSounds.Hand.Play();
+                            DialogResult dr = MessageBox.Show("您听到声音了吗？", "提问", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                            if (dr == DialogResult.Yes)
+                            {
                                 //Console.WriteLine("成功");
                                 await SendMessage(new AutoTestMessage.Message
-                                    {
-                                        MessageType = AutoTestMessage.Message.MessageTypes.PlayAudio,
-                                        Content = "Success"
-                                    });
-                                }
-                                else
                                 {
+                                    MessageType = AutoTestMessage.Message.MessageTypes.PlayAudio,
+                                    Content = "Success"
+                                });
+                            }
+                            else
+                            {
                                 //Console.WriteLine("失败");
                                 await SendMessage(new AutoTestMessage.Message
-                                    {
-                                        MessageType = AutoTestMessage.Message.MessageTypes.PlayAudio,
-                                        Content = "Fail"
-                                    });
-                                }
+                                {
+                                    MessageType = AutoTestMessage.Message.MessageTypes.PlayAudio,
+                                    Content = "Fail"
+                                });
                             }
+                        }
                         //执行CHKDSK
                         else if (message.MessageType == AutoTestMessage.Message.MessageTypes.ChkdskEvent)
-                            {
-                                AutoTestMessage.Message sending = new AutoTestMessage.Message();
-                                sending.MessageType = AutoTestMessage.Message.MessageTypes.ChkdskEvent;
-                                sending.Content = JsonConvert.SerializeObject(
-                                    new ChkdskEvent
-                                    {
-                                        result = await DiskTest.startDiskTestAsync()
-                                    });
-                                await SendMessage(sending);
-                            }
+                        {
+                            AutoTestMessage.Message sending = new AutoTestMessage.Message();
+                            sending.MessageType = AutoTestMessage.Message.MessageTypes.ChkdskEvent;
+                            sending.Content = JsonConvert.SerializeObject(
+                                new ChkdskEvent
+                                {
+                                    result = await DiskTest.startDiskTestAsync()
+                                });
+                            await SendMessage(sending);
+                        }
                         else if (message.MessageType == AutoTestMessage.Message.MessageTypes.NetworkTest)
                         {
                             await SendMessage(new AutoTestMessage.Message { MessageType = AutoTestMessage.Message.MessageTypes.NetworkTest });

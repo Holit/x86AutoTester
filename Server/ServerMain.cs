@@ -473,7 +473,7 @@ namespace Server
             }
             catch (Exception ex)
             {
-                Program.ReportError(ex, false,0x8002AE00);
+                Program.ReportError(ex, false, 0x8002AE00);
             }
         }
         public void setClientState(string client, string current, int finishedCount)
@@ -779,7 +779,7 @@ namespace Server
                     jsonres = Convert.ToBase64String(Encoding.Default.GetBytes(jsonres));
                     System.IO.File.WriteAllText(saveFileDialog1.FileName, jsonres);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Program.ReportError(ex, false, 0x8003001F, Title: "存取配置文件时失败");
                 }
@@ -789,14 +789,14 @@ namespace Server
 
         private void label_backdoor_Click(object sender, EventArgs e)
         {
-            if(false)
+            if (false)
             {
                 //此处由后门测试代码段自定义
                 try
                 {
                     throw new System.NotSupportedException("此代码不应该被执行");
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Program.ReportError(ex, true, 0xFFFFFFFF, Title: "检测到执行错误");
                 }
@@ -825,20 +825,22 @@ namespace Server
         }
         public void UpdateGlobalProgress()
         {
-            pbGlobalProgress.Invoke((MethodInvoker)delegate {
+            pbGlobalProgress.Invoke((MethodInvoker)delegate
+            {
                 if (dic_Sockets.Count() == 0)
                 {
                     pbGlobalProgress.Value = 0;
                 }
                 else
                 {
-                    int remainTask = dic_Sockets.Sum((kv) => {
-                        int count = ClientTask.Tasks.Count - kv.Value.GetRemainTaskCount() - (kv.Value.currentTask.TaskMessage.MessageType != AutoTestMessage.Message.MessageTypes.None?1:0);
+                    int remainTask = dic_Sockets.Sum((kv) =>
+                    {
+                        int count = ClientTask.Tasks.Count - kv.Value.GetRemainTaskCount() - (kv.Value.currentTask.TaskMessage.MessageType != AutoTestMessage.Message.MessageTypes.None ? 1 : 0);
                         if (count < 0) count = 0;
                         return count;
-                        });
+                    });
                     int taskTotal = dic_Sockets.Count() * ClientTask.Tasks.Count;
-                    pbGlobalProgress.Value = remainTask *100 / taskTotal;
+                    pbGlobalProgress.Value = remainTask * 100 / taskTotal;
                 }
             });
         }

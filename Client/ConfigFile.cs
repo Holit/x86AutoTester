@@ -28,7 +28,7 @@ public class ConfigFile
     /// 备注：暂不支持1，2选项
     /// </summary>
     public int disk_write_type;
-    
+
 
     public bool global_net;
     public bool net_test;

@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Ports;
 using System.Management;
 using System.Text;
 using System.Threading.Tasks;

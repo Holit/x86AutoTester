@@ -22,16 +22,14 @@ namespace Server
             new ClientTask(new Message { MessageType = Message.MessageTypes.WMIMessage, Content = "Win32_NetworkAdapterConfiguration"},"MAC地址测试"),
             new ClientTask(new Message { MessageType = Message.MessageTypes.SerialTest, Content = null} ,"串口写入测试"),
             new ClientTask(new Message { MessageType = Message.MessageTypes.StartGetClientCpuInfo , Content = null} ,"获取客户端温度和风扇信息"),
-            new ClientTask(new Message { MessageType = Message.MessageTypes.DiskPressure, 
-                    Content = "-b4K -F8 -r -o32 -W60 -d60"} ,"硬盘压力测试"),//4k块面积 8线程 32并发 预热60秒 测试60秒
-                //发布版本：
-                //  Content = "-b4K -F8 -r -o32 -W60 -d21600"},"硬盘压力测试") : null,
+            new ClientTask(new Message { MessageType = Message.MessageTypes.DiskPressure,
+                    Content = "-b4K -F8 -r -o32 -W60 -d21600"} ,"硬盘压力测试"),//4k块面积 8线程 32并发 预热60秒 测试60秒
             new ClientTask(new Message { MessageType = Message.MessageTypes.TesterMessage, Content =
                     new TesterMessage{
                         data = {
                             { "operator" , "cpuTest" },
                             { "thread" , "auto" },
-                            { "totalTime" , (2*60*1000).ToString() }
+                            { "totalTime" , (60*60*1000).ToString() }
                             //发布
                         }
                     }.ToString()
@@ -42,7 +40,7 @@ namespace Server
                             { "operator" , "memoryTest" },
                             { "reservedMemory" , (64L*1024*1024*1024).ToString() },//64G保留空间
                             { "memoryPerThread" , (1024*1024*512).ToString() },//512M每线程
-                            { "totalTime" , (0).ToString() },//测试时间2分钟
+                            { "totalTime" , (60 * 1000 * 60).ToString() },//测试时间2分钟
                             { "sleepTime" , (60*1000).ToString() },//线程睡眠时间1分钟
                         }
                     }.ToString()
@@ -563,7 +561,7 @@ namespace Server
                 }
                 else
                 {
-                    client.log(client.currentTask.describe + "测试失败:"+message.Content);
+                    client.log(client.currentTask.describe + "测试失败:" + message.Content);
                     client.Socket.Send(new Message
                     {
                         MessageType = Message.MessageTypes.TaskResult,
@@ -632,7 +630,7 @@ namespace Server
             }
             else if (message.MessageType == Message.MessageTypes.SerialTest)
             {
-                if (message.Content=="OK")
+                if (message.Content == "OK")
                 {
                     client.log(client.currentTask.describe + "测试通过");
                     client.Socket.Send(new Message
